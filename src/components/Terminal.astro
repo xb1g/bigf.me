@@ -7,9 +7,8 @@ const { class: className } = Astro.props;
 ---
 
 <div id="terminal" class:list={["min-h-screen bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg monitor-warp scanlines", className]}>
-  <!-- Vaporwave Background -->
   <div class="vaporwave-bg"></div>
-  <!-- Moving Scanline -->
+  <div class="vaporwave-sunset"></div>
   <div class="scanline-moving"></div>
   <!-- Terminal Output Area -->
   <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-36 md:pb-28 font-mono text-sm md:text-base">
