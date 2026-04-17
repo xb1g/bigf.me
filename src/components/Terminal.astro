@@ -1,5 +1,4 @@
 ---
-// Terminal Component - Main shell interface
 interface Props {
   class?: string;
 }
@@ -7,27 +6,28 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div id="terminal" class:list={["min-h-screen bg-[#181A1F] text-[#ABB2BF] flex flex-col", className]}>
+<div id="terminal" class:list={["min-h-screen bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg scanline", className]}>
   <!-- Terminal Output Area -->
-  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-48 md:pb-36 font-mono text-sm md:text-base">
+  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-52 md:pb-40 font-mono text-sm md:text-base">
     <!-- Welcome Message -->
-    <div class="mb-4">
-      <div class="text-[#98C379]">Welcome to bigf.me</div>
-      <div class="text-[#6B7280]">Type 'help' to see available commands</div>
+    <div class="mb-6">
+      <div class="text-[#39ff14] glow-text font-bold text-lg mb-2">Welcome to bigf.me</div>
+      <div class="text-[#ff6b9d] text-sm mb-1">Type 'help' or click a quick button below</div>
+      <div class="text-[#6b7280] text-xs">Terminal v1.0 • Synthwave Edition</div>
     </div>
   </div>
 
   <!-- Active Prompt -->
-  <div class="fixed bottom-20 md:bottom-12 left-0 right-0 bg-[#181A1F] border-t border-[#3E4451] p-4 md:p-4 z-10">
+  <div class="fixed bottom-24 md:bottom-16 left-0 right-0 bg-[#0a0a0f]/95 backdrop-blur-sm border-t border-[#2a2a3f] p-4 md:p-4 z-10 glow-cyan">
     <div class="flex items-center gap-2 max-w-4xl mx-auto">
-      <span class="text-[#E06C75] shrink-0">bigseed@bigf.me</span>
-      <span class="text-[#ABB2BF]">:</span>
-      <span id="current-path" class="text-[#61AFEF]">~</span>
-      <span class="text-[#ABB2BF]">$</span>
-      <input 
-        id="terminal-input" 
-        type="text" 
-        class="flex-1 bg-transparent text-[#ABB2BF] outline-none font-mono text-sm md:text-base min-w-0"
+      <span class="text-[#ff6b9d] shrink-0 glow-text font-semibold">bigseed@bigf.me</span>
+      <span class="text-[#6b7280]">:</span>
+      <span id="current-path" class="text-[#00d4ff]">~</span>
+      <span class="text-[#e2e8f0]">$</span>
+      <input
+        id="terminal-input"
+        type="text"
+        class="flex-1 bg-transparent text-[#e2e8f0] outline-none font-mono text-sm md:text-base min-w-0 caret-[#00d4ff]"
         autocomplete="off"
         autocorrect="off"
         autocapitalize="off"
@@ -37,29 +37,29 @@ const { class: className } = Astro.props;
   </div>
 
   <!-- Quick Buttons Bar (above input) -->
-  <div class="fixed bottom-[8.5rem] md:bottom-24 left-0 right-0 bg-[#1F2227] border-t border-[#3E4451] px-4 py-2 z-10">
+  <div class="fixed bottom-[9.5rem] md:bottom-28 left-0 right-0 bg-[#15151f]/95 backdrop-blur-sm border-t border-[#2a2a3f] px-4 py-2 z-10">
     <div class="flex items-center gap-2 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
-      <span class="text-[#6B7280] text-xs shrink-0 mr-1">Quick:</span>
-      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="whoami">whoami</button>
-      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="ls">ls</button>
-      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat about">about</button>
-      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat books">books</button>
-      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat philosophy">philosophy</button>
-      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat now">now</button>
-      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#E06C75] rounded text-xs text-[#E06C75] hover:bg-[#E06C75] hover:text-[#181A1F] transition-colors shrink-0 ml-auto" data-cmd="clear">clear</button>
+      <span class="text-[#6b7280] text-xs shrink-0 mr-1">Quick:</span>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="whoami">whoami</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="ls">ls</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat about">about</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat books">books</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat philosophy">philosophy</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat now">now</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#ff6b9d] rounded text-xs text-[#ff6b9d] hover:bg-[#ff6b9d] hover:text-[#0a0a0f] hover:glow-pink transition-all duration-200 shrink-0 ml-auto" data-cmd="clear">clear</button>
     </div>
   </div>
 
   <!-- Mobile Action Bar -->
-  <div id="mobile-action-bar" class="fixed bottom-0 left-0 right-0 bg-[#282C34] border-t border-[#3E4451] p-2 md:hidden z-20">
+  <div id="mobile-action-bar" class="fixed bottom-0 left-0 right-0 bg-[#15151f]/95 backdrop-blur-sm border-t border-[#2a2a3f] p-2 md:hidden z-20">
     <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="help">help</button>
-      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="whoami">whoami</button>
-      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="ls">ls</button>
-      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="cat about">cat about</button>
-      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="cat books">cat books</button>
-      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="clear">clear</button>
-      <button id="keyboard-toggle" class="whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#61AFEF] hover:border-[#61AFEF] transition-colors ml-auto">⌨</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="help">help</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="whoami">whoami</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="ls">ls</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="cat about">about</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="cat books">books</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="clear">clear</button>
+      <button id="keyboard-toggle" class="whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#00d4ff] rounded text-xs text-[#00d4ff] hover:bg-[#00d4ff] hover:text-[#0a0a0f] transition-colors ml-auto">⌨</button>
     </div>
   </div>
 </div>
@@ -82,50 +82,68 @@ const { class: className } = Astro.props;
   const currentPathEl = document.getElementById('current-path');
   const commandChips = document.querySelectorAll('.command-chip');
   const keyboardToggle = document.getElementById('keyboard-toggle');
-  
+
   let currentPath = '~';
   let commandHistory: string[] = [];
   let historyIndex = -1;
+  let userScrolled = false;
+
+  function scrollToBottom() {
+    if (!userScrolled && terminal) {
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  }
 
   function addCommandToOutput(command: string) {
     const cmdLine = document.createElement('div');
     cmdLine.className = 'mb-2';
     cmdLine.innerHTML = `
-      <span class="text-[#E06C75]">bigseed@bigf.me</span>
-      <span class="text-[#ABB2BF]">:</span>
-      <span class="text-[#61AFEF]">${currentPath}</span>
-      <span class="text-[#ABB2BF]">$</span>
-      <span class="text-[#ABB2BF] ml-2">${command}</span>
+      <span class="text-[#ff6b9d] glow-text font-semibold">bigseed@bigf.me</span>
+      <span class="text-[#6b7280]">:</span>
+      <span class="text-[#00d4ff]">${currentPath}</span>
+      <span class="text-[#e2e8f0]">$</span>
+      <span class="text-[#e2e8f0] ml-2">${command}</span>
     `;
     terminal?.appendChild(cmdLine);
+    scrollToBottom();
   }
 
   function addOutputToTerminal(output: string, isError = false) {
     if (output === '__CLEAR__') {
       if (terminal) terminal.innerHTML = '';
+      userScrolled = false;
       return;
     }
 
     const outputDiv = document.createElement('div');
-    outputDiv.className = `mb-4 whitespace-pre-wrap ${isError ? 'text-[#E06C75]' : 'text-[#ABB2BF]'}`;
+    outputDiv.className = `mb-4 whitespace-pre-wrap ${isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}`;
     outputDiv.textContent = output;
     terminal?.appendChild(outputDiv);
-    terminal?.scrollTo({ top: terminal.scrollHeight, behavior: 'smooth' });
+    scrollToBottom();
   }
 
   function execute(cmd: string) {
     if (!cmd.trim()) return;
-    
+
     commandHistory.push(cmd);
     historyIndex = commandHistory.length;
-    
+    userScrolled = false;
+
     addCommandToOutput(cmd);
-    
+
     const result = executeCommand(cmd, currentPath);
     addOutputToTerminal(result.output, result.error);
-    
+
     input.value = '';
   }
+
+  // Auto-scroll: detect user scroll
+  terminal?.addEventListener('scroll', () => {
+    if (terminal) {
+      const isAtBottom = terminal.scrollHeight - terminal.scrollTop <= terminal.clientHeight + 50;
+      userScrolled = !isAtBottom;
+    }
+  });
 
   // Input event listeners
   input?.addEventListener('keydown', (e) => {
@@ -175,4 +193,7 @@ const { class: className } = Astro.props;
   if (window.innerWidth >= 768) {
     input?.focus();
   }
+
+  // Initial scroll to bottom
+  scrollToBottom();
 </script>
