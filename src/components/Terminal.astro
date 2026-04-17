@@ -1,0 +1,155 @@
+---
+// Terminal Component - Main shell interface
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div id="terminal" class:list={["min-h-screen bg-[#181A1F] text-[#ABB2BF] flex flex-col", className]}>
+  <!-- Terminal Output Area -->
+  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-32 md:pb-20 font-mono text-sm md:text-base">
+    <!-- Welcome Message -->
+    <div class="mb-4">
+      <div class="text-[#98C379]">Welcome to bigf.me</div>
+      <div class="text-[#6B7280]">Type 'help' to see available commands</div>
+    </div>
+  </div>
+
+  <!-- Active Prompt -->
+  <div class="fixed bottom-16 md:bottom-0 left-0 right-0 bg-[#181A1F] border-t border-[#3E4451] p-4 md:p-4 z-10">
+    <div class="flex items-center gap-2 max-w-4xl mx-auto">
+      <span class="text-[#E06C75] shrink-0">bigseed@bigf.me</span>
+      <span class="text-[#ABB2BF]">:</span>
+      <span id="current-path" class="text-[#61AFEF]">~</span>
+      <span class="text-[#ABB2BF]">$</span>
+      <input 
+        id="terminal-input" 
+        type="text" 
+        class="flex-1 bg-transparent text-[#ABB2BF] outline-none font-mono text-sm md:text-base min-w-0"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      />
+    </div>
+  </div>
+
+  <!-- Mobile Action Bar -->
+  <div id="mobile-action-bar" class="fixed bottom-0 left-0 right-0 bg-[#282C34] border-t border-[#3E4451] p-2 md:hidden z-20">
+    <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="help">help</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="whoami">whoami</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="ls">ls</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="cat about">cat about</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="cat books">cat books</button>
+      <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] transition-colors" data-cmd="clear">clear</button>
+      <button id="keyboard-toggle" class="whitespace-nowrap px-3 py-2 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#61AFEF] hover:border-[#61AFEF] transition-colors ml-auto">⌨</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
+
+<script>
+  import { executeCommand } from '../lib/commands.ts';
+
+  const terminal = document.getElementById('terminal-output');
+  const input = document.getElementById('terminal-input') as HTMLInputElement;
+  const currentPathEl = document.getElementById('current-path');
+  const commandChips = document.querySelectorAll('.command-chip');
+  const keyboardToggle = document.getElementById('keyboard-toggle');
+  
+  let currentPath = '~';
+  let commandHistory: string[] = [];
+  let historyIndex = -1;
+
+  function addCommandToOutput(command: string) {
+    const cmdLine = document.createElement('div');
+    cmdLine.className = 'mb-2';
+    cmdLine.innerHTML = `
+      <span class="text-[#E06C75]">bigseed@bigf.me</span>
+      <span class="text-[#ABB2BF]">:</span>
+      <span class="text-[#61AFEF]">${currentPath}</span>
+      <span class="text-[#ABB2BF]">$</span>
+      <span class="text-[#ABB2BF] ml-2">${command}</span>
+    `;
+    terminal?.appendChild(cmdLine);
+  }
+
+  function addOutputToTerminal(output: string, isError = false) {
+    if (output === '__CLEAR__') {
+      if (terminal) terminal.innerHTML = '';
+      return;
+    }
+
+    const outputDiv = document.createElement('div');
+    outputDiv.className = `mb-4 whitespace-pre-wrap ${isError ? 'text-[#E06C75]' : 'text-[#ABB2BF]'}`;
+    outputDiv.textContent = output;
+    terminal?.appendChild(outputDiv);
+    terminal?.scrollTo({ top: terminal.scrollHeight, behavior: 'smooth' });
+  }
+
+  function execute(cmd: string) {
+    if (!cmd.trim()) return;
+    
+    commandHistory.push(cmd);
+    historyIndex = commandHistory.length;
+    
+    addCommandToOutput(cmd);
+    
+    const result = executeCommand(cmd, currentPath);
+    addOutputToTerminal(result.output, result.error);
+    
+    input.value = '';
+  }
+
+  // Input event listeners
+  input?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      execute(input.value);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        input.value = commandHistory[historyIndex] || '';
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex < commandHistory.length - 1) {
+        historyIndex++;
+        input.value = commandHistory[historyIndex] || '';
+      } else {
+        historyIndex = commandHistory.length;
+        input.value = '';
+      }
+    }
+  });
+
+  // Mobile command chips
+  commandChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const cmd = chip.getAttribute('data-cmd') || '';
+      execute(cmd);
+    });
+  });
+
+  // Keyboard toggle
+  keyboardToggle?.addEventListener('click', () => {
+    input?.focus();
+  });
+
+  // Focus input on desktop
+  if (window.innerWidth >= 768) {
+    input?.focus();
+  }
+</script>
