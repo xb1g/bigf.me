@@ -13,7 +13,7 @@ export interface Project {
   description: string;
 }
 
-const categories: Record<string, string[]> = {
+export const categories: Record<string, string[]> = {
   hardware: ['longkeeb', 'portex', 'fermentabot'],
   education: ['passionseed', 'datasciblock', 'coderdojo', 'quizdom'],
   ai: ['careerac', 'rocketmap', 'neuralmix', 'hive'],
@@ -22,7 +22,7 @@ const categories: Record<string, string[]> = {
   experiments: ['trojang', 'govern', 'susu', 'prova'],
 };
 
-const projects: Record<string, Project> = {
+export const projects: Record<string, Project> = {
   passionseed: {
     name: 'PassionSeed',
     category: 'education',

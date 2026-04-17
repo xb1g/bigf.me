@@ -82,7 +82,9 @@ const { class: className } = Astro.props;
 </style>
 
 <script>
-  import { executeCommand } from '../lib/commands.ts';
+  import { executeCommand, projects, categories } from '../lib/commands.ts';
+  import { createProjectCard, createCarousel } from './ProjectCard.ts';
+  import type { Project } from '../lib/commands.ts';
 
   const terminal = document.getElementById('terminal-output');
   const input = document.getElementById('terminal-input') as HTMLInputElement;
@@ -119,7 +121,7 @@ const { class: className } = Astro.props;
     scrollToBottom();
   }
 
-  function addOutputToTerminal(output: string, isError = false) {
+  function addOutputToTerminal(output: string, isError = false, element?: HTMLElement) {
     if (output === '__CLEAR__') {
       if (terminal) {
         terminal.innerHTML = '';
@@ -135,11 +137,38 @@ const { class: className } = Astro.props;
       return;
     }
 
-    const outputDiv = document.createElement('div');
-    outputDiv.className = `mb-4 whitespace-pre-wrap ${isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}`;
-    outputDiv.textContent = output;
-    terminal?.appendChild(outputDiv);
+    if (element) {
+      terminal?.appendChild(element);
+    } else {
+      const outputDiv = document.createElement('div');
+      outputDiv.className = `mb-4 whitespace-pre-wrap ${isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}`;
+      outputDiv.textContent = output;
+      terminal?.appendChild(outputDiv);
+    }
     scrollToBottom();
+  }
+
+  function renderProjectCards(projectList: string[], categoryName?: string) {
+    if (projectList.length === 0) return null;
+    
+    const projectData = projectList
+      .map(id => ({ ...projects[id], id }))
+      .filter(p => p.name);
+    
+    const cards = projectData.map(p => 
+      createProjectCard({
+        project: p,
+        onClick: (projectId) => {
+          const cmd = categoryName ? `cd ${categoryName}/${projectId}` : `cd ${projectId}`;
+          execute(cmd);
+        }
+      })
+    );
+    
+    return createCarousel({
+      title: categoryName ? `${categoryName} projects` : 'Projects',
+      items: cards
+    });
   }
 
   function execute(cmd: string) {
@@ -150,18 +179,87 @@ const { class: className } = Astro.props;
 
     addCommandToOutput(cmd);
 
+    const parts = cmd.trim().split(' ');
+    const command = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    // Handle ls with visual cards
+    if (command === 'ls') {
+      const target = args[0] || currentPath;
+      
+      // Home - show all categories with cards
+      if (target === '~' || target === '/' || target === 'home') {
+        // Show categories as cards
+        const categoryCards = Object.entries(categories).map(([cat, projs]) => {
+          const card = document.createElement('div');
+          card.className = 'flex-shrink-0 w-48 bg-[#15151f] border border-[#2a2a3f] rounded-lg p-4 cursor-pointer hover:border-[#ff6b9d] transition-all group';
+          card.innerHTML = `
+            <div class="text-2xl mb-2">${getCategoryIcon(cat)}</div>
+            <h3 class="text-sm font-semibold text-[#e2e8f0] group-hover:text-[#ff6b9d] transition-colors capitalize">${cat}</h3>
+            <p class="text-xs text-[#6b7280] mt-1">${projs.length} projects</p>
+          `;
+          card.addEventListener('click', () => execute(`cd ${cat}`));
+          return card;
+        });
+        
+        const carousel = createCarousel({ title: 'Categories', items: categoryCards });
+        addOutputToTerminal('', false, carousel);
+        
+        // Also show text output
+        addOutputToTerminal(`drwxr-xr-x  categories/
+drwxr-xr-x  pages/
+
+Use 'cd [category]' to explore or click a card above.`, false);
+      } 
+      // Category - show projects as cards
+      else {
+        const category = target.split('/')[0];
+        const projectList = categories[category];
+        if (projectList) {
+          const carousel = renderProjectCards(projectList, category);
+          if (carousel) {
+            addOutputToTerminal('', false, carousel);
+          }
+          // Also show text list
+          const items = projectList.map(p => `drwxr-xr-x  ${p}/`).join('\n');
+          addOutputToTerminal(`${category}/:\n${items}\n\nClick a card above or use 'cd [project]' to navigate.`);
+        } else {
+          addOutputToTerminal(`ls: ${target}: No such directory`, true);
+        }
+      }
+      
+      // Update path if needed
+      const result = executeCommand(cmd, currentPath);
+      if (result.newPath !== undefined) {
+        currentPath = result.newPath;
+        if (currentPathEl) currentPathEl.textContent = currentPath;
+      }
+      input.value = '';
+      return;
+    }
+
+    // Default command execution
     const result = executeCommand(cmd, currentPath);
     addOutputToTerminal(result.output, result.error);
 
-    // Update path if cd command changed it
     if (result.newPath !== undefined) {
       currentPath = result.newPath;
-      if (currentPathEl) {
-        currentPathEl.textContent = currentPath;
-      }
+      if (currentPathEl) currentPathEl.textContent = currentPath;
     }
 
     input.value = '';
+  }
+
+  function getCategoryIcon(category: string): string {
+    const icons: Record<string, string> = {
+      hardware: '🔧',
+      education: '📚',
+      ai: '🤖',
+      sustainability: '🌱',
+      community: '👥',
+      experiments: '🧪'
+    };
+    return icons[category] || '📁';
   }
 
   input?.addEventListener('keydown', (e) => {
