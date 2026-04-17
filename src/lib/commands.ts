@@ -2,6 +2,7 @@ export interface CommandResult {
   output: string;
   error?: boolean;
   html?: boolean;
+  newPath?: string;
 }
 
 export interface Project {
@@ -208,7 +209,7 @@ Email: your.big@passionseed.com`,
     case 'ls': {
       const target = args[0] || currentPath;
       
-      if (target === '/' || target === '~') {
+      if (target === '/' || target === '~' || target === 'home') {
         return {
           output: `drwxr-xr-x  categories/
 drwxr-xr-x  pages/
@@ -247,8 +248,26 @@ Use 'ls [category]' to see projects:
 
     case 'cd': {
       const dir = args[0] || '~';
+      
+      if (dir === '~' || dir === '/' || dir === 'home') {
+        return {
+          output: `Changed to: ~`,
+          newPath: '~',
+        };
+      }
+      
+      const targetDir = dir.replace('/', '').replace('~', '');
+      
+      if (categories[targetDir]) {
+        return {
+          output: `Changed to: ${targetDir}/`,
+          newPath: targetDir,
+        };
+      }
+      
       return {
-        output: `Changed to: ${dir}`,
+        output: `cd: ${dir}: No such directory`,
+        error: true,
       };
     }
 

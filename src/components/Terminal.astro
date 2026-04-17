@@ -153,6 +153,14 @@ const { class: className } = Astro.props;
     const result = executeCommand(cmd, currentPath);
     addOutputToTerminal(result.output, result.error);
 
+    // Update path if cd command changed it
+    if (result.newPath !== undefined) {
+      currentPath = result.newPath;
+      if (currentPathEl) {
+        currentPathEl.textContent = currentPath;
+      }
+    }
+
     input.value = '';
   }
 
