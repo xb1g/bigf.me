@@ -9,7 +9,7 @@ const { class: className } = Astro.props;
 
 <div id="terminal" class:list={["min-h-screen bg-[#181A1F] text-[#ABB2BF] flex flex-col", className]}>
   <!-- Terminal Output Area -->
-  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-32 md:pb-20 font-mono text-sm md:text-base">
+  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-48 md:pb-36 font-mono text-sm md:text-base">
     <!-- Welcome Message -->
     <div class="mb-4">
       <div class="text-[#98C379]">Welcome to bigf.me</div>
@@ -18,7 +18,7 @@ const { class: className } = Astro.props;
   </div>
 
   <!-- Active Prompt -->
-  <div class="fixed bottom-16 md:bottom-0 left-0 right-0 bg-[#181A1F] border-t border-[#3E4451] p-4 md:p-4 z-10">
+  <div class="fixed bottom-20 md:bottom-12 left-0 right-0 bg-[#181A1F] border-t border-[#3E4451] p-4 md:p-4 z-10">
     <div class="flex items-center gap-2 max-w-4xl mx-auto">
       <span class="text-[#E06C75] shrink-0">bigseed@bigf.me</span>
       <span class="text-[#ABB2BF]">:</span>
@@ -33,6 +33,20 @@ const { class: className } = Astro.props;
         autocapitalize="off"
         spellcheck="false"
       />
+    </div>
+  </div>
+
+  <!-- Quick Buttons Bar (above input) -->
+  <div class="fixed bottom-[8.5rem] md:bottom-24 left-0 right-0 bg-[#1F2227] border-t border-[#3E4451] px-4 py-2 z-10">
+    <div class="flex items-center gap-2 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
+      <span class="text-[#6B7280] text-xs shrink-0 mr-1">Quick:</span>
+      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="whoami">whoami</button>
+      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="ls">ls</button>
+      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat about">about</button>
+      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat books">books</button>
+      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat philosophy">philosophy</button>
+      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#3E4451] rounded text-xs text-[#ABB2BF] hover:border-[#61AFEF] hover:text-[#61AFEF] transition-colors shrink-0" data-cmd="cat now">now</button>
+      <button class="quick-btn px-2 py-1 bg-[#282C34] border border-[#E06C75] rounded text-xs text-[#E06C75] hover:bg-[#E06C75] hover:text-[#181A1F] transition-colors shrink-0 ml-auto" data-cmd="clear">clear</button>
     </div>
   </div>
 
@@ -139,6 +153,15 @@ const { class: className } = Astro.props;
   commandChips.forEach(chip => {
     chip.addEventListener('click', () => {
       const cmd = chip.getAttribute('data-cmd') || '';
+      execute(cmd);
+    });
+  });
+
+  // Quick buttons
+  const quickBtns = document.querySelectorAll('.quick-btn');
+  quickBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cmd = btn.getAttribute('data-cmd') || '';
       execute(cmd);
     });
   });
