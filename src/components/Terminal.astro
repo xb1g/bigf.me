@@ -6,21 +6,21 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div id="terminal" class:list={["min-h-screen bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg scanline", className]}>
+<div id="terminal" class:list={["min-h-screen bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg", className]}>
   <!-- Terminal Output Area -->
-  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-52 md:pb-40 font-mono text-sm md:text-base">
+  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-36 md:pb-28 font-mono text-sm md:text-base">
     <!-- Welcome Message -->
     <div class="mb-6">
-      <div class="text-[#39ff14] glow-text font-bold text-lg mb-2">Welcome to bigf.me</div>
+      <div class="text-[#39ff14] font-bold text-lg mb-2">Welcome to bigf.me</div>
       <div class="text-[#ff6b9d] text-sm mb-1">Type 'help' or click a quick button below</div>
       <div class="text-[#6b7280] text-xs">Terminal v1.0 • Synthwave Edition</div>
     </div>
   </div>
 
   <!-- Active Prompt -->
-  <div class="fixed bottom-24 md:bottom-16 left-0 right-0 bg-[#0a0a0f]/95 backdrop-blur-sm border-t border-[#2a2a3f] p-4 md:p-4 z-10 glow-cyan">
+  <div class="fixed bottom-20 md:bottom-14 left-0 right-0 bg-[#0a0a0f]/95 backdrop-blur-sm border-t border-[#2a2a3f] p-3 md:p-3 z-10">
     <div class="flex items-center gap-2 max-w-4xl mx-auto">
-      <span class="text-[#ff6b9d] shrink-0 glow-text font-semibold">bigseed@bigf.me</span>
+      <span class="text-[#ff6b9d] shrink-0 font-semibold">bigseed@bigf.me</span>
       <span class="text-[#6b7280]">:</span>
       <span id="current-path" class="text-[#00d4ff]">~</span>
       <span class="text-[#e2e8f0]">$</span>
@@ -37,16 +37,16 @@ const { class: className } = Astro.props;
   </div>
 
   <!-- Quick Buttons Bar (above input) -->
-  <div class="fixed bottom-[9.5rem] md:bottom-28 left-0 right-0 bg-[#15151f]/95 backdrop-blur-sm border-t border-[#2a2a3f] px-4 py-2 z-10">
+  <div class="fixed bottom-[7.5rem] md:bottom-24 left-0 right-0 bg-[#15151f]/95 backdrop-blur-sm border-t border-[#2a2a3f] px-4 py-2 z-10">
     <div class="flex items-center gap-2 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
       <span class="text-[#6b7280] text-xs shrink-0 mr-1">Quick:</span>
-      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="whoami">whoami</button>
-      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="ls">ls</button>
-      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat about">about</button>
-      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat books">books</button>
-      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat philosophy">philosophy</button>
-      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] hover:glow-cyan transition-all duration-200 shrink-0" data-cmd="cat now">now</button>
-      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#ff6b9d] rounded text-xs text-[#ff6b9d] hover:bg-[#ff6b9d] hover:text-[#0a0a0f] hover:glow-pink transition-all duration-200 shrink-0 ml-auto" data-cmd="clear">clear</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="whoami">whoami</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="ls">ls</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat about">about</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat books">books</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat philosophy">philosophy</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat now">now</button>
+      <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#ff6b9d] rounded text-xs text-[#ff6b9d] hover:bg-[#ff6b9d] hover:text-[#0a0a0f] transition-all duration-200 shrink-0 ml-auto" data-cmd="clear">clear</button>
     </div>
   </div>
 
@@ -86,11 +86,12 @@ const { class: className } = Astro.props;
   let currentPath = '~';
   let commandHistory: string[] = [];
   let historyIndex = -1;
-  let userScrolled = false;
 
   function scrollToBottom() {
-    if (!userScrolled && terminal) {
-      terminal.scrollTop = terminal.scrollHeight;
+    if (terminal) {
+      setTimeout(() => {
+        terminal.scrollTop = terminal.scrollHeight;
+      }, 10);
     }
   }
 
@@ -98,7 +99,7 @@ const { class: className } = Astro.props;
     const cmdLine = document.createElement('div');
     cmdLine.className = 'mb-2';
     cmdLine.innerHTML = `
-      <span class="text-[#ff6b9d] glow-text font-semibold">bigseed@bigf.me</span>
+      <span class="text-[#ff6b9d] font-semibold">bigseed@bigf.me</span>
       <span class="text-[#6b7280]">:</span>
       <span class="text-[#00d4ff]">${currentPath}</span>
       <span class="text-[#e2e8f0]">$</span>
@@ -110,8 +111,18 @@ const { class: className } = Astro.props;
 
   function addOutputToTerminal(output: string, isError = false) {
     if (output === '__CLEAR__') {
-      if (terminal) terminal.innerHTML = '';
-      userScrolled = false;
+      if (terminal) {
+        terminal.innerHTML = '';
+        // Restore welcome message
+        const welcome = document.createElement('div');
+        welcome.className = 'mb-6';
+        welcome.innerHTML = `
+          <div class="text-[#39ff14] font-bold text-lg mb-2">Welcome to bigf.me</div>
+          <div class="text-[#ff6b9d] text-sm mb-1">Type 'help' or click a quick button below</div>
+          <div class="text-[#6b7280] text-xs">Terminal v1.0 • Synthwave Edition</div>
+        `;
+        terminal.appendChild(welcome);
+      }
       return;
     }
 
@@ -127,7 +138,6 @@ const { class: className } = Astro.props;
 
     commandHistory.push(cmd);
     historyIndex = commandHistory.length;
-    userScrolled = false;
 
     addCommandToOutput(cmd);
 
@@ -136,14 +146,6 @@ const { class: className } = Astro.props;
 
     input.value = '';
   }
-
-  // Auto-scroll: detect user scroll
-  terminal?.addEventListener('scroll', () => {
-    if (terminal) {
-      const isAtBottom = terminal.scrollHeight - terminal.scrollTop <= terminal.clientHeight + 50;
-      userScrolled = !isAtBottom;
-    }
-  });
 
   // Input event listeners
   input?.addEventListener('keydown', (e) => {
@@ -195,5 +197,5 @@ const { class: className } = Astro.props;
   }
 
   // Initial scroll to bottom
-  scrollToBottom();
+  setTimeout(scrollToBottom, 100);
 </script>
