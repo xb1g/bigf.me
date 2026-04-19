@@ -57,7 +57,7 @@
 }
 
 .vaporwave-bg {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -71,7 +71,7 @@
 }
 
 .vaporwave-sunset {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
@@ -93,7 +93,7 @@
 
 .monitor-warp::before {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -116,7 +116,7 @@
 
 .scanlines::before {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -134,7 +134,7 @@
 }
 
 .scanline-moving {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -148,9 +148,40 @@
 
 @keyframes scanlineMove {
   0% { top: -2%; opacity: 0; }
-  5% { opacity: 1; }
-  95% { opacity: 1; }
+  5% { opacity: 0.2; }
+  95% { opacity: 0.2; }
   100% { top: 102%; opacity: 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.highlight-btn::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, #ff6b9d, #b829dd, #00d4ff, #ff6b9d);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  filter: blur(4px);
+}
+
+.highlight-btn:hover::before {
+  opacity: 0.6;
 }
 
 .grid-bg {

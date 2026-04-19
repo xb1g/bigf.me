@@ -6,30 +6,59 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div id="terminal" class:list={["min-h-screen bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg monitor-warp scanlines", className]}>
-  <div class="vaporwave-bg"></div>
-  <div class="vaporwave-sunset"></div>
+<!-- CRT Monitor Wrapper for Desktop -->
+<div class="md:fixed md:inset-0 bg-black md:flex md:items-center md:justify-center min-h-screen z-0">
+  <!-- The CRT Bezel -->
+  <div class="w-full min-h-screen md:min-h-0 md:h-[85vh] md:w-[90vw] md:max-w-5xl md:rounded-[3rem] md:border-[24px] md:border-[#1a1a24] md:shadow-[0_20px_60px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,0,0,1)] relative overflow-hidden mx-auto bg-[#0a0a0f] flex flex-col">
+    <!-- Inner Monitor Screen Glass/Shadow -->
+    <div class="hidden md:block absolute inset-0 pointer-events-none md:rounded-[1.5rem] shadow-[inset_0_0_100px_rgba(0,0,0,0.95)] z-[70]"></div>
+    
+    <div id="terminal" class:list={["flex-1 min-h-screen md:min-h-0 bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg monitor-warp scanlines relative", className]}>
+  <!-- Construction Tape -->
+  <div class="w-full h-8 construction-tape flex items-center justify-center z-[60] shadow-[0_4px_15px_rgba(0,0,0,0.8)] border-b-2 border-black relative">
+    <div class="bg-black px-6 py-0.5 text-[#facc15] font-mono font-bold text-xs md:text-sm tracking-widest flex items-center gap-4 whitespace-nowrap whitespace-pre">
+      <span>🚧</span>
+      <span>SITE UNDER CONSTRUCTION</span>
+      <span>🚧</span>
+    </div>
+  </div>
+
   <div class="scanline-moving"></div>
   
   <!-- Terminal Output Area -->
-  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-[180px] md:pb-[140px] font-mono text-sm md:text-base">
+  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-[140px] font-mono text-sm md:text-base w-full max-w-4xl mx-auto relative z-10">
     <!-- Welcome Message -->
     <div class="mb-6">
       <div class="text-[#39ff14] font-bold text-lg mb-2">Welcome to bigf.me</div>
       <div class="text-[#ff6b9d] text-sm mb-1">Type 'help' or click a quick button below</div>
-      <div class="text-[#6b7280] text-xs">Terminal v1.0 • Synthwave Edition</div>
     </div>
   </div>
 
   <!-- Bottom Control Area -->
-  <div class="fixed bottom-0 left-0 right-0 flex flex-col z-50">
+  <div class="absolute bottom-0 left-0 right-0 flex flex-col z-50">
     <!-- Quick Buttons Bar -->
     <div class="bg-[#15151f]/95 backdrop-blur-sm border-t border-[#2a2a3f] px-4 py-2">
       <div class="flex items-center gap-2 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
         <span class="text-[#6b7280] text-xs shrink-0 mr-1">Quick:</span>
+        
+        <!-- HIGHLIGHTS Button - Special Glowing Animation -->
+        <button 
+          class="highlight-btn relative px-3 py-1.5 bg-gradient-to-r from-[#ff6b9d]/20 via-[#b829dd]/20 to-[#00d4ff]/20 border border-[#ff6b9d] rounded text-xs text-[#ff6b9d] font-bold tracking-wider overflow-hidden group shrink-0" 
+          data-cmd="highlights"
+        >
+          <span class="relative z-10 flex items-center gap-1">
+            <span class="animate-pulse">✨</span>
+            HIGHLIGHTS
+            <span class="animate-pulse">✨</span>
+          </span>
+          <div class="absolute inset-0 bg-gradient-to-r from-[#ff6b9d] via-[#b829dd] to-[#00d4ff] opacity-0 group-hover:opacity-30 transition-opacity"></div>
+          <div class="absolute -inset-1 bg-gradient-to-r from-[#ff6b9d] via-[#b829dd] to-[#00d4ff] opacity-20 blur-sm animate-glow-pulse"></div>
+        </button>
+        
         <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="whoami">whoami</button>
         <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="ls">ls</button>
         <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat about">about</button>
+        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#39ff14]/50 rounded text-xs text-[#39ff14] hover:border-[#39ff14] hover:bg-[#39ff14]/10 transition-all duration-200 shrink-0" data-cmd="cat life">🎨 life</button>
         <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat books">books</button>
         <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat philosophy">philosophy</button>
         <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat now">now</button>
@@ -56,17 +85,8 @@ const { class: className } = Astro.props;
       </div>
     </div>
 
-    <!-- Mobile Action Bar (only on mobile, at very bottom) -->
-    <div id="mobile-action-bar" class="bg-[#15151f]/95 backdrop-blur-sm border-t border-[#2a2a3f] p-2 md:hidden">
-      <div class="flex items-center gap-2 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
-        <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="help">help</button>
-        <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="whoami">whoami</button>
-        <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="ls">ls</button>
-        <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="cat about">about</button>
-        <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="cat books">books</button>
-        <button class="command-chip whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] transition-colors" data-cmd="clear">clear</button>
-        <button id="keyboard-toggle" class="whitespace-nowrap px-3 py-2 bg-[#15151f] border border-[#00d4ff] rounded text-xs text-[#00d4ff] hover:bg-[#00d4ff] hover:text-[#0a0a0f] transition-colors ml-auto">⌨</button>
-      </div>
+
+  </div>
     </div>
   </div>
 </div>
@@ -79,6 +99,23 @@ const { class: className } = Astro.props;
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  @keyframes tape-scroll {
+    from { background-position: 0 0; }
+    to { background-position: -56.57px 0; }
+  }
+
+  .construction-tape {
+    background: repeating-linear-gradient(
+      -45deg,
+      #facc15,
+      #facc15 20px,
+      #000000 20px,
+      #000000 40px
+    );
+    background-size: 56.57px 56.57px;
+    animation: tape-scroll 2s linear infinite;
+  }
 </style>
 
 <script>
@@ -89,8 +126,6 @@ const { class: className } = Astro.props;
   const terminal = document.getElementById('terminal-output');
   const input = document.getElementById('terminal-input') as HTMLInputElement;
   const currentPathEl = document.getElementById('current-path');
-  const commandChips = document.querySelectorAll('.command-chip');
-  const keyboardToggle = document.getElementById('keyboard-toggle');
 
   let currentPath = '~';
   let commandHistory: string[] = [];
@@ -130,7 +165,6 @@ const { class: className } = Astro.props;
         welcome.innerHTML = `
           <div class="text-[#39ff14] font-bold text-lg mb-2">Welcome to bigf.me</div>
           <div class="text-[#ff6b9d] text-sm mb-1">Type 'help' or click a quick button below</div>
-          <div class="text-[#6b7280] text-xs">Terminal v1.0 • Synthwave Edition</div>
         `;
         terminal.appendChild(welcome);
       }
@@ -142,7 +176,37 @@ const { class: className } = Astro.props;
     } else {
       const outputDiv = document.createElement('div');
       outputDiv.className = `mb-4 whitespace-pre-wrap ${isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}`;
-      outputDiv.textContent = output;
+      
+      if (isError) {
+        outputDiv.textContent = output;
+      } else {
+        let formattedOutput = output
+          // Escape HTML first
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+          // Horizontal rule
+          .replace(/^---$/gm, '<span class="text-[#2a2a3f] block my-2">----------------------------------------</span>')
+          // Headers
+          .replace(/^###\s+(.+)$/gm, '<span class="text-[#b829dd] font-bold text-md block mt-2 mb-1">### $1</span>')
+          .replace(/^##\s+(.+)$/gm, '<span class="text-[#00d4ff] font-bold text-lg block mt-3 mb-1">## $1</span>')
+          .replace(/^#\s+(.+)$/gm, '<span class="text-[#39ff14] font-bold text-xl block mt-4 mb-2"># $1</span>')
+          // Blockquotes
+          .replace(/^&gt;\s+(.+)$/gm, '<span class="text-[#a78bfa] italic border-l-2 border-[#a78bfa] pl-2 block my-2">&gt; $1</span>')
+          // Bold
+          .replace(/\*\*(.*?)\*\*/g, '<span class="font-bold text-[#facc15]">$1</span>')
+          // Italic
+          .replace(/(^|[^\*])\*([^\*]+)\*(?!\*)/g, '$1<span class="italic text-[#a78bfa]">$2</span>')
+          // Lists (- item)
+          .replace(/^-\s+(.+)$/gm, '<span class="text-[#ff6b9d]">-</span> <span class="text-[#e2e8f0]">$1</span>')
+          // Links
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a target="_blank" href="$2" class="text-[#00d4ff] underline hover:text-[#ff6b9d] transition-colors">$1</a>')
+          // Directories permissions
+          .replace(/^drwxr-xr-x\s+(.+)$/gm, '<span class="text-[#6b7280]">drwxr-xr-x</span>  <span class="text-[#00d4ff] font-bold">$1</span>')
+          // File permissions
+          .replace(/^-rw-r--r--\s+(.+)$/gm, '<span class="text-[#6b7280]">-rw-r--r--</span>  <span class="text-[#e2e8f0]">$1</span>');
+          
+        outputDiv.innerHTML = formattedOutput;
+      }
+      
       terminal?.appendChild(outputDiv);
     }
     scrollToBottom();
@@ -161,6 +225,7 @@ const { class: className } = Astro.props;
         onClick: (projectId) => {
           const cmd = categoryName ? `cd ${categoryName}/${projectId}` : `cd ${projectId}`;
           execute(cmd);
+          execute('ls');
         }
       })
     );
@@ -183,6 +248,31 @@ const { class: className } = Astro.props;
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
 
+    // Handle highlights command - show curated best projects (optimized for Eigen)
+    if (command === 'highlights') {
+      const highlightProjects = ['passionseed', 'fync', 'longkeeb', 'hive', 'careerac'];
+      const carousel = renderProjectCards(highlightProjects);
+      if (carousel) {
+        addOutputToTerminal('', false, carousel);
+      }
+      addOutputToTerminal(`✨ HIGHLIGHTS
+
+These are the projects I'm most proud of:
+
+• PassionSeed - AI career discovery for students (300 hackathon users)
+• Fync - Friendship graph API (early exploration in relationship modeling)
+• LongKeeb/Portex - Hardware keyboards I designed and sold
+• Hive - AI democracy tool (Gemini hackathon semi-finalist)
+• CareerAc - Career planning AI (Berkeley Challenge Lab)
+
+Click any card to explore, or use 'cd [project]' to navigate deeper.
+
+Type 'cat life' for music, places, and art.`);
+      input.value = '';
+      scrollToBottom();
+      return;
+    }
+
     // Handle ls with visual cards
     if (command === 'ls') {
       const target = args[0] || currentPath;
@@ -198,7 +288,10 @@ const { class: className } = Astro.props;
             <h3 class="text-sm font-semibold text-[#e2e8f0] group-hover:text-[#ff6b9d] transition-colors capitalize">${cat}</h3>
             <p class="text-xs text-[#6b7280] mt-1">${projs.length} projects</p>
           `;
-          card.addEventListener('click', () => execute(`cd ${cat}`));
+          card.addEventListener('click', () => {
+            execute(`cd ${cat}`);
+            execute('ls');
+          });
           return card;
         });
         
@@ -240,6 +333,15 @@ Use 'cd [category]' to explore or click a card above.`, false);
 
     // Default command execution
     const result = executeCommand(cmd, currentPath);
+
+    if (command === 'gallery') {
+      addOutputToTerminal(result.output, result.error);
+      setTimeout(() => {
+        window.location.href = '/life';
+      }, 1000);
+      return;
+    }
+
     addOutputToTerminal(result.output, result.error);
 
     if (result.newPath !== undefined) {
@@ -283,12 +385,7 @@ Use 'cd [category]' to explore or click a card above.`, false);
     }
   });
 
-  commandChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const cmd = chip.getAttribute('data-cmd') || '';
-      execute(cmd);
-    });
-  });
+
 
   const quickBtns = document.querySelectorAll('.quick-btn');
   quickBtns.forEach(btn => {
@@ -298,13 +395,37 @@ Use 'cd [category]' to explore or click a card above.`, false);
     });
   });
 
-  keyboardToggle?.addEventListener('click', () => {
-    input?.focus();
+  // Also attach click handler to highlight-btn (HIGHLIGHTS button)
+  const highlightBtns = document.querySelectorAll('.highlight-btn');
+  highlightBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cmd = btn.getAttribute('data-cmd') || '';
+      execute(cmd);
+    });
   });
 
-  if (window.innerWidth >= 768) {
-    input?.focus();
-  }
+  // Always focus input on load
+  input?.focus();
+  
+  // Auto-copy selection on mouseup
+  document.addEventListener('mouseup', async () => {
+    const selection = window.getSelection()?.toString();
+    if (selection) {
+      try {
+        await navigator.clipboard.writeText(selection);
+      } catch (err) {
+        console.error('Failed to copy text', err);
+      }
+    }
+  });
+
+  // Focus input on click, but only if they aren't selecting text
+  document.addEventListener('click', () => {
+    const selection = window.getSelection()?.toString();
+    if (!selection) {
+      input?.focus();
+    }
+  });
 
   setTimeout(scrollToBottom, 100);
 </script>

@@ -14,8 +14,8 @@ export interface Project {
 }
 
 export const categories: Record<string, string[]> = {
-  hardware: ['longkeeb', 'portex', 'fermentabot'],
   education: ['passionseed', 'datasciblock', 'coderdojo', 'quizdom'],
+  hardware: ['longkeeb', 'portex', 'fermentabot'],
   ai: ['careerac', 'rocketmap', 'neuralmix', 'hive'],
   sustainability: ['onetrace', 'chatasci', 'coffee-trace'],
   community: ['jojo-soba', 'fync', 'hamsterhub'],
@@ -28,14 +28,14 @@ export const projects: Record<string, Project> = {
     category: 'education',
     tech: ['Next.js', 'Supabase', 'AI SDK'],
     year: '2024',
-    description: 'Platform to grow the seed of passion for every student.',
+    description: 'AI career discovery platform modeling student emotional patterns from app usage to guide authentic life decisions. Shipped hackathon platform to 300 users in 1 month.',
   },
   careerac: {
     name: 'CareerAc',
     category: 'ai',
     tech: ['Next.js', 'OpenRouter', 'Vercel AI SDK'],
     year: '2025',
-    description: 'Helping community college students plan their study.',
+    description: 'AI career planning for underserved students. Built at Berkeley Challenge Lab - designing startups to transform society.',
   },
   rocketmap: {
     name: 'RocketMap',
@@ -52,11 +52,11 @@ export const projects: Record<string, Project> = {
     description: 'Split ergonomic mechanical keyboard.',
   },
   longkeeb: {
-    name: 'LongKeeb',
+    name: 'LongKeeb/Portex',
     category: 'hardware',
-    tech: ['PCB', 'QMK Firmware', 'Hardware'],
-    year: '2020',
-    description: 'Custom mechanical keyboard.',
+    tech: ['PCB Design', 'Fusion 360', 'QMK'],
+    year: '2020-2024',
+    description: 'Designed and shipped consumer hardware products (Cantor42, Charybdis, Portex) to paying customers. End-to-end from design → manufacturing → delivery.',
   },
   datasciblock: {
     name: 'DataSciBlock',
@@ -131,9 +131,9 @@ export const projects: Record<string, Project> = {
   fync: {
     name: 'Fync',
     category: 'community',
-    tech: ['API', 'SDK', 'Friendship'],
+    tech: ['API', 'SDK', 'Graph Analysis'],
     year: '2023',
-    description: 'Stripe for friendship tracking.',
+    description: 'Friendship graph API modeling human connection strength and social dynamics at scale. Early infrastructure for quantifying relationships.',
   },
   hamsterhub: {
     name: 'HamsterHub',
@@ -198,31 +198,42 @@ I'm passionate about technology solutions that actually work.
 - Deep into coffee and fermentation
 
 ## Music
-Oasis, Nirvana, Radiohead, The Beatles, Pink Floyd`,
+Oasis, Nirvana, Radiohead`,
 
   books: `bigseed@bigf.me:~$ cat books.md
 
 # Books I've Read
 
 ## Building & Startup
-- Zero to One (Thiel) - Monopoly thinking, definite optimism
-- Lean Startup (Ries) - Build-measure-learn loops
-- Business Model Generation - Visualizing business models
-- The Founders (PayPal Mafia) - Startup ecosystem dynamics
+- Zero to One (Thiel) - Find the secret and monopolize it. Monopoly thinking, definite optimism.
+- Lean Startup (Ries) - Build measure learn. And just repeat, focus on talking to customers.
+- Business Model Generation - Taught me an easy way to plan a business since grade 9.
+- The Founders (PayPal Mafia) - Sees how crazy the people really are, behind the scene of the backbones of Silicon Valley.
+- Start with Why (Sinek) - Find your why: why, why, why...
+
+## Technology & Design
+- Philosophy of Software Design (Ousterhout) - Deep modules...
+- The Next Renaissance - AI is here to change the way people live. We don't work to survive anymore, I'm optimistic it could thrive us. In a personal growth revolution...
 
 ## Productivity & Work
-- Deep Work (Cal Newport) - Focused work in distracted world
-- Digital Minimalism (Cal Newport) - Intentional technology use
-- The Art of Learning (Josh Waitzkin) - Mastery process
+- Deep Work (Cal Newport) - It is rare, it is precious, the only kind of work that is useful.
+- Digital Minimalism (Cal Newport) - After I dropped my phone in a dam, it made me see how addicted to that little brick I am. And how much has new technology changed the way people live? Not for the good, but just farming the attention span... makes me see how time shouldn't only be used in working or in just fun, but actually have some leisure that is really good.
+- The Art of Learning (Josh Waitzkin) - Learning is transferrable, I love learning, you focus, you are in the zone, it's really rare.
+- Peak (Anders Ericsson) - Deliberate practice grows you.
+
+## Psychology & Healing
+- The Shadow (Carl Jung summarized) - To be complete you need to integrate your shadow. Own it, find a way to deal with it, or else you're just gonna break.
+- The Body Keeps the Score (Bessel van der Kolk) - Trauma is not rare, it is hard to solve, but solvable with good practices.
 
 ## Biography & Vision
 - Steve Jobs (Isaacson) - Product obsession, design thinking
 - Elon Musk - First principles, multi-planetary vision
 
 ## Fiction & Philosophy
-- Brave New World (Huxley) - Technology and control
-- White Nights (Dostoevsky) - Dreams vs reality
-- Hitchhiker's Guide to the Galaxy - Don't panic`,
+- Brave New World (Huxley) - The world where everyone is happy might not be the best world. The truth is precious. You can learn and grow, and not fit in the society, but a fake society is worthless to be in.
+- White Nights (Dostoevsky) - Real world still better than dreaming. Wake up and do it.
+- Hitchhiker's Guide to the Galaxy - The world might just be gone in any moment... (in a fiction) do things that excites you.
+- The Complete Notebooks (Albert Camus) - When life is hard on you for no purpose when you're young, you appreciate everything it has. Grace...`,
 
   philosophy: `bigseed@bigf.me:~$ cat philosophy.md
 
@@ -276,6 +287,39 @@ Tools that help people:
 ## Reading
 - The Body Keeps the Score (trauma/healing)
 - Re-reading Deep Work (focus in AI age)`,
+
+  life: `bigseed@bigf.me:~$ cat life.md
+
+# 🎨 Life & Reflections
+
+## Visual Gallery
+I've organized my moments into a postcard collection. 
+Type 'gallery' or [Click Here to View the Life Postcards Gallery](/life)
+
+## Places That Shaped Me
+- **Bangkok, Thailand** - Where I learned to build. The chaos, the energy, the endless problems to solve.
+- **San Francisco / Berkeley** - Where I'm learning to think bigger. Startup Semester changed my perspective on what's possible.
+- **Japan** - Craftsmanship as a way of life. Deeply moved by the serenity of tea ceremonies and the meticulous art of chasen (bamboo whisk) making. The traditional buildings and farms are precious reminders of mastering a craft through presence.
+
+## Music I'm Listening To
+- **[Oasis](https://open.spotify.com/artist/2DaxqgrOhsnH0AHIqPcQ4n)** - Live Forever, Slide Away, Going Nowhere, Carry Us All, Falling Down
+- **[Nirvana](https://open.spotify.com/artist/6olE6TJLqED3rqDCTT0FyM)** - Lounge Act, Heart-Shaped Box, All Apologies, In Bloom, Lithium
+- **[Radiohead](https://open.spotify.com/artist/4Z8W4fZZBcVWTjM58EMTzi)** - Just, Black Star, Lucky ... honestly all of The Bends and OK Computer
+
+> "Music is what feelings sound like." - These tracks fuel my late-night building sessions.
+
+## Art & Reflections
+- **Drawing & Sketching** - I reflect through drawing. Technical diagrams, architecture sketches, occasional portraits.
+- **Photography** - Capturing moments of human connection, urban chaos, quiet mornings.
+- **Writing** - Journaling about building, failing, learning. The messy process of becoming.
+
+## Beliefs
+- Education is the base of everything. don't push kids in factory, let them play, let them have fun learning.
+- Everyone is capable of growth, and change. real learning shows that.
+- Love is hard, but i love it
+
+---
+*"I'm glad we get to learn to be human, the most human of humankind. Pushed by AI taking our jobs, we gotta build real personality and sense of self."*`,
 };
 
 function getAllProjects(): string[] {
@@ -313,20 +357,27 @@ export function executeCommand(input: string, currentPath: string): CommandResul
       return {
         output: `Available commands:
   whoami     - Show identity information
-  ls         - List projects by category
+  ls         - List projects by category (with visual cards)
+  highlights - ✨ Show my best curated projects
+  life       - 🎨 Personal side: places, art, music, reflections
   cat        - Display content pages (about, books, philosophy, now)
   cd         - Navigate to project directory
   clear      - Clear terminal
-  help       - Show this help message`,
+  help       - Show this help message
+
+Pro tips:
+  • Click ✨ HIGHLIGHTS for curated projects
+  • Type 'life' to see the personal side`,
       };
 
     case 'whoami':
       return {
-        output: `bigseed
-Web Developer | Builder | Integrated Innovation
-Based: Bangkok / Berkeley
-Passion Seed: passionseed.org
-Email: your.big@passionseed.com`,
+        output: `name: Bunnyasit Fang. github: xb1g, and i will write blogs here and on substack later.
+
+i am gonna fix education in thailand, i build stuffs i care deeply about. 
+I want to retire to do art. but i need to form my world view and experience first.
+
+email: bunyasit@passionseed.org`,
       };
 
     case 'ls': {
@@ -506,7 +557,20 @@ ${project.description}
       };
     }
 
+    case 'highlights':
+      return {
+        output: `__HIGHLIGHTS__`,
+        highlightProjects: ['passionseed', 'fync', 'longkeeb', 'hive', 'careerac'],
+      };
+
+    case 'gallery':
+      return {
+        output: `Opening life gallery...`,
+        html: true,
+      };
+
     case 'clear':
+    case 'cls':
       return {
         output: '__CLEAR__',
       };

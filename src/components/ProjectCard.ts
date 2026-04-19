@@ -11,18 +11,9 @@ export function createProjectCard(props: ProjectCardProps): HTMLElement {
   const card = document.createElement('div');
   card.className = 'project-card flex-shrink-0 w-64 bg-[#15151f] border border-[#2a2a3f] rounded-lg overflow-hidden cursor-pointer hover:border-[#00d4ff] transition-all duration-300 group';
   
-  // Image placeholder with gradient
+  // Image placeholder
   const imageContainer = document.createElement('div');
-  imageContainer.className = 'h-32 bg-gradient-to-br from-[#ff6b9d]/20 to-[#00d4ff]/20 flex items-center justify-center relative overflow-hidden';
-  
-  // Abstract pattern overlay
-  const pattern = document.createElement('div');
-  pattern.className = 'absolute inset-0 opacity-30';
-  pattern.style.backgroundImage = `
-    radial-gradient(circle at 30% 40%, rgba(255, 107, 157, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 70% 60%, rgba(0, 212, 255, 0.4) 0%, transparent 50%)
-  `;
-  imageContainer.appendChild(pattern);
+  imageContainer.className = 'h-32 bg-[#0d0d12] flex items-center justify-center relative overflow-hidden';
   
   // Project initial/icon
   const icon = document.createElement('div');
