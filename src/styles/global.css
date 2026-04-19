@@ -3,16 +3,16 @@
 @theme {
   --color-terminal-bg: #0a0a0f;
   --color-terminal-text: #e2e8f0;
-  --color-terminal-prompt: #ff6b9d;
+  --color-terminal-prompt: #ff5789;
   --color-terminal-link: #00d4ff;
-  --color-terminal-success: #39ff14;
+  --color-terminal-success: #42ff9e;
   --color-terminal-warning: #ffd700;
   --color-terminal-chip-bg: #15151f;
   --color-terminal-chip-border: #2a2a3f;
   --color-terminal-muted: #6b7280;
   --color-synth-pink: #ff6b9d;
-  --color-synth-cyan: #00d4ff;
-  --color-synth-purple: #b829dd;
+  --color-synth-cyan: #5cceff;
+  --color-synth-purple: #f033b4;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 }
 
@@ -140,48 +140,86 @@
   right: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.6), transparent);
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-  animation: scanlineMove 6s linear infinite;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8), 0 0 3px rgba(255, 107, 157, 0.5); /* subtle cyan+pink glow */
+  animation: scanlineMove 8s linear infinite;
   pointer-events: none;
   z-index: 51;
 }
 
+/* Base erratic scanline animation */
 @keyframes scanlineMove {
-  0% { top: -2%; opacity: 0; }
-  5% { opacity: 0.2; }
+  0% { top: -2%; opacity: 0; transform: scaleY(1); }
+  5% { opacity: 0.4; transform: scaleY(1); }
+  15% { top: 15%; opacity: 0.4; }
+  15.1% { opacity: 0.8; transform: scaleY(3); } /* Glitch flash */
+  15.2% { opacity: 0.2; transform: scaleY(0.5); }
+  15.3% { opacity: 0.4; transform: scaleY(1); }
+  45% { top: 45%; }
+  45.1% { opacity: 0; } /* Blink off */
+  45.3% { opacity: 0.6; }
+  45.5% { opacity: 0.4; }
+  85% { opacity: 0.4; transform: scaleY(1); }
+  85.1% { top: 85%; opacity: 0.9; transform: scaleY(4) translateY(-2px); } /* Big jump glitch */
+  85.3% { opacity: 0.4; transform: scaleY(1); }
   95% { opacity: 0.2; }
   100% { top: 102%; opacity: 0; }
 }
 
-@keyframes glow-pulse {
-  0%, 100% {
-    opacity: 0.2;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.05);
-  }
-}
-
-.animate-glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite;
-}
-
-.highlight-btn::before {
-  content: '';
+/* VHS thick tracking band */
+.tracking-line {
   position: absolute;
-  inset: -2px;
-  background: linear-gradient(90deg, #ff6b9d, #b829dd, #00d4ff, #ff6b9d);
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s;
-  filter: blur(4px);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12%;
+  background: linear-gradient(to bottom, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.02) 20%, 
+    rgba(200,255,255,0.05) 50%, 
+    rgba(255,255,255,0.02) 80%, 
+    rgba(255,255,255,0) 100%
+  );
+  animation: trackingMove 14s linear infinite;
+  pointer-events: none;
+  z-index: 49;
+  opacity: 0.7;
+}
+/* For Webkit we can add a bit of pixel distortion via backdrop-filter */
+@supports (backdrop-filter: contrast(1)) {
+  .tracking-line {
+    backdrop-filter: contrast(1.1) brightness(1.05) saturate(1.2);
+  }
 }
 
-.highlight-btn:hover::before {
-  opacity: 0.6;
+@keyframes trackingMove {
+  0% { top: -20%; }
+  100% { top: 120%; }
+}
+
+/* Script-triggered screen shake glitch */
+.glitch-anim {
+  animation: crtGlitch 0.25s cubic-bezier(.25, .46, .45, .94) both;
+}
+
+@keyframes crtGlitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-2px, 1px) }
+  40% { transform: translate(-1px, -2px) }
+  60% { transform: translate(3px, 1px) }
+  80% { transform: translate(1px, -1px) }
+  100% { transform: translate(0) }
+}
+
+/* Script-triggered RGB text split */
+.glitch-rgb {
+  animation: rgbSplit 0.2s steps(2, end) forwards;
+}
+
+@keyframes rgbSplit {
+  0% { text-shadow: 2px 0 rgba(255,0,0,0.8), -2px 0 rgba(0,255,255,0.8); }
+  40% { text-shadow: -3px 0 rgba(255,0,0,0.8), 2px 0 rgba(0,255,255,0.8); }
+  80% { text-shadow: 1px 0 rgba(255,0,0,0.8), -1px 0 rgba(0,255,255,0.8); }
+  100% { text-shadow: 0 0 2px currentColor; }
 }
 
 .grid-bg {
@@ -193,4 +231,90 @@
 
 .crt-text {
   text-shadow: 0 0 2px currentColor;
+}
+
+/* Infinite Canvas Styling */
+.canvas-bg {
+  background-color: #e8e6e1;
+  background-image: radial-gradient(#d0cdc5 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: 0 0;
+}
+
+.canvas-viewport {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  cursor: grab;
+}
+
+.canvas-viewport:active {
+  cursor: grabbing;
+}
+
+.canvas-surface {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* Custom Cursor Styles */
+@media (pointer: fine) {
+  html, body {
+    cursor: none !important;
+  }
+  
+  a, button, [role="button"], input, textarea, .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
+#cursor-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #ff6b9d;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s ease-out, background-color 0.3s ease;
+}
+
+#cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(255, 107, 157, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.cursor-hover #cursor-outline {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 107, 157, 0.1);
+  border-color: rgba(255, 107, 157, 0.8);
+}
+
+.cursor-hover #cursor-dot {
+  transform: scale(1.5);
+  background-color: #5cceff;
+}
+
+.cursor-panning #cursor-outline {
+  width: 30px;
+  height: 30px;
+  border-color: #5cceff;
+}
+
+.cursor-panning #cursor-dot {
+  background-color: #5cceff;
 }

@@ -7,13 +7,13 @@ const { class: className } = Astro.props;
 ---
 
 <!-- CRT Monitor Wrapper for Desktop -->
-<div class="md:fixed md:inset-0 bg-black md:flex md:items-center md:justify-center min-h-screen z-0">
+<div class="absolute w-full h-full inset-0 bg-black md:flex md:items-center md:justify-center z-0 overflow-hidden rounded-[3rem]">
   <!-- The CRT Bezel -->
-  <div class="w-full min-h-screen md:min-h-0 md:h-[85vh] md:w-[90vw] md:max-w-5xl md:rounded-[3rem] md:border-[24px] md:border-[#1a1a24] md:shadow-[0_20px_60px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,0,0,1)] relative overflow-hidden mx-auto bg-[#0a0a0f] flex flex-col">
+  <div class="w-full h-full md:rounded-[3rem] md:border-[24px] border border-[#2a2a3f] md:border-[#1a1a24] shadow-[0_20px_60px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,0,0,1)] relative mx-auto bg-[#0a0a0f] flex flex-col md:resize md:overflow-hidden" style="min-width: 320px;">
     <!-- Inner Monitor Screen Glass/Shadow -->
     <div class="hidden md:block absolute inset-0 pointer-events-none md:rounded-[1.5rem] shadow-[inset_0_0_100px_rgba(0,0,0,0.95)] z-[70]"></div>
     
-    <div id="terminal" class:list={["flex-1 min-h-screen md:min-h-0 bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg monitor-warp scanlines relative", className]}>
+    <div id="terminal" class:list={["flex-1 h-full bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg monitor-warp scanlines relative rounded-[1rem] md:rounded-none overflow-hidden", className]}>
   <!-- Construction Tape -->
   <div class="w-full h-8 construction-tape flex items-center justify-center z-[60] shadow-[0_4px_15px_rgba(0,0,0,0.8)] border-b-2 border-black relative">
     <div class="bg-black px-6 py-0.5 text-[#facc15] font-mono font-bold text-xs md:text-sm tracking-widest flex items-center gap-4 whitespace-nowrap whitespace-pre">
@@ -24,9 +24,10 @@ const { class: className } = Astro.props;
   </div>
 
   <div class="scanline-moving"></div>
+  <div class="tracking-line"></div>
   
   <!-- Terminal Output Area -->
-  <div id="terminal-output" class="flex-1 overflow-y-auto p-4 pb-[140px] font-mono text-sm md:text-base w-full max-w-4xl mx-auto relative z-10">
+  <div id="terminal-output" class="flex-1 overflow-x-hidden overflow-y-auto p-4 pb-[140px] font-mono text-sm md:text-base w-full mx-auto relative z-10 custom-scrollbar block">
     <!-- Welcome Message -->
     <div class="mb-6">
       <div class="text-[#39ff14] font-bold text-lg mb-2">Welcome to bigf.me</div>
@@ -37,32 +38,31 @@ const { class: className } = Astro.props;
   <!-- Bottom Control Area -->
   <div class="absolute bottom-0 left-0 right-0 flex flex-col z-50">
     <!-- Quick Buttons Bar -->
-    <div class="bg-[#15151f]/95 backdrop-blur-sm border-t border-[#2a2a3f] px-4 py-2">
-      <div class="flex items-center gap-2 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
-        <span class="text-[#6b7280] text-xs shrink-0 mr-1">Quick:</span>
+    <div class="relative group/bar bg-[#0a0a0f]/40 backdrop-blur-xl border-t border-[#2a2a3f]/40 px-4 py-2 overflow-hidden">
+      <div class="relative z-10 flex items-center gap-4 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
+        <span class="text-[#6b7280] text-[10px] uppercase tracking-widest shrink-0 font-bold opacity-40">Quick</span>
         
-        <!-- HIGHLIGHTS Button - Special Glowing Animation -->
+        <!-- HIGHLIGHTS Button - Custom hover -->
         <button 
-          class="highlight-btn relative px-3 py-1.5 bg-gradient-to-r from-[#ff6b9d]/20 via-[#b829dd]/20 to-[#00d4ff]/20 border border-[#ff6b9d] rounded text-xs text-[#ff6b9d] font-bold tracking-wider overflow-hidden group shrink-0" 
+          class="highlight-btn px-3 py-1 border border-[#ff6b9d]/30 rounded-full text-xs text-[#ff6b9d]/80 hover:text-white hover:bg-[#ff6b9d] hover:shadow-[0_0_20px_rgba(255,107,157,0.4)] transition-all duration-300 shrink-0" 
           data-cmd="highlights"
         >
-          <span class="relative z-10 flex items-center gap-1">
-            <span class="animate-pulse">✨</span>
-            HIGHLIGHTS
-            <span class="animate-pulse">✨</span>
-          </span>
-          <div class="absolute inset-0 bg-gradient-to-r from-[#ff6b9d] via-[#b829dd] to-[#00d4ff] opacity-0 group-hover:opacity-30 transition-opacity"></div>
-          <div class="absolute -inset-1 bg-gradient-to-r from-[#ff6b9d] via-[#b829dd] to-[#00d4ff] opacity-20 blur-sm animate-glow-pulse"></div>
+          highlights
         </button>
         
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="whoami">whoami</button>
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="ls">ls</button>
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat about">about</button>
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#39ff14]/50 rounded text-xs text-[#39ff14] hover:border-[#39ff14] hover:bg-[#39ff14]/10 transition-all duration-200 shrink-0" data-cmd="cat life">🎨 life</button>
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat books">books</button>
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat philosophy">philosophy</button>
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#2a2a3f] rounded text-xs text-[#e2e8f0] hover:border-[#00d4ff] hover:text-[#00d4ff] transition-all duration-200 shrink-0" data-cmd="cat now">now</button>
-        <button class="quick-btn px-2 py-1 bg-[#15151f] border border-[#ff6b9d] rounded text-xs text-[#ff6b9d] hover:bg-[#ff6b9d] hover:text-[#0a0a0f] transition-all duration-200 shrink-0 ml-auto" data-cmd="clear">clear</button>
+        <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="whoami">whoami</button>
+        <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="ls">ls</button>
+        <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat about">about</button>
+        <button class="quick-btn px-3 py-1 border border-[#39ff14]/10 rounded-full text-xs text-[#39ff14]/60 hover:text-[#39ff14] hover:border-[#39ff14]/30 hover:bg-[#39ff14]/5 hover:shadow-[0_0_15px_rgba(57,255,20,0.2)] transition-all duration-300 shrink-0" data-cmd="cat life">life</button>
+        <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat books">books</button>
+        <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat philosophy">philosophy</button>
+        <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat now">now</button>
+        <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="pretext">pretext</button>
+        <button class="quick-btn px-3 py-1 border border-[#a78bfa]/20 rounded-full text-xs text-[#a78bfa]/70 hover:text-[#a78bfa] hover:border-[#a78bfa]/40 hover:bg-[#a78bfa]/10 hover:shadow-[0_0_15px_rgba(167,139,250,0.2)] transition-all duration-300 shrink-0 flex items-center gap-1" data-cmd="ai "><span class="text-[10px]">🤖</span> ask ai</button>
+        
+        <div class="ml-auto flex items-center gap-2">
+          <button class="quick-btn px-3 py-1 border border-transparent rounded-full text-xs text-[#6b7280]/40 hover:text-[#ff6b9d] transition-all duration-300 shrink-0" data-cmd="clear">clear</button>
+        </div>
       </div>
     </div>
 
@@ -116,12 +116,118 @@ const { class: className } = Astro.props;
     background-size: 56.57px 56.57px;
     animation: tape-scroll 2s linear infinite;
   }
+
+  /* ── Reasoning stream animations ── */
+
+  @keyframes think-glow {
+    0%, 100% { text-shadow: 0 0 4px #a78bfa44, 0 0 8px #a78bfa22; opacity: 0.55; }
+    50%       { text-shadow: 0 0 8px #a78bfa99, 0 0 20px #a78bfa44; opacity: 0.85; }
+  }
+
+  @keyframes think-border-pulse {
+    0%, 100% { border-color: #a78bfa22; box-shadow: inset 0 0 12px #a78bfa08; }
+    50%       { border-color: #a78bfa55; box-shadow: inset 0 0 20px #a78bfa18, 0 0 8px #a78bfa22; }
+  }
+
+  @keyframes char-in {
+    from { opacity: 0; transform: translateX(-3px); filter: blur(1.5px); }
+    to   { opacity: 1; transform: translateX(0);    filter: blur(0); }
+  }
+
+  @keyframes think-scanline {
+    from { top: 0%; }
+    to   { top: 100%; }
+  }
+
+  @keyframes synthesis-flash {
+    0%   { opacity: 1; background: #a78bfa22; }
+    40%  { opacity: 1; background: #a78bfa55; box-shadow: 0 0 30px #a78bfa66; }
+    100% { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
+  }
+
+  @keyframes think-header-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.3; }
+  }
+
+  @keyframes answer-slide-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .think-block {
+    border: 1px solid #a78bfa22;
+    background: linear-gradient(135deg, #0a0a18 0%, #0d0a1a 100%);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+    animation: think-border-pulse 2.4s ease-in-out infinite;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .think-block.collapsed {
+    animation: synthesis-flash 0.6s ease-out forwards;
+  }
+
+  .think-scanline-bar {
+    position: absolute;
+    left: 0; right: 0;
+    height: 18px;
+    background: linear-gradient(180deg, transparent, #a78bfa0a 50%, transparent);
+    pointer-events: none;
+    animation: think-scanline 2.8s linear infinite;
+  }
+
+  .think-header {
+    animation: think-glow 1.8s ease-in-out infinite;
+  }
+
+  .think-dot {
+    animation: think-header-blink 0.9s step-start infinite;
+  }
+
+  .think-char {
+    display: inline;
+    animation: char-in 0.06s ease-out both;
+  }
+
+  /* Variable font weight cycling — mapped by char position mod classes */
+  .w-thin   { font-weight: 100; opacity: 0.4; letter-spacing: 0.02em; }
+  .w-light  { font-weight: 300; opacity: 0.6; letter-spacing: 0.01em; }
+  .w-normal { font-weight: 400; opacity: 0.75; }
+  .w-medium { font-weight: 500; opacity: 0.85; }
+  .w-bold   { font-weight: 700; opacity: 0.95; letter-spacing: -0.01em; }
+  .w-black  { font-weight: 900; opacity: 1.0;  letter-spacing: -0.02em; }
+
+  .ai-answer-block {
+    animation: answer-slide-in 0.35s ease-out both;
+  }
 </style>
+
 
 <script>
   import { executeCommand, projects, categories } from '../lib/commands.ts';
   import { createProjectCard, createCarousel } from './ProjectCard.ts';
+  import { createThemePicker } from './ThemePicker.ts';
   import type { Project } from '../lib/commands.ts';
+
+  // Listen for global execute commands (e.g. from mobile dock)
+  window.addEventListener('terminal:execute', (e: any) => {
+    execute(e.detail.command);
+  });
+
+  // MiniMax AI config (Chinese token plan - OpenAI-compatible endpoint)
+  const MINIMAX_BASE_URL = 'https://api.minimaxi.com/v1';
+  const MINIMAX_API_KEY = '[REDACTED]';
+  const MINIMAX_MODEL = 'MiniMax-M2.7-highspeed';
+
+  const SYSTEM_PROMPT = `You are an AI assistant embedded in the terminal portfolio of Bunyasit Fang (github: xb1g), a builder and Integrated Innovation student at Chulalongkorn University, currently on Startup Semester at UC Berkeley (SCET). 
+
+You know about his projects: PassionSeed (AI career discovery, 300 hackathon users), CareerAc (AI career planning), RocketMap (business model canvas), LongKeeb/Portex (ergonomic keyboards shipped to customers), Hive (AI democracy tool, Gemini hackathon semi-finalist), Fync (friendship graph API), NeuralMix (LLM for audio mixing), and more.
+
+His mission: fixing education in Thailand. He's passionate about AI + Education + Sustainability. He also loves Oasis, Nirvana, Radiohead, coffee roasting, and art.
+
+Answer concisely in plain text (no markdown, this is a terminal). Keep responses short and punchy unless asked for detail. If asked about code or tech, be technical and precise.`;
 
   const terminal = document.getElementById('terminal-output');
   const input = document.getElementById('terminal-input') as HTMLInputElement;
@@ -156,10 +262,65 @@ const { class: className } = Astro.props;
     scrollToBottom();
   }
 
+  let prepareWithSegments: any, layoutWithLines: any;
+  let pretextLoaded = false;
+  let textBlocksCache: { id: number, text: string, isError: boolean, prepared: any, el: HTMLElement }[] = [];
+  let nextBlockId = 0;
+
+  // Initialize Pretext globally
+  import('https://esm.sh/@chenglou/pretext@1.0.3').then((mod) => {
+    prepareWithSegments = mod.prepareWithSegments;
+    layoutWithLines = mod.layoutWithLines;
+    pretextLoaded = true;
+    
+    // Setup resize observer on terminal to reflow all text using pretext
+    const resizeObserver = new ResizeObserver(() => {
+       if (!pretextLoaded || !terminal) return;
+       requestAnimationFrame(() => {
+         const width = terminal.clientWidth - 32; // taking padding into account
+         // Reflow all saved text blocks
+         textBlocksCache.forEach(block => {
+            if (!block.el.isConnected) return;
+            const { height, lines } = layoutWithLines(block.prepared, width, 24);
+            
+            block.el.style.height = height + 'px';
+            block.el.innerHTML = '';
+            
+            lines.forEach((line: any) => {
+               const lineEl = document.createElement('div');
+               lineEl.className = 'whitespace-pre absolute left-0';
+               lineEl.style.top = (line.start.segmentIndex * 24) + 'px'; // Pretext doesn't expose line y natively but we can do index * 24
+            });
+            // Better rendering approach since layoutWithLines gives us the ordered lines:
+            let html = '';
+            for (let i = 0; i < lines.length; i++) {
+               let formattedLine = lines[i].text
+                  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                  .replace(/^###\s+(.+)$/g, '<span class="text-[#b829dd] font-bold text-md block mt-2 mb-1">### $1</span>')
+                  .replace(/^##\s+(.+)$/g, '<span class="text-[#00d4ff] font-bold text-lg block mt-3 mb-1">## $1</span>')
+                  .replace(/^#\s+(.+)$/g, '<span class="text-[#39ff14] font-bold text-xl block mt-4 mb-2"># $1</span>')
+                  .replace(/^&gt;\s+(.+)$/g, '<span class="text-[#a78bfa] italic border-l-2 border-[#a78bfa] pl-2 block my-2">&gt; $1</span>')
+                  .replace(/\*\*(.*?)\*\*/g, '<span class="font-bold text-[#facc15]">$1</span>')
+                  .replace(/(^|[^\*])\*([^\*]+)\*(?!\*)/g, '$1<span class="italic text-[#a78bfa]">$2</span>')
+                  .replace(/^-\s+(.+)$/g, '<span class="text-[#ff6b9d]">-</span> <span class="text-[#e2e8f0]">$1</span>')
+                  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a target="_blank" href="$2" class="text-[#00d4ff] underline hover:text-[#ff6b9d] transition-colors">$1</a>')
+                  .replace(/^drwxr-xr-x\s+(.+)$/g, '<span class="text-[#6b7280]">drwxr-xr-x</span>  <span class="text-[#00d4ff] font-bold">$1</span>')
+                  .replace(/^-rw-r--r--\s+(.+)$/g, '<span class="text-[#6b7280]">-rw-r--r--</span>  <span class="text-[#e2e8f0]">$1</span>');
+               
+               html += `<div class="whitespace-pre overflow-hidden h-[24px] absolute left-0 text-ellipsis ${block.isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}" style="top: ${i * 24}px">${formattedLine}</div>`;
+            }
+            block.el.innerHTML = html;
+         });
+       });
+    });
+    if (terminal) resizeObserver.observe(terminal);
+  });
+
   function addOutputToTerminal(output: string, isError = false, element?: HTMLElement) {
     if (output === '__CLEAR__') {
       if (terminal) {
         terminal.innerHTML = '';
+        textBlocksCache = [];
         const welcome = document.createElement('div');
         welcome.className = 'mb-6';
         welcome.innerHTML = `
@@ -171,40 +332,69 @@ const { class: className } = Astro.props;
       return;
     }
 
+    if (output.startsWith('__PRETEXT__')) {
+        output = output.substring('__PRETEXT__'.length); // For the pretext command, just render it as normal text now since the WHOLE terminal is pretext powered
+    }
+
+    if (output === '__THEME_PICKER__') {
+      const picker = createThemePicker();
+      terminal?.appendChild(picker);
+      scrollToBottom();
+      return;
+    }
+
     if (element) {
       terminal?.appendChild(element);
     } else {
       const outputDiv = document.createElement('div');
-      outputDiv.className = `mb-4 whitespace-pre-wrap ${isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}`;
+      outputDiv.className = `mb-4 relative w-full`;
       
-      if (isError) {
-        outputDiv.textContent = output;
-      } else {
-        let formattedOutput = output
-          // Escape HTML first
-          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-          // Horizontal rule
-          .replace(/^---$/gm, '<span class="text-[#2a2a3f] block my-2">----------------------------------------</span>')
-          // Headers
-          .replace(/^###\s+(.+)$/gm, '<span class="text-[#b829dd] font-bold text-md block mt-2 mb-1">### $1</span>')
-          .replace(/^##\s+(.+)$/gm, '<span class="text-[#00d4ff] font-bold text-lg block mt-3 mb-1">## $1</span>')
-          .replace(/^#\s+(.+)$/gm, '<span class="text-[#39ff14] font-bold text-xl block mt-4 mb-2"># $1</span>')
-          // Blockquotes
-          .replace(/^&gt;\s+(.+)$/gm, '<span class="text-[#a78bfa] italic border-l-2 border-[#a78bfa] pl-2 block my-2">&gt; $1</span>')
-          // Bold
-          .replace(/\*\*(.*?)\*\*/g, '<span class="font-bold text-[#facc15]">$1</span>')
-          // Italic
-          .replace(/(^|[^\*])\*([^\*]+)\*(?!\*)/g, '$1<span class="italic text-[#a78bfa]">$2</span>')
-          // Lists (- item)
-          .replace(/^-\s+(.+)$/gm, '<span class="text-[#ff6b9d]">-</span> <span class="text-[#e2e8f0]">$1</span>')
-          // Links
-          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a target="_blank" href="$2" class="text-[#00d4ff] underline hover:text-[#ff6b9d] transition-colors">$1</a>')
-          // Directories permissions
-          .replace(/^drwxr-xr-x\s+(.+)$/gm, '<span class="text-[#6b7280]">drwxr-xr-x</span>  <span class="text-[#00d4ff] font-bold">$1</span>')
-          // File permissions
-          .replace(/^-rw-r--r--\s+(.+)$/gm, '<span class="text-[#6b7280]">-rw-r--r--</span>  <span class="text-[#e2e8f0]">$1</span>');
+      if (pretextLoaded) {
+          // Process using pretext for exact line rendering
+          const font = '14px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
+          // Sanitize raw output and prepare
+          const prepared = prepareWithSegments(output, font);
           
-        outputDiv.innerHTML = formattedOutput;
+          textBlocksCache.push({
+              id: nextBlockId++,
+              text: output,
+              isError,
+              prepared,
+              el: outputDiv
+          });
+          
+          const width = terminal!.clientWidth - 32;
+          const { height, lines } = layoutWithLines(prepared, width, 24);
+          outputDiv.style.height = height + 'px';
+          
+          let html = '';
+          for (let i = 0; i < lines.length; i++) {
+             let formattedLine = lines[i].text
+                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                .replace(/^###\s+(.+)$/g, '<span class="text-[#b829dd] font-bold text-md block mt-2 mb-1">### $1</span>')
+                .replace(/^##\s+(.+)$/g, '<span class="text-[#00d4ff] font-bold text-lg block mt-3 mb-1">## $1</span>')
+                .replace(/^#\s+(.+)$/g, '<span class="text-[#39ff14] font-bold text-xl block mt-4 mb-2"># $1</span>')
+                .replace(/^&gt;\s+(.+)$/g, '<span class="text-[#a78bfa] italic border-l-2 border-[#a78bfa] pl-2 block my-2">&gt; $1</span>')
+                .replace(/\*\*(.*?)\*\*/g, '<span class="font-bold text-[#facc15]">$1</span>')
+                .replace(/(^|[^\*])\*([^\*]+)\*(?!\*)/g, '$1<span class="italic text-[#a78bfa]">$2</span>')
+                .replace(/^-\s+(.+)$/g, '<span class="text-[#ff6b9d]">-</span> <span class="text-[#e2e8f0]">$1</span>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a target="_blank" href="$2" class="text-[#00d4ff] underline hover:text-[#ff6b9d] transition-colors">$1</a>')
+                .replace(/^drwxr-xr-x\s+(.+)$/g, '<span class="text-[#6b7280]">drwxr-xr-x</span>  <span class="text-[#00d4ff] font-bold">$1</span>')
+                .replace(/^-rw-r--r--\s+(.+)$/g, '<span class="text-[#6b7280]">-rw-r--r--</span>  <span class="text-[#e2e8f0]">$1</span>');
+             
+             html += `<div class="whitespace-pre overflow-hidden h-[24px] absolute left-0 text-ellipsis ${isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}" style="top: ${i * 24}px">${formattedLine}</div>`;
+          }
+          outputDiv.innerHTML = html;
+      } else {
+          // Fallback if pretext script fails to load
+          outputDiv.className += ` whitespace-pre-wrap ${isError ? 'text-[#ff6b9d]' : 'text-[#e2e8f0]'}`;
+          if (isError) {
+            outputDiv.textContent = output;
+          } else {
+            let formattedOutput = output
+              .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            outputDiv.innerHTML = formattedOutput;
+          }
       }
       
       terminal?.appendChild(outputDiv);
@@ -212,7 +402,297 @@ const { class: className } = Astro.props;
     scrollToBottom();
   }
 
+  // ── Rate limiting ──────────────────────────────────────────────
+  const AI_REQUEST_TIMESTAMPS: number[] = [];
+  const AI_RATE_LIMIT = 5;       // max requests
+  const AI_RATE_WINDOW = 60_000; // per 60 seconds
+
+  function checkAIRateLimit(): { allowed: boolean; waitMs: number } {
+    const now = Date.now();
+    // Evict timestamps outside window
+    while (AI_REQUEST_TIMESTAMPS.length && now - AI_REQUEST_TIMESTAMPS[0] > AI_RATE_WINDOW) {
+      AI_REQUEST_TIMESTAMPS.shift();
+    }
+    if (AI_REQUEST_TIMESTAMPS.length >= AI_RATE_LIMIT) {
+      const waitMs = AI_RATE_WINDOW - (now - AI_REQUEST_TIMESTAMPS[0]);
+      return { allowed: false, waitMs };
+    }
+    AI_REQUEST_TIMESTAMPS.push(now);
+    return { allowed: true, waitMs: 0 };
+  }
+
+  // ── Variable-weight char classes (sinusoidal cycle) ────────────
+  const WEIGHT_CYCLE = ['w-thin','w-light','w-normal','w-medium','w-bold','w-black','w-bold','w-medium','w-normal','w-light'];
+
+  function makeThinkChar(ch: string, globalIdx: number): string {
+    if (ch === '\n') return '<br>';
+    if (ch === ' ')  return '<span class="think-char" style="animation-delay:' + (Math.min(globalIdx * 0.012, 1.5)) + 's"> </span>';
+    const wClass   = WEIGHT_CYCLE[globalIdx % WEIGHT_CYCLE.length];
+    const delay    = Math.min(globalIdx * 0.012, 1.5);
+    // Purple hue varies slightly by weight class for depth
+    const hue      = 265 + (globalIdx % 7) * 3;
+    const lit      = 65 + (globalIdx % 5) * 4;
+    const escaped  = ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return `<span class="think-char ${wClass}" style="animation-delay:${delay}s;color:hsl(${hue},70%,${lit}%)">${escaped}</span>`;
+  }
+
+  // ── Main AI handler ─────────────────────────────────────────────
+  async function handleAICommand(query: string) {
+    // Rate limit check
+    const rl = checkAIRateLimit();
+    if (!rl.allowed) {
+      const secs = Math.ceil(rl.waitMs / 1000);
+      const errDiv = document.createElement('div');
+      errDiv.className = 'mb-4 font-mono text-xs';
+      errDiv.innerHTML = `<span style="color:#ff6b9d">◈ rate limit</span>  <span style="color:#6b7280">try again in ${secs}s  (max ${AI_RATE_LIMIT} req/min)</span>`;
+      terminal?.appendChild(errDiv);
+      scrollToBottom();
+      input.value = '';
+      return;
+    }
+
+    // ── Outer wrapper ──────────────────────────────────────────────
+    const aiContainer = document.createElement('div');
+    aiContainer.className = 'mb-6 relative w-full';
+
+    // ── Think block ───────────────────────────────────────────────
+    const thinkBlock = document.createElement('div');
+    thinkBlock.className = 'think-block mb-3 px-3 pt-2 pb-3';
+
+    // Scanline overlay
+    const scanline = document.createElement('div');
+    scanline.className = 'think-scanline-bar';
+    thinkBlock.appendChild(scanline);
+
+    // Header: ASCII box top + blinking label
+    const thinkHeader = document.createElement('div');
+    thinkHeader.className = 'think-header flex items-center gap-2 text-[10px] font-mono mb-2 select-none';
+    thinkHeader.style.cssText = 'color:#a78bfa; letter-spacing:0.12em;';
+    thinkHeader.innerHTML = `<span style="color:#a78bfa44">┌─</span><span class="think-dot" style="color:#a78bfa">◈</span><span> REASONING</span><span style="color:#a78bfa44;flex:1"> ──────────────────────────────────────</span>`;
+    thinkBlock.appendChild(thinkHeader);
+
+    // Char container — where think chars flow in
+    const thinkCharEl = document.createElement('div');
+    thinkCharEl.className = 'font-mono text-xs leading-[1.7] pl-4 relative z-10';
+    thinkCharEl.style.cssText = 'min-height:1em; word-break:break-word;';
+    thinkBlock.appendChild(thinkCharEl);
+
+    // Footer ASCII box bottom
+    const thinkFooter = document.createElement('div');
+    thinkFooter.className = 'font-mono text-[9px] mt-2 select-none';
+    thinkFooter.style.color = '#a78bfa22';
+    thinkFooter.textContent = '└' + '─'.repeat(48);
+    thinkBlock.appendChild(thinkFooter);
+
+    aiContainer.appendChild(thinkBlock);
+
+    // ── Answer block ──────────────────────────────────────────────
+    const answerBlock = document.createElement('div');
+    answerBlock.className = 'ai-answer-block font-mono text-sm whitespace-pre-wrap leading-relaxed';
+    answerBlock.style.color = '#e2e8f0';
+    answerBlock.innerHTML = '<span style="color:#a78bfa;animation:think-header-blink 0.9s step-start infinite">_</span>';
+    aiContainer.appendChild(answerBlock);
+
+    terminal?.appendChild(aiContainer);
+    scrollToBottom();
+
+    // ── Stream state ──────────────────────────────────────────────
+    let rawText         = '';
+    let thinkText       = '';
+    let answerText      = '';
+    let inThink         = false;
+    let thinkSealed     = false;
+    let thinkCharCount  = 0;   // chars already pushed into thinkCharEl
+    let answerCharCount = 0;   // chars already pushed into answerEl
+    let globalThinkIdx  = 0;   // for weight cycling / delay
+
+    let thinkWordCount  = 0;
+    let thinkCollapseTriggered = false;
+
+    function flushThinkChars() {
+      const newSlice = thinkText.slice(thinkCharCount);
+      if (!newSlice) return;
+      let html = '';
+      for (const ch of newSlice) {
+        html += makeThinkChar(ch, globalThinkIdx++);
+        if (ch === ' ' || ch === '\n') thinkWordCount++;
+      }
+      thinkCharEl.insertAdjacentHTML('beforeend', html);
+      thinkCharCount = thinkText.length;
+    }
+
+    function flushAnswerChars() {
+      const newSlice = answerText.slice(answerCharCount);
+      if (!newSlice) return;
+      // Simple streaming: update textContent with cursor
+      answerBlock.textContent = answerText + '_';
+      answerCharCount = answerText.length;
+    }
+
+    function collapseThinkBlock() {
+      if (thinkCollapseTriggered) return;
+      thinkCollapseTriggered = true;
+
+      // Flush any remaining think chars first
+      flushThinkChars();
+
+      // Count words for the pill label
+      const wc = thinkText.trim().split(/\s+/).filter(Boolean).length;
+
+      // Brief flash then collapse
+      setTimeout(() => {
+        thinkBlock.classList.add('collapsed');
+        setTimeout(() => {
+          // Replace with collapsed pill
+          const pill = document.createElement('div');
+          pill.className = 'mb-3 font-mono text-[10px] flex items-center gap-2 cursor-pointer select-none group';
+          pill.style.cssText = 'color:#a78bfa55; letter-spacing:0.08em;';
+          pill.innerHTML = `<span style="color:#a78bfa33">┤</span><span class="group-hover:opacity-100" style="opacity:0.5;transition:opacity 0.2s">◈ ${wc} words of reasoning</span><span style="color:#a78bfa33"> ├─────  <span style="color:#a78bfa55;opacity:0.6">[click to expand]</span></span>`;
+
+          // Click to toggle full reasoning
+          let expanded = false;
+          const fullView = document.createElement('div');
+          fullView.className = 'think-block px-3 pt-2 pb-3 mt-2';
+          fullView.style.display = 'none';
+          fullView.innerHTML = thinkCharEl.innerHTML; // reuse the already-rendered chars
+
+          pill.addEventListener('click', () => {
+            expanded = !expanded;
+            fullView.style.display = expanded ? 'block' : 'none';
+            pill.querySelector('span:last-child span:last-child')!.textContent = expanded ? '[click to collapse]' : '[click to expand]';
+          });
+
+          const pillWrapper = document.createElement('div');
+          pillWrapper.appendChild(pill);
+          pillWrapper.appendChild(fullView);
+
+          thinkBlock.replaceWith(pillWrapper);
+          scrollToBottom();
+        }, 650);
+      }, 80);
+    }
+
+    // ── Fetch ─────────────────────────────────────────────────────
+    try {
+      const response = await fetch(`${MINIMAX_BASE_URL}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${MINIMAX_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: MINIMAX_MODEL,
+          max_tokens: 1024,
+          stream: true,
+          messages: [
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: query }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        thinkBlock.remove();
+        answerBlock.style.color = '#ff6b9d';
+        answerBlock.textContent = `Error ${response.status}: ${errText.slice(0, 200)}`;
+        scrollToBottom();
+        input.value = '';
+        return;
+      }
+
+      const reader   = response.body?.getReader();
+      const decoder  = new TextDecoder();
+      if (!reader) { answerBlock.textContent = 'Error: no body'; input.value = ''; return; }
+
+      let sseBuffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        sseBuffer += decoder.decode(value, { stream: true });
+        const lines = sseBuffer.split('\n');
+        sseBuffer = lines.pop() ?? '';
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const payload = line.slice(6).trim();
+          if (payload === '[DONE]') continue;
+
+          try {
+            const chunk = JSON.parse(payload);
+            const content: string | undefined = chunk.choices?.[0]?.delta?.content;
+            if (!content) continue;
+
+            rawText += content;
+
+            // ── State machine: route chars to think vs answer ──────
+            const thinkOpenAt  = rawText.indexOf('<think>');
+            const thinkCloseAt = rawText.indexOf('</think>');
+
+            if (!thinkSealed) {
+              if (thinkCloseAt !== -1) {
+                // Just sealed — extract regions
+                thinkSealed = true;
+                inThink     = false;
+                thinkText   = thinkOpenAt !== -1
+                  ? rawText.slice(thinkOpenAt + 7, thinkCloseAt)
+                  : rawText.slice(0, thinkCloseAt);
+                answerText  = rawText.slice(thinkCloseAt + 8);
+                flushThinkChars();
+                collapseThinkBlock();
+                flushAnswerChars();
+              } else if (thinkOpenAt !== -1) {
+                inThink   = true;
+                thinkText = rawText.slice(thinkOpenAt + 7);
+                flushThinkChars();
+              } else {
+                // No think tag at all — raw answer
+                answerText = rawText;
+                flushAnswerChars();
+              }
+            } else {
+              // Think already done — accumulate answer
+              answerText = rawText.slice(rawText.indexOf('</think>') + 8);
+              flushAnswerChars();
+            }
+          } catch (_) { /* skip malformed */ }
+        }
+
+        scrollToBottom();
+      }
+
+      // ── Final render ───────────────────────────────────────────
+      // If model had no <think> at all
+      if (!thinkSealed && !inThink) {
+        thinkBlock.remove();
+      } else if (inThink && !thinkSealed) {
+        // Unclosed think (rare) — seal it
+        thinkText = rawText.replace('<think>', '');
+        flushThinkChars();
+        collapseThinkBlock();
+      }
+
+      // Final answer without cursor
+      const finalAnswer = thinkSealed
+        ? rawText.slice(rawText.indexOf('</think>') + 8).trim()
+        : rawText.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+
+      answerBlock.textContent = finalAnswer || answerBlock.textContent.replace(/_$/, '');
+
+    } catch (err: any) {
+      thinkBlock.remove();
+      answerBlock.style.color = '#ff6b9d';
+      answerBlock.textContent = `connection error: ${err.message}`;
+    }
+
+    scrollToBottom();
+    input.value = '';
+  }
+
   function renderProjectCards(projectList: string[], categoryName?: string) {
+
     if (projectList.length === 0) return null;
     
     const projectData = projectList
@@ -334,6 +814,13 @@ Use 'cd [category]' to explore or click a card above.`, false);
     // Default command execution
     const result = executeCommand(cmd, currentPath);
 
+    // Handle AI command
+    if (result.output.startsWith('__AI__')) {
+      const query = result.output.slice('__AI__'.length);
+      handleAICommand(query);
+      return;
+    }
+
     if (command === 'gallery') {
       addOutputToTerminal(result.output, result.error);
       setTimeout(() => {
@@ -391,7 +878,15 @@ Use 'cd [category]' to explore or click a card above.`, false);
   quickBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const cmd = btn.getAttribute('data-cmd') || '';
-      execute(cmd);
+      // If cmd ends with a trailing space (like "ai "), pre-fill input instead of executing
+      if (cmd.endsWith(' ')) {
+        input.value = cmd;
+        input.focus();
+        // Move cursor to end
+        input.setSelectionRange(cmd.length, cmd.length);
+      } else {
+        execute(cmd);
+      }
     });
   });
 
@@ -426,6 +921,35 @@ Use 'cd [category]' to explore or click a card above.`, false);
       input?.focus();
     }
   });
+
+  // Random glitch effect generator
+  function triggerRandomGlitch() {
+    const terminalEl = document.getElementById('terminal');
+    const terminalOutputEl = document.getElementById('terminal-output');
+    
+    // Screen jitter effect
+    if (Math.random() > 0.4) {
+      terminalEl?.classList.add('glitch-anim');
+    }
+    
+    // RGB split text glitch effect
+    if (Math.random() > 0.3) {
+      terminalOutputEl?.classList.add('glitch-rgb');
+    }
+    
+    // Remove classes after animation completes (allow margin for CSS 0.25s length)
+    setTimeout(() => {
+      terminalEl?.classList.remove('glitch-anim');
+      terminalOutputEl?.classList.remove('glitch-rgb');
+    }, 300);
+    
+    // Schedule next glitch between 2 and 15 seconds
+    const nextGlitchTime = Math.random() * 13000 + 2000;
+    setTimeout(triggerRandomGlitch, nextGlitchTime);
+  }
+  
+  // Start glitch loop soon after load
+  setTimeout(triggerRandomGlitch, Math.random() * 4000 + 1000);
 
   setTimeout(scrollToBottom, 100);
 </script>

@@ -175,27 +175,28 @@ export const projects: Record<string, Project> = {
 const pages: Record<string, string> = {
   about: `bigseed@bigf.me:~$ cat about.md
 
-# Big Seed
+# Bunyasit Fang
 
-Web Developer | Builder | Integrated Innovation
+## Web Developer | Builder | Integrated Innovation student
 
-I'm passionate about technology solutions that actually work.
+I'm passionate about technology solutions that actually work and have a human soul.
 
 ## Contact
-- Email: your.big@passionseed.com
-- Passion Seed: passionseed.org
+- **Email:** bunyasit@passionseed.org
+- **Passion Seed:** [passionseed.org](https://passionseed.org)
+- **GitHub:** [xb1g](https://github.com/xb1g)
 
 ## Journey
-- High school: Competitive programming, Arduino projects
-- COVID: Built mechanical keyboards (LongKeeb), sold to friends
-- University: Chulalongkorn, Integrated Innovation (tech + business)
-- 30+ projects spanning hardware, education, AI, sustainability
-- Berkeley SCET Startup Semester exchange
+- **High school:** Competitive programming, Arduino projects, and early hacking.
+- **COVID (2020-2024):** Founded LongKeeb/Portex. Designed split ergonomic mechanical keyboards (Cantor42, Charybdis) and shipped them globally.
+- **University:** Chulalongkorn University, BAScii (Integrated Innovation). Tech + Business + Design.
+- **30+ Projects:** Spanning hardware, education, AI, and sustainability.
+- **Berkeley SCET:** Currently on Startup Semester exchange in SF/Berkeley (Spring 2026). 🐻
 
 ## Currently
-- Building tools at the intersection of AI and education
-- Exploring direct democracy systems
-- Deep into coffee and fermentation
+- Building the intersection of **AI and Education** (PassionSeed, CareerAc).
+- Exploring **Direct Democracy** systems (Hive).
+- Mastering **Coffee Roasting** and fermentation.
 
 ## Music
 Oasis, Nirvana, Radiohead`,
@@ -265,7 +266,7 @@ Tools that help people:
 - Connect better (Fync, HamsterHub)
 - Understand systems (Coffee traceability, Direct democracy)`,
 
-  now: `bigseed@bigf.me:~$ cat about.md
+  now: `bigseed@bigf.me:~$ cat now.md
 
 # What I'm Working On Now
 
@@ -275,7 +276,7 @@ Tools that help people:
 - **RocketMap** - Business hypothesis testing platform
 
 ## Recent Highlights
-- Berkeley SCET Startup Semester completed
+- **Berkeley SCET Startup Semester** - Immersed in the SF/Berkeley startup ecosystem.
 - Hive project: Direct democracy condo management (Gemini hackathon semi-finalist)
 - NeuralMix: LLM for mixing (Technology Entrepreneurship class)
 
@@ -298,8 +299,8 @@ Type 'gallery' or [Click Here to View the Life Postcards Gallery](/life)
 
 ## Places That Shaped Me
 - **Bangkok, Thailand** - Where I learned to build. The chaos, the energy, the endless problems to solve.
-- **San Francisco / Berkeley** - Where I'm learning to think bigger. Startup Semester changed my perspective on what's possible.
-- **Japan** - Craftsmanship as a way of life. Deeply moved by the serenity of tea ceremonies and the meticulous art of chasen (bamboo whisk) making. The traditional buildings and farms are precious reminders of mastering a craft through presence.
+- **San Francisco / Berkeley** - Where I'm currently learning to think bigger. Startup Semester is changing my perspective on what's possible.
+
 
 ## Music I'm Listening To
 - **[Oasis](https://open.spotify.com/artist/2DaxqgrOhsnH0AHIqPcQ4n)** - Live Forever, Slide Away, Going Nowhere, Carry Us All, Falling Down
@@ -362,22 +363,32 @@ export function executeCommand(input: string, currentPath: string): CommandResul
   life       - 🎨 Personal side: places, art, music, reflections
   cat        - Display content pages (about, books, philosophy, now)
   cd         - Navigate to project directory
+  ai         - 🤖 Chat with MiniMax M2.7 AI (e.g. ai what is bigf.me?)
+  pretext    - ⚙️ Interactive pretext engine demo (text wrapping & layout)
+  theme      - 🎨 Customize the terminal color theme
   clear      - Clear terminal
   help       - Show this help message
 
 Pro tips:
   • Click ✨ HIGHLIGHTS for curated projects
+  • Type 'ai <question>' to chat with MiniMax M2.7
   • Type 'life' to see the personal side`,
       };
 
     case 'whoami':
       return {
-        output: `name: Bunnyasit Fang. github: xb1g, and i will write blogs here and on substack later.
+        output: `# Bunyasit Fang
 
-i am gonna fix education in thailand, i build stuffs i care deeply about. 
-I want to retire to do art. but i need to form my world view and experience first.
+**role**     :: Builder & Integrated Innovation Student
+**status**   :: Currently at UC Berkeley (SCET) for Startup Semester 🐻
+**focus**    :: AI + Education + Sustainability
+**mission**  :: Fixing education in Thailand
+**github**   :: [xb1g](https://github.com/xb1g)
+**email**    :: bunyasit@passionseed.org
 
-email: bunyasit@passionseed.org`,
+> "I build things I care deeply about. One day I'll retire to do art, but first, I must build the world I want to see."
+
+I'm an Integrated Innovation student at Chulalongkorn University, currently exploring the intersection of technology, business, and philosophy in the Bay Area. I've built 30+ projects ranging from ergonomic hardware to AI-powered education platforms.`,
       };
 
     case 'ls': {
@@ -574,6 +585,32 @@ ${project.description}
       return {
         output: '__CLEAR__',
       };
+
+    case 'theme':
+      return {
+        output: '__THEME_PICKER__',
+      };
+
+    case 'pretext': {
+      const textToMeasure = args.length > 0 ? args.join(' ') : "Pretext side-steps the need for DOM measurements (e.g. getBoundingClientRect, offsetHeight), which trigger layout reflow, one of the most expensive operations in the browser. It implements its own text measurement logic, using the browsers' own font engine as ground truth (very AI-friendly iteration method).";
+      return {
+        output: `__PRETEXT__${textToMeasure}`,
+      };
+    }
+
+    case 'ai':
+    case 'ask':
+    case 'chat': {
+      const query = args.join(' ').trim();
+      if (!query) {
+        return {
+          output: `Usage: ai <question>\n\nExamples:\n  ai who is Bunyasit?\n  ai what projects have you built?\n  ai tell me about PassionSeed`,
+        };
+      }
+      return {
+        output: `__AI__${query}`,
+      };
+    }
 
     case '':
       return { output: '' };

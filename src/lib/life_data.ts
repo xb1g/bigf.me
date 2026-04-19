@@ -13,15 +13,8 @@ import yose2 from '../assets/images/yose2.jpeg';
 export const postcards = [
   {
     image: expo2025,
-    title: 'Japanese Craftsmanship',
-    caption: 'Mastering the art of presence through tea, chasen making, and the serene architecture of farms.',
-    date: '2024',
-    location: 'Kyoto, Japan'
-  },
-  {
-    image: expo2025,
     title: 'Expo 2025',
-    caption: 'Dreaming about the future of technology and humanity in Osaka.',
+    caption: 'that day was hot hot burning hot. the structures are truly amazing.',
     date: '2025',
     location: 'Osaka, Japan'
   },
