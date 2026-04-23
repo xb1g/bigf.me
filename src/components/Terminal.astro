@@ -216,18 +216,7 @@ const { class: className } = Astro.props;
     execute(e.detail.command);
   });
 
-  // MiniMax AI config (Chinese token plan - OpenAI-compatible endpoint)
-  const MINIMAX_BASE_URL = 'https://api.minimaxi.com/v1';
-  const MINIMAX_API_KEY = '[REDACTED]';
-  const MINIMAX_MODEL = 'MiniMax-M2.7-highspeed';
-
-  const SYSTEM_PROMPT = `You are an AI assistant embedded in the terminal portfolio of Bunyasit Fang (github: xb1g), a builder and Integrated Innovation student at Chulalongkorn University, currently on Startup Semester at UC Berkeley (SCET). 
-
-You know about his projects: PassionSeed (AI career discovery, 300 hackathon users), CareerAc (AI career planning), RocketMap (business model canvas), LongKeeb/Portex (ergonomic keyboards shipped to customers), Hive (AI democracy tool, Gemini hackathon semi-finalist), Fync (friendship graph API), NeuralMix (LLM for audio mixing), and more.
-
-His mission: fixing education in Thailand. He's passionate about AI + Education + Sustainability. He also loves Oasis, Nirvana, Radiohead, coffee roasting, and art.
-
-Answer concisely in plain text (no markdown, this is a terminal). Keep responses short and punchy unless asked for detail. If asked about code or tech, be technical and precise.`;
+  // Backend API endpoint (no API key exposed client-side)
 
   const terminal = document.getElementById('terminal-output');
   const input = document.getElementById('terminal-input') as HTMLInputElement;
@@ -574,21 +563,12 @@ Answer concisely in plain text (no markdown, this is a terminal). Keep responses
 
     // ── Fetch ─────────────────────────────────────────────────────
     try {
-      const response = await fetch(`${MINIMAX_BASE_URL}/chat/completions`, {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${MINIMAX_API_KEY}`,
         },
-        body: JSON.stringify({
-          model: MINIMAX_MODEL,
-          max_tokens: 1024,
-          stream: true,
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            { role: 'user', content: query }
-          ]
-        })
+        body: JSON.stringify({ query })
       });
 
       if (!response.ok) {

@@ -14,7 +14,7 @@ export interface Project {
 }
 
 export const categories: Record<string, string[]> = {
-  education: ['passionseed', 'datasciblock', 'coderdojo', 'quizdom'],
+  education: ['passionseed', 'passionseed-app', 'datasciblock', 'coderdojo', 'quizdom'],
   hardware: ['longkeeb', 'portex', 'fermentabot'],
   ai: ['careerac', 'rocketmap', 'neuralmix', 'hive'],
   sustainability: ['onetrace', 'chatasci', 'coffee-trace'],
@@ -26,9 +26,16 @@ export const projects: Record<string, Project> = {
   passionseed: {
     name: 'PassionSeed',
     category: 'education',
-    tech: ['Next.js', 'Supabase', 'AI SDK'],
-    year: '2024',
-    description: 'AI career discovery platform modeling student emotional patterns from app usage to guide authentic life decisions. Shipped hackathon platform to 300 users in 1 month.',
+    tech: ['Next.js', 'Supabase', 'AI SDK', 'Expo'],
+    year: '2024-2025',
+    description: 'AI career discovery platform for Thai students. Full-stack web + mobile ecosystem with PathLab (30-min daily career exploration tasks), hackathon platform (300+ users), learning maps, expert interviews, direction finder, classrooms, teams, and epic sprints. Embeddings-powered recommendations, real-time collaboration, and TCAS university planning.',
+  },
+  'passionseed-app': {
+    name: 'PassionSeed Mobile',
+    category: 'education',
+    tech: ['Expo', 'React Native', 'Supabase', 'Skia'],
+    year: '2025',
+    description: 'Native mobile companion for PassionSeed. PathLab seed exploration with daily tasks (quiz/video/activities), reflections, hackathon program with inbox/comments/webtoon/comic features, push notifications, Skia GPU animations, TCAS planner, university comparison, and portfolio fit scoring. Deployed via EAS to iOS and Android.',
   },
   careerac: {
     name: 'CareerAc',
@@ -194,7 +201,7 @@ I'm passionate about technology solutions that actually work and have a human so
 - **Berkeley SCET:** Currently on Startup Semester exchange in SF/Berkeley (Spring 2026). 🐻
 
 ## Currently
-- Building the intersection of **AI and Education** (PassionSeed, CareerAc).
+- Building the intersection of **AI and Education** — PassionSeed web platform + native mobile app serving 300+ Thai students with career discovery, hackathon programs, and daily PathLab exploration.
 - Exploring **Direct Democracy** systems (Hive).
 - Mastering **Coffee Roasting** and fermentation.
 
@@ -271,19 +278,22 @@ Tools that help people:
 # What I'm Working On Now
 
 ## April 2026
-- **bigf.me** - Building this terminal portfolio
-- **CareerAc** - AI-powered transfer planning tool
-- **RocketMap** - Business hypothesis testing platform
+- **PassionSeed Web** - AI career discovery platform for Thai students. Running hackathon programs with 300+ users, building PathLab daily career exploration, embeddings-powered recommendations, team direction matching, and expert interview systems.
+- **PassionSeed Mobile** - Shipping the native Expo/React Native app. Hackathon program with inbox, comments, webtoon/comic features, push notifications, Skia GPU animations, TCAS planner, and EAS deployment to iOS + Android.
+- **bigf.me** - This terminal portfolio you're looking at right now.
 
 ## Recent Highlights
 - **Berkeley SCET Startup Semester** - Immersed in the SF/Berkeley startup ecosystem.
+- Shipped PassionSeed hackathon to 300+ Thai students with real-time collaboration
+- Built and deployed PassionSeed mobile app (iOS + Android) with Skia animations and push notifications
 - Hive project: Direct democracy condo management (Gemini hackathon semi-finalist)
 - NeuralMix: LLM for mixing (Technology Entrepreneurship class)
 
 ## Learning
+- Embeddings and vector search for career recommendations
+- Mobile app deployment pipelines (EAS Build + Hosting)
 - Supply chain traceability (OneTrace/Flowit)
 - Coffee roasting and fermentation
-- Direct democracy systems design
 
 ## Reading
 - The Body Keeps the Score (trauma/healing)
@@ -388,7 +398,7 @@ Pro tips:
 
 > "I build things I care deeply about. One day I'll retire to do art, but first, I must build the world I want to see."
 
-I'm an Integrated Innovation student at Chulalongkorn University, currently exploring the intersection of technology, business, and philosophy in the Bay Area. I've built 30+ projects ranging from ergonomic hardware to AI-powered education platforms.`,
+I'm an Integrated Innovation student at Chulalongkorn University, currently exploring the intersection of technology, business, and philosophy in the Bay Area. I've built 30+ projects ranging from ergonomic hardware to AI-powered education platforms. Currently shipping PassionSeed — an AI career discovery platform with web + mobile apps serving 300+ Thai students.`,
       };
 
     case 'ls': {
@@ -571,7 +581,7 @@ ${project.description}
     case 'highlights':
       return {
         output: `__HIGHLIGHTS__`,
-        highlightProjects: ['passionseed', 'fync', 'longkeeb', 'hive', 'careerac'],
+        highlightProjects: ['passionseed', 'passionseed-app', 'fync', 'longkeeb', 'hive', 'careerac'],
       };
 
     case 'gallery':
