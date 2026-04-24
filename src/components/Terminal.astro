@@ -444,36 +444,11 @@ const { class: className } = Astro.props;
     const aiContainer = document.createElement('div');
     aiContainer.className = 'mb-6 relative w-full';
 
-    // ── Think block ───────────────────────────────────────────────
-    const thinkBlock = document.createElement('div');
-    thinkBlock.className = 'think-block mb-3 px-3 pt-2 pb-3';
-
-    // Scanline overlay
-    const scanline = document.createElement('div');
-    scanline.className = 'think-scanline-bar';
-    thinkBlock.appendChild(scanline);
-
-    // Header: ASCII box top + blinking label
-    const thinkHeader = document.createElement('div');
-    thinkHeader.className = 'think-header flex items-center gap-2 text-[10px] font-mono mb-2 select-none';
-    thinkHeader.style.cssText = 'color:#a78bfa; letter-spacing:0.12em;';
-    thinkHeader.innerHTML = `<span style="color:#a78bfa44">┌─</span><span class="think-dot" style="color:#a78bfa">◈</span><span> REASONING</span><span style="color:#a78bfa44;flex:1"> ──────────────────────────────────────</span>`;
-    thinkBlock.appendChild(thinkHeader);
-
-    // Char container — where think chars flow in
-    const thinkCharEl = document.createElement('div');
-    thinkCharEl.className = 'font-mono text-xs leading-[1.7] pl-4 relative z-10';
-    thinkCharEl.style.cssText = 'min-height:1em; word-break:break-word;';
-    thinkBlock.appendChild(thinkCharEl);
-
-    // Footer ASCII box bottom
-    const thinkFooter = document.createElement('div');
-    thinkFooter.className = 'font-mono text-[9px] mt-2 select-none';
-    thinkFooter.style.color = '#a78bfa22';
-    thinkFooter.textContent = '└' + '─'.repeat(48);
-    thinkBlock.appendChild(thinkFooter);
-
-    aiContainer.appendChild(thinkBlock);
+    // ── Simple loading indicator ─────────────────────────────────
+    const loadingEl = document.createElement('div');
+    loadingEl.className = 'font-mono text-xs text-[#a78bfa] mb-2';
+    loadingEl.textContent = 'thinking...';
+    aiContainer.appendChild(loadingEl);
 
     // ── Answer block ──────────────────────────────────────────────
     const answerBlock = document.createElement('div');
@@ -486,80 +461,8 @@ const { class: className } = Astro.props;
     scrollToBottom();
 
     // ── Stream state ──────────────────────────────────────────────
-    let rawText         = '';
-    let thinkText       = '';
-    let answerText      = '';
-    let inThink         = false;
-    let thinkSealed     = false;
-    let thinkCharCount  = 0;   // chars already pushed into thinkCharEl
-    let answerCharCount = 0;   // chars already pushed into answerEl
-    let globalThinkIdx  = 0;   // for weight cycling / delay
-
-    let thinkWordCount  = 0;
-    let thinkCollapseTriggered = false;
-
-    function flushThinkChars() {
-      const newSlice = thinkText.slice(thinkCharCount);
-      if (!newSlice) return;
-      let html = '';
-      for (const ch of newSlice) {
-        html += makeThinkChar(ch, globalThinkIdx++);
-        if (ch === ' ' || ch === '\n') thinkWordCount++;
-      }
-      thinkCharEl.insertAdjacentHTML('beforeend', html);
-      thinkCharCount = thinkText.length;
-    }
-
-    function flushAnswerChars() {
-      const newSlice = answerText.slice(answerCharCount);
-      if (!newSlice) return;
-      // Simple streaming: update textContent with cursor
-      answerBlock.textContent = answerText + '_';
-      answerCharCount = answerText.length;
-    }
-
-    function collapseThinkBlock() {
-      if (thinkCollapseTriggered) return;
-      thinkCollapseTriggered = true;
-
-      // Flush any remaining think chars first
-      flushThinkChars();
-
-      // Count words for the pill label
-      const wc = thinkText.trim().split(/\s+/).filter(Boolean).length;
-
-      // Brief flash then collapse
-      setTimeout(() => {
-        thinkBlock.classList.add('collapsed');
-        setTimeout(() => {
-          // Replace with collapsed pill
-          const pill = document.createElement('div');
-          pill.className = 'mb-3 font-mono text-[10px] flex items-center gap-2 cursor-pointer select-none group';
-          pill.style.cssText = 'color:#a78bfa55; letter-spacing:0.08em;';
-          pill.innerHTML = `<span style="color:#a78bfa33">┤</span><span class="group-hover:opacity-100" style="opacity:0.5;transition:opacity 0.2s">◈ ${wc} words of reasoning</span><span style="color:#a78bfa33"> ├─────  <span style="color:#a78bfa55;opacity:0.6">[click to expand]</span></span>`;
-
-          // Click to toggle full reasoning
-          let expanded = false;
-          const fullView = document.createElement('div');
-          fullView.className = 'think-block px-3 pt-2 pb-3 mt-2';
-          fullView.style.display = 'none';
-          fullView.innerHTML = thinkCharEl.innerHTML; // reuse the already-rendered chars
-
-          pill.addEventListener('click', () => {
-            expanded = !expanded;
-            fullView.style.display = expanded ? 'block' : 'none';
-            pill.querySelector('span:last-child span:last-child')!.textContent = expanded ? '[click to collapse]' : '[click to expand]';
-          });
-
-          const pillWrapper = document.createElement('div');
-          pillWrapper.appendChild(pill);
-          pillWrapper.appendChild(fullView);
-
-          thinkBlock.replaceWith(pillWrapper);
-          scrollToBottom();
-        }, 650);
-      }, 80);
-    }
+    let answerText = '';
+    let answerCharCount = 0;
 
     // ── Fetch ─────────────────────────────────────────────────────
     try {
@@ -587,6 +490,9 @@ const { class: className } = Astro.props;
 
       let sseBuffer = '';
 
+      // Remove loading indicator once stream starts
+      loadingEl.remove();
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
@@ -605,64 +511,20 @@ const { class: className } = Astro.props;
             const content: string | undefined = chunk.choices?.[0]?.delta?.content;
             if (!content) continue;
 
-            rawText += content;
-
-            // ── State machine: route chars to think vs answer ──────
-            const thinkOpenAt  = rawText.indexOf('<think>');
-            const thinkCloseAt = rawText.indexOf('</think>');
-
-            if (!thinkSealed) {
-              if (thinkCloseAt !== -1) {
-                // Just sealed — extract regions
-                thinkSealed = true;
-                inThink     = false;
-                thinkText   = thinkOpenAt !== -1
-                  ? rawText.slice(thinkOpenAt + 7, thinkCloseAt)
-                  : rawText.slice(0, thinkCloseAt);
-                answerText  = rawText.slice(thinkCloseAt + 8);
-                flushThinkChars();
-                collapseThinkBlock();
-                flushAnswerChars();
-              } else if (thinkOpenAt !== -1) {
-                inThink   = true;
-                thinkText = rawText.slice(thinkOpenAt + 7);
-                flushThinkChars();
-              } else {
-                // No think tag at all — raw answer
-                answerText = rawText;
-                flushAnswerChars();
-              }
-            } else {
-              // Think already done — accumulate answer
-              answerText = rawText.slice(rawText.indexOf('</think>') + 8);
-              flushAnswerChars();
-            }
+            answerText += content;
+            answerBlock.textContent = answerText + '_';
+            answerCharCount = answerText.length;
           } catch (_) { /* skip malformed */ }
         }
 
         scrollToBottom();
       }
 
-      // ── Final render ───────────────────────────────────────────
-      // If model had no <think> at all
-      if (!thinkSealed && !inThink) {
-        thinkBlock.remove();
-      } else if (inThink && !thinkSealed) {
-        // Unclosed think (rare) — seal it
-        thinkText = rawText.replace('<think>', '');
-        flushThinkChars();
-        collapseThinkBlock();
-      }
-
       // Final answer without cursor
-      const finalAnswer = thinkSealed
-        ? rawText.slice(rawText.indexOf('</think>') + 8).trim()
-        : rawText.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-
-      answerBlock.textContent = finalAnswer || answerBlock.textContent.replace(/_$/, '');
+      answerBlock.textContent = answerText.trim();
 
     } catch (err: any) {
-      thinkBlock.remove();
+      loadingEl.remove();
       answerBlock.style.color = '#ff6b9d';
       answerBlock.textContent = `connection error: ${err.message}`;
     }
