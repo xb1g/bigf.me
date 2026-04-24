@@ -3,10 +3,9 @@ import type { APIRoute } from 'astro';
 export const prerender = false;
 
 const MINIMAX_BASE_URL = 'https://api.minimaxi.com/v1';
-const MINIMAX_API_KEY = import.meta.env.MINIMAX_API_KEY;
 const MINIMAX_MODEL = 'MiniMax-M2.7-highspeed';
 
-const SYSTEM_PROMPT = `You are an AI assistant embedded in the terminal portfolio of Bunyasit Fang (github: xb1g), a builder and Integrated Innovation student at Chulalongkorn University, currently on Startup Semester at UC Berkeley (SCET). 
+const SYSTEM_PROMPT = `You are an AI assistant embedded in the terminal portfolio of Bunyasit Fang (github: xb1g), a builder and Integrated Innovation student at Chulalongkorn University, currently on Startup Semester at UC Berkeley (SCET).
 
 You know about his projects: PassionSeed (AI career discovery, 300 hackathon users), CareerAc (AI career planning), RocketMap (business model canvas), LongKeeb/Portex (ergonomic keyboards shipped to customers), Hive (AI democracy tool, Gemini hackathon semi-finalist), Fync (friendship graph API), NeuralMix (LLM for audio mixing), and more.
 
@@ -26,6 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    const MINIMAX_API_KEY = process.env.MINIMAX_API_KEY || process.env.MINIMAX_CN_API_KEY;
     if (!MINIMAX_API_KEY) {
       return new Response(JSON.stringify({ error: 'API key not configured' }), {
         status: 500,
@@ -58,7 +58,6 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Stream the response directly to the client
     return new Response(response.body, {
       status: 200,
       headers: {
