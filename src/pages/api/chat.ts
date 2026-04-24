@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 
+export const prerender = false;
+
 const MINIMAX_BASE_URL = 'https://api.minimaxi.com/v1';
 const MINIMAX_API_KEY = import.meta.env.MINIMAX_API_KEY;
 const MINIMAX_MODEL = 'MiniMax-M2.7-highspeed';
