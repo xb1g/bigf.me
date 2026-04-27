@@ -235,8 +235,8 @@
 
 /* Infinite Canvas Styling */
 .canvas-bg {
-  background-color: #e8e6e1;
-  background-image: radial-gradient(#d0cdc5 1px, transparent 1px);
+  background-color: #000000;
+  background-image: radial-gradient(#333333 1px, transparent 1px);
   background-size: 40px 40px;
   background-position: 0 0;
 }

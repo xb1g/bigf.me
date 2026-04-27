@@ -1,0 +1,9 @@
+{
+  "setup": [
+    "pnpmi"
+  ],
+  "teardown": [],
+  "run": [
+    "pnpm dev"
+  ]
+}
