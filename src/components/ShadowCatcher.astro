@@ -1,0 +1,358 @@
+---
+---
+
+<div class="w-full h-full flex flex-col bg-[#0f0f14] text-[#e8e6e1] overflow-hidden rounded-[2.5rem] relative" id="shadow-root">
+
+  <!-- PIN Gate -->
+  <div id="shadow-pin-gate" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#0f0f14] rounded-[2.5rem]">
+    <div class="text-4xl mb-6">👻</div>
+    <div class="text-xs uppercase tracking-[0.3em] text-[#5a5860] mb-8 font-mono">Shadow Catcher</div>
+    <div class="flex flex-col items-center gap-3 w-full max-w-[200px]">
+      <input
+        id="shadow-pin-input"
+        type="password"
+        inputmode="numeric"
+        placeholder="PIN"
+        maxlength="8"
+        class="w-full bg-[#1a1a24] border border-[#2a2a3f] rounded-xl px-4 py-3 text-center text-white text-lg tracking-[0.3em] font-mono placeholder:text-[#3a3a50] focus:outline-none focus:border-[#6c63d5] transition-colors"
+      />
+      <button
+        id="shadow-pin-submit"
+        class="w-full bg-[#6c63d5] hover:bg-[#7c73e5] text-white text-sm font-mono uppercase tracking-widest py-3 rounded-xl transition-colors"
+      >
+        Enter
+      </button>
+      <div id="shadow-pin-error" class="text-[#ff6b6b] text-xs font-mono hidden">wrong pin</div>
+    </div>
+  </div>
+
+  <!-- Main App (hidden until auth) -->
+  <div id="shadow-app" class="hidden flex flex-col h-full">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#1e1e2e]">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">👻</span>
+        <span class="font-mono text-xs uppercase tracking-[0.2em] text-[#6c63d5]">Shadow Catcher</span>
+      </div>
+      <div id="shadow-save-status" class="text-[10px] font-mono text-[#4a4a60] transition-all"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex border-b border-[#1e1e2e] px-4">
+      <button class="shadow-tab active-tab px-4 py-3 text-xs font-mono uppercase tracking-widest text-[#6c63d5] border-b-2 border-[#6c63d5] -mb-px transition-colors" data-tab="think">
+        Think
+      </button>
+      <button class="shadow-tab px-4 py-3 text-xs font-mono uppercase tracking-widest text-[#4a4a60] border-b-2 border-transparent -mb-px transition-colors hover:text-[#8a8899]" data-tab="shadow">
+        Shadow
+      </button>
+      <button class="shadow-tab px-4 py-3 text-xs font-mono uppercase tracking-widest text-[#4a4a60] border-b-2 border-transparent -mb-px transition-colors hover:text-[#8a8899]" data-tab="photo">
+        Capture
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="flex-1 overflow-hidden">
+
+      <!-- THINK TAB -->
+      <div id="tab-think" class="shadow-panel h-full flex flex-col p-5 gap-4">
+        <textarea
+          id="think-textarea"
+          placeholder="dump it here. no structure needed. just think..."
+          class="flex-1 bg-[#0a0a0f] border border-[#1e1e2e] rounded-2xl p-4 text-sm text-[#c8c6c1] placeholder:text-[#3a3a50] font-mono leading-relaxed resize-none focus:outline-none focus:border-[#6c63d5] transition-colors"
+          style="min-height: 0;"
+        ></textarea>
+        <div class="flex items-center gap-3">
+          <button
+            id="think-save-btn"
+            class="flex-1 bg-[#6c63d5] hover:bg-[#7c73e5] disabled:bg-[#2a2a3f] disabled:text-[#4a4a60] text-white text-xs font-mono uppercase tracking-widest py-3 rounded-xl transition-colors"
+          >
+            Save thought
+          </button>
+          <button
+            id="think-clear-btn"
+            class="px-4 py-3 bg-[#1a1a24] hover:bg-[#252535] text-[#6a6a7a] text-xs font-mono rounded-xl transition-colors"
+          >
+            Clear
+          </button>
+        </div>
+        <div id="think-notebook-reminder" class="hidden items-center gap-2 bg-[#1a1a10] border border-[#3a3a10] rounded-xl px-4 py-3">
+          <span class="text-sm">📓</span>
+          <span class="text-xs font-mono text-[#a09a50]">saved. now write it in your notebook.</span>
+        </div>
+      </div>
+
+      <!-- SHADOW TAB -->
+      <div id="tab-shadow" class="shadow-panel hidden h-full flex flex-col p-5 gap-4 overflow-y-auto">
+        <div class="text-xs font-mono text-[#4a4a60] uppercase tracking-widest">What are you escaping?</div>
+        <div class="grid grid-cols-2 gap-2" id="shadow-behavior-grid">
+          <button class="shadow-behavior-chip px-3 py-2 bg-[#1a1a24] border border-[#2a2a3f] rounded-xl text-xs font-mono text-[#8a8899] hover:border-[#6c63d5] hover:text-[#6c63d5] transition-colors text-left" data-behavior="YouTube">📺 YouTube</button>
+          <button class="shadow-behavior-chip px-3 py-2 bg-[#1a1a24] border border-[#2a2a3f] rounded-xl text-xs font-mono text-[#8a8899] hover:border-[#6c63d5] hover:text-[#6c63d5] transition-colors text-left" data-behavior="Phone scroll">📱 Phone scroll</button>
+          <button class="shadow-behavior-chip px-3 py-2 bg-[#1a1a24] border border-[#2a2a3f] rounded-xl text-xs font-mono text-[#8a8899] hover:border-[#6c63d5] hover:text-[#6c63d5] transition-colors text-left" data-behavior="Shopping">🛍️ Shopping</button>
+          <button class="shadow-behavior-chip px-3 py-2 bg-[#1a1a24] border border-[#2a2a3f] rounded-xl text-xs font-mono text-[#8a8899] hover:border-[#6c63d5] hover:text-[#6c63d5] transition-colors text-left" data-behavior="Waiting (GF call)">💬 Waiting</button>
+          <button class="shadow-behavior-chip px-3 py-2 bg-[#1a1a24] border border-[#2a2a3f] rounded-xl text-xs font-mono text-[#8a8899] hover:border-[#6c63d5] hover:text-[#6c63d5] transition-colors text-left" data-behavior="Food/eating">🍜 Food/eating</button>
+          <button class="shadow-behavior-chip px-3 py-2 bg-[#1a1a24] border border-[#2a2a3f] rounded-xl text-xs font-mono text-[#8a8899] hover:border-[#6c63d5] hover:text-[#6c63d5] transition-colors text-left" data-behavior="Other">✏️ Other</button>
+        </div>
+        <div id="shadow-selected-behavior" class="hidden px-3 py-2 bg-[#1a0a24] border border-[#6c63d5] rounded-xl text-xs font-mono text-[#6c63d5]"></div>
+        <div>
+          <div class="text-xs font-mono text-[#4a4a60] uppercase tracking-widest mb-2">What triggered it?</div>
+          <textarea
+            id="shadow-trigger"
+            placeholder="bored? anxious? avoiding something specific?"
+            rows="3"
+            class="w-full bg-[#0a0a0f] border border-[#1e1e2e] rounded-xl p-3 text-xs text-[#c8c6c1] placeholder:text-[#3a3a50] font-mono leading-relaxed resize-none focus:outline-none focus:border-[#6c63d5] transition-colors"
+          ></textarea>
+        </div>
+        <button
+          id="shadow-log-btn"
+          class="w-full bg-[#2a1a3f] hover:bg-[#3a1a4f] disabled:bg-[#1a1a24] disabled:text-[#4a4a60] text-[#a78bfa] text-xs font-mono uppercase tracking-widest py-3 rounded-xl transition-colors border border-[#4a3a6f]"
+        >
+          Log shadow
+        </button>
+        <div id="shadow-log-confirm" class="hidden text-center text-xs font-mono text-[#6c63d5]">logged 👻</div>
+      </div>
+
+      <!-- PHOTO / CAPTURE TAB -->
+      <div id="tab-photo" class="shadow-panel hidden h-full flex flex-col p-5 gap-4 items-center justify-center">
+        <div class="text-xs font-mono text-[#4a4a60] uppercase tracking-widest mb-2">Capture a thought</div>
+
+        <!-- Camera preview -->
+        <div id="photo-preview-area" class="w-full flex-1 bg-[#0a0a0f] border border-[#1e1e2e] rounded-2xl overflow-hidden flex items-center justify-center" style="min-height: 0; max-height: 300px;">
+          <img id="photo-preview-img" class="hidden w-full h-full object-cover" alt="preview" />
+          <video id="photo-video" class="hidden w-full h-full object-cover" autoplay playsinline muted></video>
+          <div id="photo-placeholder" class="flex flex-col items-center gap-3 text-[#3a3a50]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span class="text-xs font-mono">notebook page · idea · anything</span>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex gap-3 w-full">
+          <input id="photo-file-input" type="file" accept="image/*" capture="environment" class="hidden" />
+          <button
+            id="photo-camera-btn"
+            class="flex-1 bg-[#1a1a24] hover:bg-[#252535] text-[#8a8899] text-xs font-mono uppercase tracking-widest py-3 rounded-xl transition-colors border border-[#2a2a3f]"
+          >
+            📷 Camera
+          </button>
+          <button
+            id="photo-save-btn"
+            class="hidden flex-1 bg-[#6c63d5] hover:bg-[#7c73e5] text-white text-xs font-mono uppercase tracking-widest py-3 rounded-xl transition-colors"
+          >
+            Save
+          </button>
+        </div>
+        <select id="photo-type" class="w-full bg-[#0a0a0f] border border-[#1e1e2e] rounded-xl px-3 py-2 text-xs font-mono text-[#8a8899] focus:outline-none focus:border-[#6c63d5]">
+          <option value="notebook">notebook page</option>
+          <option value="thought">thought / idea</option>
+          <option value="random">random</option>
+        </select>
+        <div id="photo-confirm" class="hidden text-center text-xs font-mono text-[#6c63d5]">saved 📸</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.getElementById('shadow-root')!
+  const pinGate = document.getElementById('shadow-pin-gate')!
+  const app = document.getElementById('shadow-app')!
+  const pinInput = document.getElementById('shadow-pin-input') as HTMLInputElement
+  const pinSubmit = document.getElementById('shadow-pin-submit')!
+  const pinError = document.getElementById('shadow-pin-error')!
+  const saveStatus = document.getElementById('shadow-save-status')!
+
+  // Auth check
+  if (sessionStorage.getItem('shadow_authed') === '1') {
+    unlock()
+  }
+
+  pinInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') pinSubmit.click()
+  })
+
+  pinSubmit.addEventListener('click', async () => {
+    const pin = pinInput.value.trim()
+    if (!pin) return
+    const res = await fetch('/api/shadow/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin }),
+    })
+    if (res.ok) {
+      sessionStorage.setItem('shadow_authed', '1')
+      unlock()
+    } else {
+      pinError.classList.remove('hidden')
+      pinInput.value = ''
+      pinInput.focus()
+    }
+  })
+
+  function unlock() {
+    pinGate.classList.add('hidden')
+    app.classList.remove('hidden')
+    app.classList.add('flex')
+  }
+
+  // Tab switching
+  document.querySelectorAll('.shadow-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = (tab as HTMLElement).dataset.tab!
+      document.querySelectorAll('.shadow-tab').forEach(t => {
+        t.classList.remove('active-tab', 'text-[#6c63d5]', 'border-[#6c63d5]')
+        t.classList.add('text-[#4a4a60]', 'border-transparent')
+      })
+      tab.classList.add('active-tab', 'text-[#6c63d5]', 'border-[#6c63d5]')
+      tab.classList.remove('text-[#4a4a60]', 'border-transparent')
+      document.querySelectorAll('.shadow-panel').forEach(p => p.classList.add('hidden'))
+      document.getElementById(`tab-${target}`)?.classList.remove('hidden')
+    })
+  })
+
+  // THINK TAB
+  const thinkTextarea = document.getElementById('think-textarea') as HTMLTextAreaElement
+  const thinkSaveBtn = document.getElementById('think-save-btn') as HTMLButtonElement
+  const thinkClearBtn = document.getElementById('think-clear-btn')!
+  const thinkReminder = document.getElementById('think-notebook-reminder')!
+
+  thinkSaveBtn.addEventListener('click', async () => {
+    const content = thinkTextarea.value.trim()
+    if (!content) return
+    thinkSaveBtn.disabled = true
+    thinkSaveBtn.textContent = 'Saving...'
+    try {
+      const res = await fetch('/api/shadow/thought', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      })
+      if (res.ok) {
+        thinkReminder.classList.remove('hidden')
+        thinkReminder.classList.add('flex')
+        setSaveStatus('saved')
+        setTimeout(() => thinkReminder.classList.add('hidden'), 8000)
+      } else {
+        setSaveStatus('error saving')
+      }
+    } catch {
+      setSaveStatus('error saving')
+    }
+    thinkSaveBtn.disabled = false
+    thinkSaveBtn.textContent = 'Save thought'
+  })
+
+  thinkClearBtn.addEventListener('click', () => {
+    thinkTextarea.value = ''
+    thinkReminder.classList.add('hidden')
+  })
+
+  // SHADOW TAB
+  let selectedBehavior = ''
+  const shadowSelectedEl = document.getElementById('shadow-selected-behavior')!
+  const shadowLogBtn = document.getElementById('shadow-log-btn') as HTMLButtonElement
+  const shadowTrigger = document.getElementById('shadow-trigger') as HTMLTextAreaElement
+  const shadowLogConfirm = document.getElementById('shadow-log-confirm')!
+
+  document.querySelectorAll('.shadow-behavior-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.shadow-behavior-chip').forEach(c => {
+        c.classList.remove('border-[#6c63d5]', 'text-[#6c63d5]', 'bg-[#1a0a24]')
+        c.classList.add('border-[#2a2a3f]', 'text-[#8a8899]', 'bg-[#1a1a24]')
+      })
+      chip.classList.add('border-[#6c63d5]', 'text-[#6c63d5]', 'bg-[#1a0a24]')
+      chip.classList.remove('border-[#2a2a3f]', 'text-[#8a8899]', 'bg-[#1a1a24]')
+      selectedBehavior = (chip as HTMLElement).dataset.behavior!
+      shadowSelectedEl.textContent = `escaping: ${selectedBehavior}`
+      shadowSelectedEl.classList.remove('hidden')
+    })
+  })
+
+  shadowLogBtn.addEventListener('click', async () => {
+    if (!selectedBehavior) return
+    shadowLogBtn.disabled = true
+    shadowLogBtn.textContent = 'Logging...'
+    try {
+      const res = await fetch('/api/shadow/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          behavior: selectedBehavior,
+          trigger: shadowTrigger.value.trim() || null,
+        }),
+      })
+      if (res.ok) {
+        shadowLogConfirm.classList.remove('hidden')
+        setSaveStatus('shadow logged')
+        selectedBehavior = ''
+        shadowTrigger.value = ''
+        shadowSelectedEl.classList.add('hidden')
+        document.querySelectorAll('.shadow-behavior-chip').forEach(c => {
+          c.classList.remove('border-[#6c63d5]', 'text-[#6c63d5]', 'bg-[#1a0a24]')
+          c.classList.add('border-[#2a2a3f]', 'text-[#8a8899]', 'bg-[#1a1a24]')
+        })
+        setTimeout(() => shadowLogConfirm.classList.add('hidden'), 3000)
+      }
+    } catch {
+      setSaveStatus('error')
+    }
+    shadowLogBtn.disabled = false
+    shadowLogBtn.textContent = 'Log shadow'
+  })
+
+  // PHOTO TAB
+  const photoFileInput = document.getElementById('photo-file-input') as HTMLInputElement
+  const photoCameraBtn = document.getElementById('photo-camera-btn')!
+  const photoSaveBtn = document.getElementById('photo-save-btn')!
+  const photoPreviewImg = document.getElementById('photo-preview-img') as HTMLImageElement
+  const photoPlaceholder = document.getElementById('photo-placeholder')!
+  const photoType = document.getElementById('photo-type') as HTMLSelectElement
+  const photoConfirm = document.getElementById('photo-confirm')!
+  let capturedFile: File | null = null
+
+  photoCameraBtn.addEventListener('click', () => photoFileInput.click())
+
+  photoFileInput.addEventListener('change', () => {
+    const file = photoFileInput.files?.[0]
+    if (!file) return
+    capturedFile = file
+    const url = URL.createObjectURL(file)
+    photoPreviewImg.src = url
+    photoPreviewImg.classList.remove('hidden')
+    photoPlaceholder.classList.add('hidden')
+    photoSaveBtn.classList.remove('hidden')
+    photoSaveBtn.classList.add('flex')
+  })
+
+  photoSaveBtn.addEventListener('click', async () => {
+    if (!capturedFile) return
+    photoSaveBtn.setAttribute('disabled', 'true')
+    ;(photoSaveBtn as HTMLButtonElement).textContent = 'Saving...'
+    try {
+      const fd = new FormData()
+      fd.append('file', capturedFile)
+      fd.append('type', photoType.value)
+      const res = await fetch('/api/shadow/photo', { method: 'POST', body: fd })
+      if (res.ok) {
+        photoConfirm.classList.remove('hidden')
+        setSaveStatus('photo saved')
+        setTimeout(() => photoConfirm.classList.add('hidden'), 3000)
+        capturedFile = null
+        photoPreviewImg.classList.add('hidden')
+        photoPlaceholder.classList.remove('hidden')
+        photoSaveBtn.classList.add('hidden')
+        photoFileInput.value = ''
+      }
+    } catch {
+      setSaveStatus('error')
+    }
+    photoSaveBtn.removeAttribute('disabled')
+    ;(photoSaveBtn as HTMLButtonElement).textContent = 'Save'
+  })
+
+  function setSaveStatus(msg: string) {
+    saveStatus.textContent = msg
+    setTimeout(() => { saveStatus.textContent = '' }, 4000)
+  }
+</script>
