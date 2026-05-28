@@ -6,17 +6,17 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<!-- CRT Monitor Wrapper for Desktop -->
-<div class="absolute w-full h-full inset-0 bg-black md:flex md:items-center md:justify-center z-0 overflow-hidden rounded-[3rem]">
+<!-- CRT Monitor Wrapper -->
+<div class="absolute w-full h-full inset-0 bg-[#0a0a0f] flex items-center justify-center z-0 overflow-hidden rounded-[3rem]">
   <!-- The CRT Bezel -->
-  <div class="w-full h-full md:rounded-[3rem] md:border-[24px] border border-[#2a2a3f] md:border-[#1a1a24] shadow-[0_20px_60px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,0,0,1)] relative mx-auto bg-[#0a0a0f] flex flex-col md:resize md:overflow-hidden" style="min-width: 320px;">
+  <div class="w-full h-full rounded-[3rem] border-[24px] border-[#1a1a24] shadow-[0_20px_60px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,0,0,1)] relative mx-auto bg-[#0a0a0f] flex flex-col overflow-hidden" style="min-width: 320px;">
     <!-- Inner Monitor Screen Glass/Shadow -->
-    <div class="hidden md:block absolute inset-0 pointer-events-none md:rounded-[1.5rem] shadow-[inset_0_0_100px_rgba(0,0,0,0.95)] z-[70]"></div>
-    
-    <div id="terminal" class:list={["flex-1 h-full bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg monitor-warp scanlines relative rounded-[1rem] md:rounded-none overflow-hidden", className]}>
+    <div class="absolute inset-0 pointer-events-none rounded-[1.5rem] shadow-[inset_0_0_100px_rgba(0,0,0,0.95)] z-[70]"></div>
+
+    <div id="terminal" class:list={["flex-1 h-full bg-[#0a0a0f] text-[#e2e8f0] flex flex-col grid-bg monitor-warp scanlines relative rounded-none overflow-hidden", className]}>
   <!-- Construction Tape -->
   <div class="w-full h-8 construction-tape flex items-center justify-center z-[60] shadow-[0_4px_15px_rgba(0,0,0,0.8)] border-b-2 border-black relative">
-    <div class="bg-black px-6 py-0.5 text-[#facc15] font-mono font-bold text-xs md:text-sm tracking-widest flex items-center gap-4 whitespace-nowrap whitespace-pre">
+    <div class="bg-[#0a0a0f] px-6 py-0.5 text-[#facc15] font-mono font-bold text-sm tracking-widest flex items-center gap-4 whitespace-nowrap whitespace-pre">
       <span>🚧</span>
       <span>SITE UNDER CONSTRUCTION</span>
       <span>🚧</span>
@@ -25,9 +25,9 @@ const { class: className } = Astro.props;
 
   <div class="scanline-moving"></div>
   <div class="tracking-line"></div>
-  
+
   <!-- Terminal Output Area -->
-  <div id="terminal-output" class="flex-1 overflow-x-hidden overflow-y-auto p-4 pb-[140px] font-mono text-sm md:text-base w-full mx-auto relative z-10 custom-scrollbar block">
+  <div id="terminal-output" class="flex-1 overflow-x-hidden overflow-y-auto p-4 pb-[140px] font-mono text-base w-full mx-auto relative z-10 custom-scrollbar block">
     <!-- Welcome Message -->
     <div class="mb-6">
       <div class="text-[#39ff14] font-bold text-lg mb-2">Welcome to bigf.me</div>
@@ -39,17 +39,17 @@ const { class: className } = Astro.props;
   <div class="absolute bottom-0 left-0 right-0 flex flex-col z-50">
     <!-- Quick Buttons Bar -->
     <div class="relative group/bar bg-[#0a0a0f]/40 backdrop-blur-xl border-t border-[#2a2a3f]/40 px-4 py-2 overflow-hidden">
-      <div class="relative z-10 flex items-center gap-4 max-w-4xl mx-auto overflow-x-auto scrollbar-hide">
-        <span class="text-[#6b7280] text-[10px] uppercase tracking-widest shrink-0 font-bold opacity-40">Quick</span>
-        
+      <div class="relative z-10 flex items-center gap-4 max-w-4xl mx-auto flex-wrap">
+        <span class="text-[#6b7280] text-xs uppercase tracking-wide shrink-0 font-bold opacity-40">Quick</span>
+
         <!-- HIGHLIGHTS Button - Custom hover -->
-        <button 
-          class="highlight-btn px-3 py-1 border border-[#ff6b9d]/30 rounded-full text-xs text-[#ff6b9d]/80 hover:text-white hover:bg-[#ff6b9d] hover:shadow-[0_0_20px_rgba(255,107,157,0.4)] transition-all duration-300 shrink-0" 
+        <button
+          class="highlight-btn px-3 py-1 border border-[#ff6b9d]/30 rounded-full text-xs text-[#ff6b9d]/80 hover:text-white hover:bg-[#ff6b9d] hover:shadow-[0_0_20px_rgba(255,107,157,0.4)] transition-all duration-300 shrink-0"
           data-cmd="highlights"
         >
           highlights
         </button>
-        
+
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="whoami">whoami</button>
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="ls">ls</button>
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat about">about</button>
@@ -59,7 +59,7 @@ const { class: className } = Astro.props;
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat now">now</button>
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="pretext">pretext</button>
         <button class="quick-btn px-3 py-1 border border-[#a78bfa]/20 rounded-full text-xs text-[#a78bfa]/70 hover:text-[#a78bfa] hover:border-[#a78bfa]/40 hover:bg-[#a78bfa]/10 hover:shadow-[0_0_15px_rgba(167,139,250,0.2)] transition-all duration-300 shrink-0 flex items-center gap-1" data-cmd="ai "><span class="text-[10px]">🤖</span> ask ai</button>
-        
+
         <div class="ml-auto flex items-center gap-2">
           <button class="quick-btn px-3 py-1 border border-transparent rounded-full text-xs text-[#6b7280]/40 hover:text-[#ff6b9d] transition-all duration-300 shrink-0" data-cmd="clear">clear</button>
         </div>
@@ -76,7 +76,7 @@ const { class: className } = Astro.props;
         <input
           id="terminal-input"
           type="text"
-          class="flex-1 bg-transparent text-[#e2e8f0] outline-none font-mono text-sm md:text-base min-w-0 caret-[#00d4ff]"
+          class="flex-1 bg-transparent text-[#e2e8f0] outline-none font-mono text-base min-w-0 caret-[#00d4ff]"
           autocomplete="off"
           autocorrect="off"
           autocapitalize="off"
@@ -607,8 +607,8 @@ Type 'cat life' for music, places, and art.`);
           card.className = 'flex-shrink-0 w-48 bg-[#15151f] border border-[#2a2a3f] rounded-lg p-4 cursor-pointer hover:border-[#ff6b9d] transition-all group';
           card.innerHTML = `
             <div class="text-2xl mb-2">${getCategoryIcon(cat)}</div>
-            <h3 class="text-sm font-semibold text-[#e2e8f0] group-hover:text-[#ff6b9d] transition-colors capitalize">${cat}</h3>
-            <p class="text-xs text-[#6b7280] mt-1">${projs.length} projects</p>
+            <div class="text-sm font-semibold text-[#e2e8f0] group-hover:text-[#ff6b9d] transition-colors capitalize">${cat}</div>
+            <p class="text-xs text-[#a0a0af] mt-1">${projs.length} projects</p>
           `;
           card.addEventListener('click', () => {
             execute(`cd ${cat}`);
@@ -660,6 +660,14 @@ Use 'cd [category]' to explore or click a card above.`, false);
     if (result.output.startsWith('__AI__')) {
       const query = result.output.slice('__AI__'.length);
       handleAICommand(query);
+      return;
+    }
+
+    if (command === 'shadow' || command === 'shadows') {
+      addOutputToTerminal(result.output, result.error);
+      input.blur();
+      window.dispatchEvent(new CustomEvent('canvas:navigate', { detail: { workspace: 'shadow' } }));
+      input.value = '';
       return;
     }
 
@@ -756,8 +764,10 @@ Use 'cd [category]' to explore or click a card above.`, false);
     }
   });
 
-  // Focus input on click, but only if they aren't selecting text
-  document.addEventListener('click', () => {
+  // Focus input on click, but only if they aren't selecting text and clicking inside the terminal
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('#terminal')) return;
     const selection = window.getSelection()?.toString();
     if (!selection) {
       input?.focus();

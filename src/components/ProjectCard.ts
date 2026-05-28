@@ -23,7 +23,7 @@ export function createProjectCard(props: ProjectCardProps): HTMLElement {
   
   // Category badge
   const badge = document.createElement('div');
-  badge.className = 'absolute top-2 right-2 px-2 py-1 bg-[#0a0a0f]/80 rounded text-[10px] text-[#6b7280] uppercase tracking-wider';
+  badge.className = 'absolute top-2 right-2 px-2 py-1 bg-[#0a0a0f]/80 rounded text-[10px] text-[#a0a0af] uppercase tracking-wider font-semibold';
   badge.textContent = project.category;
   imageContainer.appendChild(badge);
   
@@ -33,18 +33,18 @@ export function createProjectCard(props: ProjectCardProps): HTMLElement {
   const content = document.createElement('div');
   content.className = 'p-3';
   
-  const title = document.createElement('h3');
+  const title = document.createElement('h2');
   title.className = 'text-sm font-semibold text-[#e2e8f0] mb-1 group-hover:text-[#00d4ff] transition-colors';
   title.textContent = project.name;
   content.appendChild(title);
   
   const year = document.createElement('div');
-  year.className = 'text-[10px] text-[#6b7280] mb-2';
+  year.className = 'text-[10px] text-[#a0a0af] mb-2 font-mono';
   year.textContent = project.year;
   content.appendChild(year);
   
   const desc = document.createElement('p');
-  desc.className = 'text-xs text-[#6b7280] line-clamp-2 leading-relaxed';
+  desc.className = 'text-xs text-[#beb9cc] line-clamp-2 leading-relaxed';
   desc.textContent = project.description;
   content.appendChild(desc);
   
@@ -53,7 +53,7 @@ export function createProjectCard(props: ProjectCardProps): HTMLElement {
   tags.className = 'flex flex-wrap gap-1 mt-3';
   project.tech.slice(0, 3).forEach(t => {
     const tag = document.createElement('span');
-    tag.className = 'px-1.5 py-0.5 bg-[#2a2a3f] rounded text-[9px] text-[#6b7280]';
+    tag.className = 'px-1.5 py-0.5 bg-[#2a2a3f] rounded text-[9px] text-[#a0a0af] font-mono';
     tag.textContent = t;
     tags.appendChild(tag);
   });
@@ -84,29 +84,27 @@ export function createCarousel(props: CarouselProps): HTMLElement {
   const header = document.createElement('div');
   header.className = 'flex items-center justify-between mb-3 px-1';
   
-  const titleEl = document.createElement('h3');
-  titleEl.className = 'text-xs text-[#6b7280] uppercase tracking-wider';
+  const titleEl = document.createElement('h2');
+  titleEl.className = 'text-xs text-[#a0a0af] uppercase tracking-wider font-semibold';
   titleEl.textContent = title;
   header.appendChild(titleEl);
   
   const count = document.createElement('span');
-  count.className = 'text-[10px] text-[#6b7280]';
+  count.className = 'text-[10px] text-[#a0a0af] font-mono';
   count.textContent = `${items.length} items`;
   header.appendChild(count);
   
   container.appendChild(header);
   
-  // Scrollable container
-  const scrollContainer = document.createElement('div');
-  scrollContainer.className = 'flex gap-3 overflow-x-auto pb-2 scrollbar-thin';
-  scrollContainer.style.scrollbarWidth = 'thin';
-  scrollContainer.style.scrollbarColor = '#2a2a3f transparent';
+  // Grid container (no horizontal scroll)
+  const gridContainer = document.createElement('div');
+  gridContainer.className = 'flex flex-wrap gap-3 pb-2';
   
   items.forEach(item => {
-    scrollContainer.appendChild(item);
+    gridContainer.appendChild(item);
   });
   
-  container.appendChild(scrollContainer);
+  container.appendChild(gridContainer);
   
   return container;
 }

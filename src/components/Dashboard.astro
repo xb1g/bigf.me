@@ -1,0 +1,193 @@
+---
+import { db } from '../lib/db'
+import { Image } from 'astro:assets'
+import profileImg from '../assets/images/profile.jpg'
+
+// Fetch latest thought for live indicator
+let latestThought = null
+try {
+  const thoughtRes = await db.execute({
+    sql: `SELECT * FROM thoughts ORDER BY created_at DESC LIMIT 1`,
+    args: [],
+  })
+  if (thoughtRes.rows.length > 0) {
+    latestThought = thoughtRes.rows[0]
+  }
+} catch (e) {
+  console.error("Failed to fetch latest thought for dashboard", e)
+}
+
+// Fetch latest shadow for live indicator
+let latestShadow = null
+try {
+  const shadowRes = await db.execute({
+    sql: `SELECT * FROM shadows ORDER BY created_at DESC LIMIT 1`,
+    args: [],
+  })
+  if (shadowRes.rows.length > 0) {
+    latestShadow = shadowRes.rows[0]
+  }
+} catch (e) {
+  console.error("Failed to fetch latest shadow for dashboard", e)
+}
+
+const purposes = [
+  { key: 'edu', label: 'Edu', color: 'ff6b9d', progress: 65,
+    text: 'Guide newer generations to design their own future so they can live fully.' },
+  { key: 'connect', label: 'Connection', color: 'a78bfa', progress: 40,
+    text: 'Engineer physical and digital spaces where creative creators gather, align, and share raw moments.' },
+  { key: 'craft', label: 'Craft', color: '00d4ff', progress: 80,
+    text: 'Craft instruments for living so that creating and using feels like a privilege, with complete trust that each is the best tool for its purpose.' },
+  { key: 'cycle', label: 'Cycle', color: '39ff14', progress: 55,
+    text: 'Design with circularity — not as a strategy, but as a way of seeing. Everything that exists is a resource for its next form. The seed is the tree. The box is the memory. Nothing is ever finished.' },
+]
+
+const companies = [
+  { name: 'PassionSeed', tag: 'Edu', color: 'ff6b9d', purpose: 'edu',
+    text: 'AI career discovery for 300+ students' },
+  { name: 'LongKeeb', tag: 'Craft', color: '00d4ff', purpose: 'craft',
+    text: 'Ergonomic split mechanical keyboards' },
+  { name: 'JOJO Soba', tag: 'Connect', color: 'ff9f1c', purpose: 'connect',
+    text: 'Espresso & soba cafe for digital creators' },
+  { name: 'CoderDojo', tag: 'Edu+Connect', color: 'a78bfa', purpose: 'edu,connect',
+    text: 'Free programming for kids every Sunday' },
+]
+---
+
+<div class="w-full h-full flex flex-col bg-[#07070a]/95 text-[#ebdcc6] overflow-hidden rounded-[2.5rem] relative border border-[#1e1e2f]/85 p-4 font-mono select-none" id="dashboard-root">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between pb-2 border-b border-[#1e1e2f] mb-3 gap-3 flex-wrap">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg overflow-hidden border border-[#ff6b9d]/30 bg-[#0a0a0f]">
+        <Image src={profileImg} alt="Bunyasit Fang" class="w-full h-full object-cover" width={96} height={96} />
+      </div>
+      <div>
+        <h1 class="text-base font-black uppercase tracking-[0.12em] text-white font-display">
+          Bunyasit Fang
+        </h1>
+        <p class="text-[10px] text-[#c0bdd3] font-sans">
+          Integrated Innovation Builder & Architect
+        </p>
+      </div>
+    </div>
+    <div class="text-[10px] text-[#10b981] uppercase tracking-wide font-bold flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+      LIVING FULLY
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="flex-1 grid grid-cols-5 gap-4 overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar" style="min-height: 0;">
+
+    <!-- Core Purposes -->
+    <div class="col-span-2 flex flex-col gap-2 min-w-0">
+      <div class="text-[9px] uppercase tracking-[0.15em] text-[#c0bdd3] font-bold font-display">
+        Core Purposes
+      </div>
+
+      <div class="flex flex-col gap-1">
+        {purposes.map(p => (
+          <div class="purpose-item group rounded-lg p-2 border border-transparent hover:border-[#2a2a3f] hover:bg-[#111118] transition-all duration-200 cursor-default"
+               data-purpose={p.key}>
+            <p class="text-[14px] text-[#ebdcc6] font-sans leading-snug mb-2">
+              {p.text}
+            </p>
+
+            <div class="flex items-center gap-2">
+              <span class="text-[9px] shrink-0 font-bold uppercase tracking-wide flex items-center gap-1" style={`color: #${p.color}`}>
+                {p.key === 'edu' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                )}
+                {p.key === 'connect' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M18 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M8.59 13.51 15.4 8.49"/><path d="m15.41 15.49-6.81-5.02"/></svg>
+                )}
+                {p.key === 'craft' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                )}
+                {p.key === 'cycle' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+                )}
+                {p.label}
+              </span>
+              <div class="flex-1 h-[3px] bg-[#1e1e2f] rounded-full overflow-hidden">
+                <div class="h-full rounded-full"
+                     style={`width: ${p.progress}%; background-color: #${p.color}`}></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Companies -->
+    <div class="col-span-3 flex flex-col gap-2 min-w-0">
+      <div class="text-[9px] uppercase tracking-[0.15em] text-[#c0bdd3] font-bold font-display">
+        Companies & Alignment
+      </div>
+
+      <div class="flex flex-col gap-0 min-w-0">
+        {companies.map(c => (
+          <div class="company-item flex items-start gap-2 rounded-lg px-2 py-1 border border-transparent hover:border-[#2a2a3f] hover:bg-[#111118] transition-all duration-200 min-w-0"
+               data-purpose={c.purpose}>
+            <span class="text-sm font-bold text-white font-display tracking-wide shrink-0 leading-none mt-[2px]">{c.name}</span>
+            <span class="text-[9px] uppercase tracking-wide font-bold shrink-0 leading-none mt-[3px]" style={`color: #${c.color}`}>
+              {c.tag}
+            </span>
+            <span class="text-[11px] text-[#c0bdd3] font-sans min-w-0 leading-snug">{c.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Status Bar -->
+  <div class="border-t border-[#1e1e2f] pt-2 mt-3 grid grid-cols-2 gap-2 text-[11px] text-[#beb9cc] font-sans">
+    <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap">
+      <span class="text-[#ff6b9d] shrink-0 font-bold font-mono">Reflect:</span>
+      <span class="text-[#ebdcc6] truncate">
+        {latestThought ? latestThought.content : 'Present and reflecting...'}
+      </span>
+    </div>
+    <div class="flex items-center justify-between gap-2">
+      <span class="text-[#a78bfa] shrink-0 font-bold font-mono">Shadow:</span>
+      <span class="text-[#ebdcc6]">
+        {latestShadow ? latestShadow.behavior : 'Focused'}
+      </span>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .company-item:hover .company-text {
+    color: #ebdcc6;
+  }
+</style>
+
+<script>
+  const purposes = document.querySelectorAll('.purpose-item');
+  const companies = document.querySelectorAll('.company-item');
+
+  purposes.forEach(p => {
+    p.addEventListener('mouseenter', () => {
+      const purposeKey = p.getAttribute('data-purpose');
+
+      companies.forEach(c => {
+        const companyPurposes = c.getAttribute('data-purpose')?.split(',') || [];
+        if (companyPurposes.includes(purposeKey)) {
+          c.classList.add('bg-[#111118]', 'border-[#2a2a3f]');
+        } else {
+          c.classList.add('opacity-30');
+        }
+      });
+    });
+
+    p.addEventListener('mouseleave', () => {
+      companies.forEach(c => {
+        c.classList.remove('bg-[#111118]', 'border-[#2a2a3f]', 'opacity-30');
+      });
+    });
+  });
+</script>

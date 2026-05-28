@@ -4,6 +4,7 @@ import Terminal from '../components/Terminal.astro';
 import Notebook from '../components/Notebook.astro';
 import Gallery from '../components/Gallery.astro';
 import ShadowCatcher from '../components/ShadowCatcher.astro';
+import Dashboard from '../components/Dashboard.astro';
 ---
 
 <Layout title="bigf.me • Bunyasit Fang">
@@ -17,34 +18,34 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
         <div class="w-1 h-1 bg-[#a09e99] rounded-full"></div>
       </div>
 
-      <!-- Item 1: Terminal -->
-      <div class="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[70vw] max-w-7xl h-[85vh] z-20 canvas-item group">
-        <div class="absolute -top-8 left-0 text-[#a09e99] font-mono text-xs opacity-50 uppercase tracking-widest pointer-events-none">Workspace 01 : Engineering</div>
-        <div class="w-full h-full shadow-[0_30px_80px_rgba(0,0,0,0.6)] rounded-[3rem] transition-transform duration-300 group-hover:scale-[1.01]">
-          <Terminal />
+      <!-- Item 1: Life Dashboard -->
+      <div class="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 z-20 canvas-item group" data-workspace="terminal">
+        <div class="absolute -top-8 left-0 text-[#a09e99] font-display text-sm opacity-60 uppercase tracking-[0.15em] pointer-events-none font-bold">Workspace 01 : Reflections</div>
+        <div class="w-[90vw] max-w-7xl h-[85vh] shadow-[0_30px_80px_rgba(0,0,0,0.6)] rounded-[3rem] overflow-hidden resize transition-transform duration-300 group-hover:scale-[1.01]">
+          <Dashboard />
         </div>
       </div>
 
       <!-- Item 2: Notebook -->
-      <div class="absolute top-0 left-[1200px] -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[70vw] max-w-5xl h-[80vh] z-10 canvas-item group">
-         <div class="absolute -top-8 left-0 text-[#a09e99] font-mono text-xs opacity-50 uppercase tracking-widest pointer-events-none">Workspace 02 : Thoughts</div>
-        <div class="w-full h-full transition-transform duration-300 group-hover:scale-[1.01]">
+      <div class="absolute top-0 left-[1200px] -translate-x-1/2 -translate-y-1/2 z-10 canvas-item group" data-workspace="notebook">
+         <div class="absolute -top-8 left-0 text-[#a09e99] font-display text-sm opacity-60 uppercase tracking-[0.15em] pointer-events-none font-bold">Workspace 02 : Thoughts</div>
+        <div class="w-[90vw] max-w-5xl h-[80vh] overflow-hidden resize transition-transform duration-300 group-hover:scale-[1.01]">
           <Notebook />
         </div>
       </div>
 
       <!-- Item 3: Gallery -->
-      <div class="absolute top-0 left-[2400px] -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[70vw] max-w-5xl h-[80vh] z-10 canvas-item group">
-         <div class="absolute -top-8 left-0 text-[#a09e99] font-mono text-xs opacity-50 uppercase tracking-widest pointer-events-none">Workspace 03 : Gallery</div>
-        <div class="w-full h-full transition-transform duration-300 group-hover:scale-[1.01]">
+      <div class="absolute top-0 left-[2400px] -translate-x-1/2 -translate-y-1/2 z-10 canvas-item group" data-workspace="gallery">
+         <div class="absolute -top-8 left-0 text-[#a09e99] font-display text-sm opacity-60 uppercase tracking-[0.15em] pointer-events-none font-bold">Workspace 03 : Gallery</div>
+        <div class="w-[90vw] max-w-5xl h-[80vh] overflow-hidden resize transition-transform duration-300 group-hover:scale-[1.01]">
           <Gallery />
         </div>
       </div>
 
       <!-- Item 4: Shadow Catcher -->
-      <div class="absolute top-0 left-[3600px] -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[420px] h-[80vh] z-10 canvas-item group">
-        <div class="absolute -top-8 left-0 text-[#a09e99] font-mono text-xs opacity-50 uppercase tracking-widest pointer-events-none">Workspace 04 : Shadows</div>
-        <div class="w-full h-full transition-transform duration-300 group-hover:scale-[1.01]">
+      <div class="absolute top-0 left-[-1200px] -translate-x-1/2 -translate-y-1/2 z-10 canvas-item group" data-workspace="shadow">
+        <div class="absolute -top-8 left-0 text-[#a09e99] font-display text-sm opacity-60 uppercase tracking-[0.15em] pointer-events-none font-bold">Workspace 04 : Shadows</div>
+        <div class="w-[90vw] max-w-[420px] h-[80vh] overflow-hidden resize transition-transform duration-300 group-hover:scale-[1.01]">
           <ShadowCatcher />
         </div>
       </div>
@@ -52,54 +53,66 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
     </div>
 
     <!-- UI Overlay Controls / Navigation -->
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-50 w-[90vw] md:w-auto">
-      
-      <!-- Mobile Quick Command Bar (Visible on small screens or anywhere) -->
-      <div class="w-full md:hidden bg-[#0a0a0f]/80 backdrop-blur-xl border border-[#2a2a3f]/50 rounded-2xl px-3 py-2 flex items-center gap-2 overflow-x-auto scrollbar-hide shadow-xl">
-        <button class="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff6b9d]/10 border border-[#ff6b9d]/30 flex items-center justify-center text-[#ff6b9d]" title="Quick Commands">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        </button>
-        <div class="w-[1px] h-4 bg-[#2a2a3f] mx-1"></div>
-        <button class="quick-cmd-btn px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white/70" data-cmd="highlights">Highlights</button>
-        <button class="quick-cmd-btn px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white/70" data-cmd="ls">List</button>
-        <button class="quick-cmd-btn px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white/70" data-cmd="cat life">Life</button>
-        <button class="quick-cmd-btn px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#a78bfa]/10 border border-[#a78bfa]/30 text-[#a78bfa]" data-cmd="ai ">AI</button>
-      </div>
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-50 w-auto">
 
       <!-- Main Navigation Bar -->
-      <div class="bg-[#fdfcf8]/90 backdrop-blur-md border border-[#d0cdc5] shadow-[0_5px_15px_rgba(0,0,0,0.05)] rounded-full px-4 py-2 flex items-center gap-4">
-        <button class="text-[#8c8577] hover:text-[#2c2c2c] transition-colors p-1" id="btn-home" title="Go to Terminal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <div class="bg-[#0a0a0f]/90 backdrop-blur-md border border-[#2a2a3f]/80 shadow-[0_5px_25px_rgba(0,0,0,0.5)] rounded-full px-4 py-2 flex items-center gap-4">
+        <!-- Home / Life Dashboard (Workspace 1) -->
+        <button class="text-[#8a8899] hover:text-white active:scale-95 transition-all p-1 cursor-pointer" id="btn-home" title="Go to Life Dashboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
         </button>
-        <div class="w-[1px] h-4 bg-[#e8e6e1]"></div>
-        <button class="text-[#8c8577] hover:text-[#2c2c2c] transition-colors p-1" id="btn-notebook" title="Go to Notebook">
+        <div class="w-[1px] h-4 bg-[#2a2a3f]/50"></div>
+
+        <!-- Terminal Overlay Toggler -->
+        <button class="text-[#8a8899] hover:text-[#00d4ff] active:scale-95 transition-all p-1 cursor-pointer" id="btn-terminal-toggle" title="Toggle Terminal Command Prompt">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 17 10 11 4 5" />
+            <line x1="12" y1="19" x2="20" y2="19" />
+          </svg>
+        </button>
+        <div class="w-[1px] h-4 bg-[#2a2a3f]/50"></div>
+
+        <!-- Notebook (Workspace 2) -->
+        <button class="text-[#8a8899] hover:text-[#ff6b9d] active:scale-95 transition-all p-1 cursor-pointer" id="btn-notebook" title="Go to Notebook">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
         </button>
-        <div class="w-[1px] h-4 bg-[#e8e6e1]"></div>
-        <button class="text-[#8c8577] hover:text-[#2c2c2c] transition-colors p-1" id="btn-gallery" title="Go to Gallery">
+        <div class="w-[1px] h-4 bg-[#2a2a3f]/50"></div>
+
+        <!-- Gallery (Workspace 3) -->
+        <button class="text-[#8a8899] hover:text-[#ff9f1c] active:scale-95 transition-all p-1 cursor-pointer" id="btn-gallery" title="Go to Gallery">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </button>
-        <div class="w-[1px] h-4 bg-[#e8e6e1]"></div>
-        <button class="text-[#8c8577] hover:text-[#6c63d5] transition-colors p-1" id="btn-shadows" title="Go to Shadow Catcher">
+        <div class="w-[1px] h-4 bg-[#2a2a3f]/50"></div>
+
+        <!-- Shadows (Workspace 4) -->
+        <button class="text-[#8a8899] hover:text-[#a78bfa] active:scale-95 transition-all p-1 cursor-pointer" id="btn-shadows" title="Go to Shadow Catcher">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
         </button>
-        <div class="w-[1px] h-4 bg-[#e8e6e1] hidden md:block"></div>
-        <button class="text-[#8c8577] hover:text-[#2c2c2c] transition-colors items-center gap-1 hidden md:flex" id="btn-zoom-out" title="Overview">
+        <div class="w-[1px] h-4 bg-[#2a2a3f]/50"></div>
+
+        <!-- Zoom Out / Overview -->
+        <button class="text-[#8a8899] hover:text-[#e8e6e1] active:scale-95 transition-all items-center gap-1 flex cursor-pointer" id="btn-zoom-out" title="Overview">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- Instructions Overlay -->
-    <div class="fixed top-6 right-6 bg-[#fdfcf8]/90 backdrop-blur-md border border-[#d0cdc5] shadow-[0_5px_15px_rgba(0,0,0,0.05)] rounded-lg p-3 text-xs text-[#8c8577] font-sans z-50 pointer-events-none opacity-80">
-      <div class="font-bold text-[#5a5955] mb-1 tracking-wider uppercase text-[9px]">Controls</div>
-      <div><span class="inline-block bg-[#e8e6e1] px-1 rounded border border-[#d0cdc5] text-[#2c2c2c]">Space</span> + Drag to pan</div>
-      <div class="mt-1"><span class="inline-block bg-[#e8e6e1] px-1 rounded border border-[#d0cdc5] text-[#2c2c2c]">Scroll</span> to pan / zoom</div>
+    <!-- Floating Expandable Terminal Overlay -->
+    <div id="terminal-overlay" class="fixed inset-x-0 bottom-24 mx-auto w-[90vw] max-w-5xl h-[55vh] z-[60] hidden transition-all duration-300 translate-y-10 opacity-0 pointer-events-none">
+      <div class="w-full h-full shadow-[0_30px_100px_rgba(0,0,0,0.8)] border border-[#2a2a3f] rounded-[2.5rem] bg-[#0a0a0f]/95 backdrop-blur-xl overflow-hidden relative p-1 flex flex-col">
+        <!-- Close overlay button -->
+        <button id="terminal-overlay-close" class="absolute top-5 right-8 text-[#8a8899] hover:text-[#ff6b9d] transition-colors text-[10px] font-mono uppercase tracking-widest cursor-pointer select-none z-[65]" type="button">
+          ✕ Close
+        </button>
+        <Terminal />
+      </div>
     </div>
 
     <!-- Custom Cursor Elements -->
-    <div id="cursor-dot" class="hidden md:block"></div>
-    <div id="cursor-outline" class="hidden md:block"></div>
+    <div id="cursor-dot"></div>
 
   </main>
 </Layout>
@@ -107,7 +120,7 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
 <style>
   .canvas-item {
     /* Prevent grabbing canvas when interacting inside items unless space is down */
-    cursor: auto; 
+    cursor: auto;
   }
   .is-panning {
     cursor: grabbing !important;
@@ -119,13 +132,27 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
   :global(#terminal-output) {
     overscroll-behavior: contain;
   }
+
+  /* Resize handle styling for workspace windows */
+  .canvas-item > div > div {
+    resize: both;
+  }
+  .canvas-item > div > div::-webkit-resizer {
+    background: transparent;
+    border-right: 3px solid #ff6b9d;
+    border-bottom: 3px solid #ff6b9d;
+    border-radius: 0 0 3rem 0;
+  }
+  .canvas-item > div > div:hover::-webkit-resizer {
+    border-right-color: #00d4ff;
+    border-bottom-color: #00d4ff;
+  }
 </style>
 
 <script>
   const viewport = document.getElementById('viewport');
   const canvas = document.getElementById('canvas');
   const cursorDot = document.getElementById('cursor-dot');
-  const cursorOutline = document.getElementById('cursor-outline');
   
   if (viewport && canvas) {
     // Canvas State
@@ -144,43 +171,31 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
     // Cursor Logic
     let cursorX = 0;
     let cursorY = 0;
-    let outlineX = 0;
-    let outlineY = 0;
 
     const moveCursor = (e: MouseEvent) => {
       cursorX = e.clientX;
       cursorY = e.clientY;
       
       if (cursorDot) {
-        cursorDot.style.transform = `translate(${cursorX - 3}px, ${cursorY - 3}px)`;
+        cursorDot.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
       }
 
       // Check for hover states
       const target = e.target as HTMLElement;
-      const isHoverable = target.closest('button, a, input, textarea, [role="button"], .cursor-pointer');
+      const isText = target.closest('input, textarea');
+      const isOverview = state.scale < 0.9;
+      const isHoverable = target.closest('button, a, [role="button"], .cursor-pointer') || (isOverview && target.closest('.canvas-item'));
       
-      if (isHoverable) {
-        document.body.classList.add('cursor-hover');
-      } else {
+      if (isText) {
+        document.body.classList.add('cursor-text-hover');
         document.body.classList.remove('cursor-hover');
+      } else if (isHoverable) {
+        document.body.classList.add('cursor-hover');
+        document.body.classList.remove('cursor-text-hover');
+      } else {
+        document.body.classList.remove('cursor-hover', 'cursor-text-hover');
       }
     };
-
-    const animateOutline = () => {
-      // Smooth follow for outline
-      const distX = cursorX - outlineX;
-      const distY = cursorY - outlineY;
-      
-      outlineX += distX * 0.15;
-      outlineY += distY * 0.15;
-      
-      if (cursorOutline) {
-        cursorOutline.style.transform = `translate(${outlineX - 20}px, ${outlineY - 20}px)`;
-      }
-      
-      requestAnimationFrame(animateOutline);
-    };
-    animateOutline();
 
     // Rendering
     let frameRequested = false;
@@ -235,6 +250,7 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
     };
 
     const handleMouseDown = (e: MouseEvent) => {
+      document.body.classList.add('cursor-clicking');
       // Figma UX: Spacebar, background click, or Middle Mouse Button (button === 1) to pan.
       if (e.button === 1 || state.spaceBarDown || e.target === viewport || e.target === canvas) {
         e.preventDefault();
@@ -260,6 +276,7 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
     };
 
     const handleMouseUp = () => {
+      document.body.classList.remove('cursor-clicking');
       state.isPanning = false;
       viewport.classList.remove('is-panning');
       document.body.classList.remove('cursor-panning');
@@ -379,50 +396,181 @@ import ShadowCatcher from '../components/ShadowCatcher.astro';
     window.addEventListener('gestureend', (e: any) => e.preventDefault());
     
     document.getElementById('btn-zoom-out')?.addEventListener('click', () => {
-      // Center and show all
-      state.x = (window.innerWidth / 2) - (1200 * 0.3); 
+      // Center and show all (since workspaces span from -1200 to 2400, center is 600)
+      state.x = (window.innerWidth / 2) - (600 * 0.3); 
       state.y = window.innerHeight / 2;
       state.scale = 0.3;
       requestUpdate(true);
     });
 
-    // Mobile nav buttons logic
-    document.getElementById('btn-home')?.addEventListener('click', () => {
-      state.x = window.innerWidth / 2;
-      state.y = window.innerHeight / 2;
-      state.scale = 1;
-      requestUpdate(true);
-    });
-    document.getElementById('btn-notebook')?.addEventListener('click', () => {
-      state.x = (window.innerWidth / 2) - (1200 * 1);
-      state.y = window.innerHeight / 2;
-      state.scale = 1;
-      requestUpdate(true);
-    });
-    document.getElementById('btn-gallery')?.addEventListener('click', () => {
-      state.x = (window.innerWidth / 2) - (2400 * 1);
-      state.y = window.innerHeight / 2;
-      state.scale = 1;
-      requestUpdate(true);
-    });
-    document.getElementById('btn-shadows')?.addEventListener('click', () => {
-      state.x = (window.innerWidth / 2) - (3600 * 1);
-      state.y = window.innerHeight / 2;
-      state.scale = 1;
-      requestUpdate(true);
+    // Active workspace list & tracker
+    const WORKSPACES = ['shadow', 'terminal', 'notebook', 'gallery'];
+    let currentActiveWorkspace = 'terminal';
+
+    // Floating Terminal Overlay Expand/Collapse Logic
+    const terminalToggleBtn = document.getElementById('btn-terminal-toggle');
+    const terminalOverlay = document.getElementById('terminal-overlay');
+    const terminalOverlayClose = document.getElementById('terminal-overlay-close');
+    const terminalInput = document.getElementById('terminal-input') as HTMLInputElement;
+
+    const openTerminalOverlay = () => {
+      if (!terminalOverlay) return;
+      terminalOverlay.classList.remove('hidden');
+      void terminalOverlay.offsetHeight; // force reflow for smooth animations
+      terminalOverlay.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
+      terminalOverlay.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      
+      // Auto focus terminal input on open
+      setTimeout(() => {
+        if (terminalInput) terminalInput.focus();
+      }, 100);
+    };
+
+    const closeTerminalOverlay = () => {
+      if (!terminalOverlay) return;
+      terminalOverlay.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      terminalOverlay.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
+      
+      setTimeout(() => {
+        terminalOverlay.classList.add('hidden');
+      }, 300);
+    };
+
+    terminalToggleBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (terminalOverlay && terminalOverlay.classList.contains('hidden')) {
+        openTerminalOverlay();
+      } else {
+        closeTerminalOverlay();
+      }
     });
 
-    // Mobile Quick Commands Logic
-    document.querySelectorAll('.quick-cmd-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cmd = btn.getAttribute('data-cmd');
-        if (cmd) {
-          window.dispatchEvent(new CustomEvent('terminal:execute', { detail: { command: cmd } }));
-          // Jump back to terminal to see output
-          state.x = window.innerWidth / 2;
-          state.y = window.innerHeight / 2;
-          state.scale = 1;
-          requestUpdate(true);
+    terminalOverlayClose?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeTerminalOverlay();
+    });
+
+    // Close overlay if clicking outside or pressing Escape
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && terminalOverlay && !terminalOverlay.classList.contains('hidden')) {
+        closeTerminalOverlay();
+      }
+    });
+
+    window.addEventListener('mousedown', (e) => {
+      if (terminalOverlay && !terminalOverlay.classList.contains('hidden')) {
+        const target = e.target as HTMLElement;
+        if (!target.closest('#terminal-overlay') && !target.closest('#btn-terminal-toggle')) {
+          closeTerminalOverlay();
+        }
+      }
+    });
+
+    // Mobile nav buttons logic using unified canvas:navigate
+    document.getElementById('btn-home')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('canvas:navigate', { detail: { workspace: 'terminal' } }));
+    });
+    document.getElementById('btn-notebook')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('canvas:navigate', { detail: { workspace: 'notebook' } }));
+    });
+    document.getElementById('btn-gallery')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('canvas:navigate', { detail: { workspace: 'gallery' } }));
+    });
+    document.getElementById('btn-shadows')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('canvas:navigate', { detail: { workspace: 'shadow' } }));
+    });
+
+    // Global canvas navigation event listener with workspace tracking
+    window.addEventListener('canvas:navigate', (e: any) => {
+      // Smoothly collapse terminal overlay whenever navigation is triggered (whether by command or direct click)
+      closeTerminalOverlay();
+
+      const workspace = e.detail.workspace;
+      if (workspace === 'shadow') {
+        state.x = (window.innerWidth / 2) + 1200;
+        state.y = window.innerHeight / 2;
+        state.scale = 1;
+        currentActiveWorkspace = 'shadow';
+        requestUpdate(true);
+      } else if (workspace === 'terminal' || workspace === 'home') {
+        state.x = window.innerWidth / 2;
+        state.y = window.innerHeight / 2;
+        state.scale = 1;
+        currentActiveWorkspace = 'terminal';
+        requestUpdate(true);
+      } else if (workspace === 'notebook') {
+        state.x = (window.innerWidth / 2) - (1200 * 1);
+        state.y = window.innerHeight / 2;
+        state.scale = 1;
+        currentActiveWorkspace = 'notebook';
+        requestUpdate(true);
+      } else if (workspace === 'gallery') {
+        state.x = (window.innerWidth / 2) - (2400 * 1);
+        state.y = window.innerHeight / 2;
+        state.scale = 1;
+        currentActiveWorkspace = 'gallery';
+        requestUpdate(true);
+      }
+    });
+
+    // Command + Left/Right arrow key navigation
+    window.addEventListener('keydown', (e) => {
+      const isCmd = e.metaKey || e.ctrlKey;
+      if (isCmd && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+        // Exclude text input/textareas except terminal-input and shadow-pin-input
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+          const allowedInputs = ['terminal-input', 'shadow-pin-input'];
+          if (!allowedInputs.includes(e.target.id)) return;
+        }
+
+        e.preventDefault();
+        const currentIndex = WORKSPACES.indexOf(currentActiveWorkspace);
+        let nextIndex = currentIndex;
+
+        if (e.key === 'ArrowLeft') {
+          // Go left: shadow <- terminal <- notebook <- gallery
+          if (currentIndex > 0) {
+            nextIndex = currentIndex - 1;
+          }
+        } else {
+          // Go right: shadow -> terminal -> notebook -> gallery
+          if (currentIndex < WORKSPACES.length - 1) {
+            nextIndex = currentIndex + 1;
+          }
+        }
+
+        if (nextIndex !== currentIndex) {
+          const nextWorkspace = WORKSPACES[nextIndex];
+          window.dispatchEvent(new CustomEvent('canvas:navigate', { detail: { workspace: nextWorkspace } }));
+        }
+      }
+    });
+
+    // Click-to-focus on canvas items (workspaces)
+    document.querySelectorAll('.canvas-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        // If clicking inside interactive child elements, let standard behavior handle it
+        const target = e.target as HTMLElement;
+        if (target.closest('button, a, input, textarea, [role="button"], .shadow-behavior-chip, .shadow-keypad-btn')) return;
+        
+        // Skip if currently dragging/panning
+        if (state.isPanning) return;
+        
+        const workspace = item.getAttribute('data-workspace');
+        
+        // Avoid jump triggering if we are already zoomed in and centered on it
+        const currentScale = state.scale;
+        let isAlreadyCentered = false;
+        
+        if (Math.abs(currentScale - 1) < 0.05) {
+          if (workspace === 'terminal' && Math.abs(state.x - window.innerWidth / 2) < 50) isAlreadyCentered = true;
+          if (workspace === 'notebook' && Math.abs(state.x - ((window.innerWidth / 2) - 1200)) < 50) isAlreadyCentered = true;
+          if (workspace === 'gallery' && Math.abs(state.x - ((window.innerWidth / 2) - 2400)) < 50) isAlreadyCentered = true;
+          if (workspace === 'shadow' && Math.abs(state.x - ((window.innerWidth / 2) + 1200)) < 50) isAlreadyCentered = true;
+        }
+
+        if (workspace && !isAlreadyCentered) {
+          window.dispatchEvent(new CustomEvent('canvas:navigate', { detail: { workspace } }));
         }
       });
     });

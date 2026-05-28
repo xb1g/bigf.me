@@ -374,6 +374,7 @@ export function executeCommand(input: string, currentPath: string): CommandResul
   cat        - Display content pages (about, books, philosophy, now)
   cd         - Navigate to project directory
   ai         - 🤖 Chat with MiniMax M2.7 AI (e.g. ai what is bigf.me?)
+  shadow     - 👻 Panning and focus onto the Shadow Catcher
   pretext    - ⚙️ Interactive pretext engine demo (text wrapping & layout)
   theme      - 🎨 Customize the terminal color theme
   clear      - Clear terminal
@@ -588,6 +589,12 @@ ${project.description}
       return {
         output: `Opening life gallery...`,
         html: true,
+      };
+
+    case 'shadow':
+    case 'shadows':
+      return {
+        output: `Panning to Workspace 04: Shadow Catcher...`,
       };
 
     case 'clear':

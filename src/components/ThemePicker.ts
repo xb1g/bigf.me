@@ -25,7 +25,7 @@ export function createThemePicker(): HTMLElement {
   ];
   
   const grid = document.createElement('div');
-  grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-6';
+  grid.className = 'grid grid-cols-2 gap-4 mb-6';
   
   colors.forEach(color => {
     const item = document.createElement('div');

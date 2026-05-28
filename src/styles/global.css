@@ -13,13 +13,16 @@
   --color-synth-pink: #ff6b9d;
   --color-synth-cyan: #5cceff;
   --color-synth-purple: #f033b4;
+  --font-display: 'Funnel Display', 'Bebas Neue', Impact, 'Arial Black', sans-serif;
+  --font-sans: 'Funnel Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-thai: 'Bai Jamjuree', 'Funnel Sans', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 }
 
 @layer base {
   html {
     font-family: var(--font-mono);
-    background: #0a0a0f;
+    background: #08080c;
     color: var(--color-terminal-text);
     min-height: 100vh;
     overflow-x: hidden;
@@ -30,6 +33,7 @@
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+    background: #08080c;
   }
 
   ::-webkit-scrollbar {
@@ -235,7 +239,7 @@
 
 /* Infinite Canvas Styling */
 .canvas-bg {
-  background-color: #000000;
+  background-color: #08080c;
   background-image: radial-gradient(#333333 1px, transparent 1px);
   background-size: 40px 40px;
   background-position: 0 0;
@@ -246,6 +250,7 @@
   width: 100vw;
   height: 100vh;
   cursor: grab;
+  background-color: #08080c;
 }
 
 .canvas-viewport:active {
@@ -260,61 +265,110 @@
   will-change: transform;
 }
 
-/* Custom Cursor Styles */
-@media (pointer: fine) {
-  html, body {
-    cursor: none !important;
-  }
-  
-  a, button, [role="button"], input, textarea, .cursor-pointer {
-    cursor: none !important;
-  }
+/* Custom Cursor Styles - Always active in workspace */
+*, html, body {
+  cursor: none !important;
 }
 
 #cursor-dot {
-  width: 6px;
-  height: 6px;
-  background-color: #ff6b9d;
-  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  margin-top: -11px;
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   z-index: 9999;
-  transition: transform 0.1s ease-out, background-color 0.3s ease;
 }
 
-#cursor-outline {
-  width: 40px;
-  height: 40px;
-  border: 1.5px solid rgba(255, 107, 157, 0.5);
+/* Main visual shape - scales instead of width/height layout changes */
+#cursor-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #ff6b9d;
   border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9998;
-  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 107, 157, 0.6);
+  border: 0px solid transparent;
+  transform: scale(0.36); /* Creates a hardware-fast 8px dot */
+  transition: 
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s ease,
+    border 0.25s ease,
+    box-shadow 0.2s ease,
+    border-radius 0.2s ease;
 }
 
-.cursor-hover #cursor-outline {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(255, 107, 157, 0.1);
-  border-color: rgba(255, 107, 157, 0.8);
+#cursor-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  margin-top: -2px;
+  background-color: #00d4ff; /* Electric Cyan inner core */
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: 
+    opacity 0.2s ease, 
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s ease;
 }
 
-.cursor-hover #cursor-dot {
-  transform: scale(1.5);
-  background-color: #5cceff;
+/* Hover State - Transforms into a target reticle/ring with a central cyan core */
+.cursor-hover #cursor-dot::before {
+  transform: scale(1.0);
+  background-color: rgba(255, 107, 157, 0.12);
+  border: 1.5px solid #ff6b9d;
+  box-shadow: 0 0 16px rgba(255, 107, 157, 0.8), inset 0 0 4px rgba(255, 107, 157, 0.4);
 }
 
-.cursor-panning #cursor-outline {
-  width: 30px;
-  height: 30px;
-  border-color: #5cceff;
+.cursor-hover #cursor-dot::after {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.cursor-panning #cursor-dot {
-  background-color: #5cceff;
+/* Text input hover state - Transforms into a sleek vertical neon I-beam cursor */
+.cursor-text-hover #cursor-dot::before {
+  transform: scaleX(0.09) scaleY(0.81); /* Creates a sleek 2px x 18px neon vertical bar */
+  border-radius: 1px;
+  background-color: #00d4ff;
+  border: 0px solid transparent;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.9);
+}
+
+.cursor-text-hover #cursor-dot::after {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* Click/Active State - Shrinks and flashes solid Electric Cyan with intense glow */
+.cursor-clicking #cursor-dot::before {
+  transform: scale(0.27) !important; /* Tiny 6px active pulse */
+  background-color: #00d4ff !important;
+  border-color: #00d4ff !important;
+  border-width: 0px !important;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 1) !important;
+}
+
+.cursor-clicking #cursor-dot::after {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* Panning/Dragging State - Tiny Electric Cyan tracking dot */
+.cursor-panning #cursor-dot::before {
+  transform: scale(0.36);
+  background-color: #00d4ff;
+  border: 0px solid transparent;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.9);
+}
+
+.cursor-panning #cursor-dot::after {
+  opacity: 0;
+  transform: scale(0);
 }
