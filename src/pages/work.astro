@@ -236,6 +236,32 @@ const tierAccent: Record<string, { border: string; glow: string; label: string; 
         </div>
       </section>
 
+      <!-- Enterprise AI Advisory -->
+      <section class="work-enterprise rounded-[1.35rem] border border-[#ff6b9d]/30 bg-[#0f0a14]/60 p-6 md:p-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-[#ff6b9d]/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-3xl relative z-10">
+          <p class="font-mono text-xs uppercase tracking-[0.25em] text-[#ff6b9d] mb-3">Enterprise advisory</p>
+          <h2 class="font-display text-2xl md:text-3xl text-[#f1f5f9] mb-4 tracking-tight">SME & Enterprise AI Adoption</h2>
+          <p class="font-sans text-sm md:text-base text-[#cbd5e1] leading-relaxed mb-6">
+            Advising leadership on practical AI integration, model selection, custom LLM fine-tuning, and workflow automation. From feasibility workshops to secure enterprise deployment pipelines on Cloudflare and Backblaze.
+          </p>
+          <div class="flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-[#cbd5e1]">
+            <span class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#ff6b9d] shadow-[0_0_8px_#ff6b9d]"></span>
+              Custom LLM Feasibility
+            </span>
+            <span class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#ff6b9d] shadow-[0_0_8px_#ff6b9d]"></span>
+              Security & Privacy Audits
+            </span>
+            <span class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#ff6b9d] shadow-[0_0_8px_#ff6b9d]"></span>
+              Workflow Automation
+            </span>
+          </div>
+        </div>
+      </section>
+
       <!-- Reference -->
       <section class="work-reference max-w-2xl">
         <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#94a3b8] mb-3">Recent reference</p>
@@ -379,8 +405,7 @@ const tierAccent: Record<string, { border: string; glow: string; label: string; 
     position: relative;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    border-radius: inherit;
+    clip-path: inset(0 round 1.35rem);
   }
 
   .work-tier:hover {
