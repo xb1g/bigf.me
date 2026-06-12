@@ -1,0 +1,556 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {
+  packages,
+  workMeta,
+  sharedProcess,
+  sharedStack,
+  referenceBuild,
+  formatThb,
+} from '../lib/work_plans';
+
+const tierAccent: Record<string, { border: string; glow: string; label: string; bar: string }> = {
+  xs: {
+    border: 'rgba(57, 255, 20, 0.45)',
+    glow: 'rgba(57, 255, 20, 0.12)',
+    label: '#39ff14',
+    bar: 'linear-gradient(90deg, #39ff14, #5cceff)',
+  },
+  small: {
+    border: 'rgba(92, 206, 255, 0.35)',
+    glow: 'rgba(92, 206, 255, 0.08)',
+    label: '#5cceff',
+    bar: 'linear-gradient(90deg, #5cceff, #a78bfa)',
+  },
+  medium: {
+    border: 'rgba(167, 139, 250, 0.35)',
+    glow: 'rgba(167, 139, 250, 0.1)',
+    label: '#a78bfa',
+    bar: 'linear-gradient(90deg, #a78bfa, #ff6b9d)',
+  },
+  large: {
+    border: 'rgba(255, 107, 157, 0.55)',
+    glow: 'rgba(255, 107, 157, 0.15)',
+    label: '#ff6b9d',
+    bar: 'linear-gradient(90deg, #ff6b9d, #ffd700)',
+  },
+};
+
+---
+
+<Layout title="bigf.me - Work / Build Plans">
+  <div class="work-page min-h-screen bg-[#0a0a0f] text-[#e2e8f0] flex flex-col monitor-warp scanlines pb-24 overflow-x-hidden">
+    <div class="vaporwave-bg"></div>
+    <div class="vaporwave-sunset"></div>
+    <div class="tracking-line"></div>
+    <div class="scanline-moving"></div>
+
+    <header class="work-header relative z-10 max-w-[72rem] mx-auto w-full px-5 md:px-8 pt-8 md:pt-12 pb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-10 md:mb-14">
+        <a href="/" class="work-back font-mono text-sm text-[#ff6b9d] hover:text-[#5cceff] transition-colors flex items-center gap-2">
+          <span aria-hidden="true">←</span> cd ..
+        </a>
+        <p class="font-mono text-[10px] uppercase tracking-[0.35em] text-[#6b7280]">Fixed scope · THB · Milestones</p>
+      </div>
+
+      <div class="work-hero max-w-2xl">
+        <p class="font-mono text-xs uppercase tracking-[0.28em] text-[#5cceff] mb-4 crt-text">Quote tiers</p>
+        <h1 class="work-title font-display text-[clamp(2.75rem,8vw,4.75rem)] leading-[0.92] font-bold tracking-tight text-[#f1f5f9] mb-6">
+          Software<br />
+          <span class="work-title-accent">build plans</span>
+        </h1>
+        <p class="font-sans text-base md:text-lg text-[#94a3b8] leading-relaxed">{workMeta.subtitle}</p>
+      </div>
+
+      <ul class="work-features-list flex flex-wrap gap-y-2 gap-x-6 mt-8 md:mt-10" role="list">
+        <li class="work-feature-item">Flat THB fee</li>
+        <li class="work-feature-item">Scope locked at kickoff</li>
+        <li class="work-feature-item">3 days – 6 weeks</li>
+      </ul>
+    </header>
+
+    <main class="flex-1 max-w-[72rem] mx-auto w-full px-5 md:px-8 relative z-10 space-y-20 md:space-y-28">
+      <!-- Tier panels -->
+      <section class="work-tiers space-y-5 md:space-y-6" aria-label="Build tiers">
+        {packages.map((pkg) => {
+          const accent = tierAccent[pkg.id];
+          const isFeatured = pkg.recommended;
+          const isXs = pkg.id === 'xs';
+          return (
+            <article
+              id={`tier-${pkg.id}`}
+              class:list={[
+                'work-tier scroll-mt-28 rounded-[1.35rem] border backdrop-blur-md transition-all duration-500',
+                isFeatured ? 'work-tier--featured' : isXs ? 'work-tier--xs' : 'work-tier--standard',
+              ]}
+              style={`--tier-border: ${accent.border}; --tier-glow: ${accent.glow}; --tier-label: ${accent.label}`}
+            >
+              {pkg.badge && (
+                <div
+                  class:list={[
+                    'work-tier-ribbon font-mono',
+                    isXs && 'work-tier-ribbon--green',
+                  ]}
+                >
+                  {pkg.badge}
+                </div>
+              )}
+
+              <div class="work-tier-inner grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)_auto] gap-8 lg:gap-10 p-6 md:p-8 lg:p-9">
+                <!-- Price block -->
+                <div class="work-tier-head lg:pr-4 lg:border-r lg:border-[#2a2a3f]/60">
+                  <div class="flex items-center gap-3 mb-3">
+                    <span class="work-tier-id font-display text-4xl md:text-5xl font-bold leading-none" style={`color: ${accent.label}`}>
+                      {pkg.name}
+                    </span>
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#6b7280] hidden sm:inline">
+                      {pkg.timeline}
+                    </span>
+                  </div>
+                  <p class="font-sans text-[#cbd5e1] text-base leading-snug mb-6 max-w-sm">{pkg.tagline}</p>
+                  <div class="flex items-end gap-2 mb-1">
+                    <span class="font-display text-4xl md:text-[2.75rem] font-bold text-[#f8fafc] tabular-nums tracking-tight">
+                      {formatThb(pkg.totalThb)}
+                    </span>
+                    <span class="font-mono text-sm text-[#6b7280] pb-1">THB</span>
+                  </div>
+                  <p class="font-mono text-xs text-[#64748b] sm:hidden mb-4">{pkg.timeline} · fixed scope</p>
+
+                  <div class="work-milestones mt-6 space-y-2.5">
+                    <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b7280]">
+                      Pay {pkg.paymentLabel ?? '40 / 40 / 20'}
+                    </p>
+                    {pkg.milestones.map((m, i) => (
+                      <div class="work-milestone-row">
+                        <div class="flex justify-between gap-3 text-xs font-mono mb-1">
+                          <span class="text-[#94a3b8]">{m.label}</span>
+                          <span class="text-[#f1f5f9] tabular-nums shrink-0">{formatThb(m.amount)}</span>
+                        </div>
+                        <div class="work-milestone-track">
+                          <div
+                            class="work-milestone-fill"
+                            style={`width: ${Math.round((m.amount / pkg.totalThb) * 100)}%; background: ${accent.bar}; animation-delay: ${i * 120}ms`}
+                          ></div>
+                        </div>
+                        <p class="text-[11px] text-[#64748b] mt-1 leading-snug">{m.trigger}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Scope -->
+                <div>
+                  <h3 class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#6b7280] mb-4">In scope</h3>
+                  <ul class="space-y-2.5">
+                    {pkg.scope.map((item) => (
+                      <li class="work-scope-item font-sans text-sm text-[#cbd5e1] leading-snug">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <h3 class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#6b7280] mt-8 mb-3">Good for</h3>
+                  <ul class="space-y-1.5 mt-3">
+                    {pkg.examples.slice(0, 4).map((ex) => (
+                      <li class="work-example-item font-sans text-xs text-[#94a3b8] flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full shrink-0" style={`background-color: ${accent.label}; box-shadow: 0 0 6px ${accent.glow};`}></span>
+                        <span>{ex}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <!-- CTA column -->
+                <div class="flex flex-col justify-between gap-6 lg:min-w-[11rem] lg:items-stretch">
+                  <div class="hidden lg:block">
+                    <h3 class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#6b7280] mb-3">Not included</h3>
+                    <ul class="space-y-2">
+                      {pkg.notIncluded.slice(0, 3).map((item) => (
+                        <li class="text-xs text-[#64748b] leading-snug pl-3 border-l border-[#2a2a3f]">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <a
+                    href={`mailto:${workMeta.contactEmail}?subject=${encodeURIComponent(`Quote request: ${pkg.name} tier`)}`}
+                    class:list={[
+                      'work-cta font-mono text-xs uppercase tracking-[0.15em] text-center py-3.5 px-5 rounded-full transition-all duration-300',
+                      isFeatured && 'work-cta--featured',
+                      isXs && 'work-cta--xs',
+                      !isFeatured && !isXs && 'work-cta--default',
+                    ]}
+                  >
+                    Request quote
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      <!-- Process + stack bento -->
+      <section class="grid md:grid-cols-2 gap-4 md:gap-5">
+        <div class="work-bento rounded-[1.35rem] border border-[#2a2a3f]/80 bg-[#0c0c14]/50 p-7 md:p-8">
+          <h2 class="font-display text-2xl text-[#f1f5f9] mb-6 tracking-tight">How it runs</h2>
+          <ol class="space-y-5">
+            {sharedProcess.map((item, i) => (
+              <li class="work-step flex gap-4">
+                <span class="work-step-num font-display text-2xl text-[#5cceff]/40 leading-none tabular-nums">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <p class="font-sans text-sm text-[#94a3b8] leading-relaxed pt-0.5">{item}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div class="work-bento work-bento--stack rounded-[1.35rem] border border-[#2a2a3f]/80 bg-[#0c0c14]/50 p-7 md:p-8">
+          <h2 class="font-display text-2xl text-[#f1f5f9] mb-6 tracking-tight">Typical stack</h2>
+          <ul class="space-y-4 mb-6">
+            {sharedStack.map((item) => (
+              <li class="font-sans text-sm text-[#94a3b8] leading-relaxed pl-4 border-l-2 border-[#ff6b9d]/40">{item}</li>
+            ))}
+          </ul>
+          <blockquote class="work-note font-mono text-xs text-[#64748b] leading-relaxed border-t border-[#2a2a3f] pt-5">
+            {workMeta.scopeNote}
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- Phase 2 matrix -->
+      <section class="work-phase rounded-[1.35rem] border border-[#2a2a3f]/60 bg-[#08080c]/40 p-6 md:p-8">
+        <h2 class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#6b7280] mb-6">Usually Phase 2 or change order</h2>
+        <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-8">
+          {packages.map((pkg) => (
+            <div>
+              <h3 class="font-display text-lg mb-3" style={`color: ${tierAccent[pkg.id].label}`}>{pkg.name}</h3>
+              <ul class="space-y-2">
+                {pkg.notIncluded.map((item) => (
+                  <li class="text-xs text-[#64748b] leading-relaxed">{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Reference -->
+      <section class="work-reference max-w-2xl">
+        <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#6b7280] mb-3">Recent reference</p>
+        <blockquote class="relative pl-6 border-l-2 border-[#ff6b9d]/50">
+          <p class="font-display text-xl md:text-2xl text-[#e2e8f0] leading-snug mb-3">{referenceBuild.title}</p>
+          <p class="font-sans text-sm text-[#94a3b8] leading-relaxed">{referenceBuild.summary}</p>
+        </blockquote>
+      </section>
+
+      <!-- CTA -->
+      <section class="work-final-cta text-center py-4 md:py-8">
+        <p class="font-sans text-[#94a3b8] mb-6 max-w-lg mx-auto leading-relaxed">
+          Send a short brief: what you're building, who uses it, must-haves, and deadline. I'll reply with the right tier — or a custom quote between tiers.
+        </p>
+        <a
+          href={`mailto:${workMeta.contactEmail}?subject=${encodeURIComponent('Software build quote request')}`}
+          class="work-cta work-cta--featured inline-block min-w-[14rem]"
+        >
+          Email {workMeta.contactEmail}
+        </a>
+      </section>
+    </main>
+
+    <footer class="text-center py-12 px-5 text-[#6b7280] font-mono text-[10px] uppercase tracking-[0.2em] relative z-10">
+      <p class="mb-5">Fixed scope · Milestone payments · Web apps & platforms</p>
+      <a href="/" class="inline-block px-5 py-2.5 border border-[#2a2a3f] rounded-full hover:border-[#ff6b9d] hover:text-[#ff6b9d] transition-all text-xs tracking-widest">
+        Return to terminal
+      </a>
+    </footer>
+  </div>
+</Layout>
+
+<style>
+  .work-page {
+    font-family: var(--font-sans);
+  }
+
+  .work-title {
+    font-family: var(--font-display);
+    text-shadow: 0 0 40px rgba(92, 206, 255, 0.08);
+  }
+
+  .work-title-accent {
+    background: linear-gradient(105deg, #ff6b9d 0%, #5cceff 45%, #39ff14 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* CRT overlays ~40% softer on /work */
+  .work-page.monitor-warp::before {
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.36) 100%);
+  }
+
+  .work-page.scanlines::before {
+    opacity: 0.24;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.09) 3px,
+      rgba(0, 0, 0, 0.09) 6px
+    );
+  }
+
+  .work-page .scanline-moving {
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.36), transparent);
+    box-shadow: 0 0 9px rgba(0, 255, 255, 0.48), 0 0 2px rgba(255, 107, 157, 0.3);
+    animation: workScanlineMove 8s linear infinite;
+  }
+
+  .work-page .tracking-line {
+    opacity: 0.42;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.012) 20%,
+      rgba(200, 255, 255, 0.03) 50%,
+      rgba(255, 255, 255, 0.012) 80%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .work-page .vaporwave-sunset {
+    opacity: 0.6;
+  }
+
+  @keyframes workScanlineMove {
+    0% { top: -2%; opacity: 0; transform: scaleY(1); }
+    5% { opacity: 0.24; transform: scaleY(1); }
+    15% { top: 15%; opacity: 0.24; }
+    15.1% { opacity: 0.48; transform: scaleY(3); }
+    15.2% { opacity: 0.12; transform: scaleY(0.5); }
+    15.3% { opacity: 0.24; transform: scaleY(1); }
+    45% { top: 45%; }
+    45.1% { opacity: 0; }
+    45.3% { opacity: 0.36; }
+    45.5% { opacity: 0.24; }
+    85% { opacity: 0.24; transform: scaleY(1); }
+    85.1% { top: 85%; opacity: 0.54; transform: scaleY(4) translateY(-2px); }
+    85.3% { opacity: 0.24; transform: scaleY(1); }
+    95% { opacity: 0.12; }
+    100% { top: 102%; opacity: 0; }
+  }
+
+  .work-features-list {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  .work-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .work-feature-item::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #5cceff;
+    box-shadow: 0 0 8px #5cceff;
+  }
+
+  .work-tier {
+    border-color: var(--tier-border);
+    background: linear-gradient(145deg, rgba(15, 15, 24, 0.92) 0%, rgba(10, 10, 15, 0.88) 100%);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+      0 24px 48px -24px var(--tier-glow);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .work-tier:hover {
+    transform: translateY(-6px);
+    border-color: var(--tier-label);
+    box-shadow:
+      0 0 0 1px var(--tier-border) inset,
+      0 32px 64px -16px var(--tier-glow),
+      0 0 40px -10px var(--tier-glow);
+  }
+
+  .work-tier::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--tier-label), transparent);
+    opacity: 0.5;
+  }
+
+  .work-tier--featured {
+    box-shadow:
+      0 0 0 1px rgba(255, 107, 157, 0.15) inset,
+      0 32px 64px -20px rgba(255, 107, 157, 0.2),
+      0 0 80px -20px rgba(255, 107, 157, 0.15);
+  }
+
+  .work-tier--featured:hover {
+    box-shadow:
+      0 0 0 1px rgba(255, 107, 157, 0.3) inset,
+      0 32px 64px -12px rgba(255, 107, 157, 0.35),
+      0 0 90px -10px rgba(255, 107, 157, 0.25);
+  }
+
+  .work-tier-ribbon {
+    position: absolute;
+    top: 1.25rem;
+    right: -2.5rem;
+    transform: rotate(32deg);
+    background: #ff6b9d;
+    color: #0a0a0f;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.35rem 3rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .work-tier-ribbon--green {
+    background: #39ff14;
+  }
+
+  .work-tier-id {
+    font-family: var(--font-display);
+  }
+
+  .work-scope-item {
+    position: relative;
+    padding-left: 1.1rem;
+  }
+
+  .work-scope-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--tier-label);
+    box-shadow: 0 0 8px var(--tier-glow);
+  }
+
+  .work-example-chip {
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid #2a2a3f;
+    background: rgba(10, 10, 15, 0.6);
+    line-height: 1.35;
+  }
+
+  .work-milestone-track {
+    height: 3px;
+    border-radius: 9999px;
+    background: #1a1a28;
+    overflow: hidden;
+  }
+
+  .work-milestone-fill {
+    height: 100%;
+    border-radius: 9999px;
+    animation: milestoneIn 0.8s ease-out both;
+  }
+
+  @keyframes milestoneIn {
+    from {
+      width: 0 !important;
+      opacity: 0.4;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .work-bento {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .work-bento--stack {
+    background: linear-gradient(160deg, rgba(20, 12, 24, 0.5) 0%, rgba(12, 12, 20, 0.6) 100%);
+  }
+
+  .work-step-num {
+    font-family: var(--font-display);
+    min-width: 2rem;
+  }
+
+  .work-cta {
+    font-family: var(--font-mono);
+    text-decoration: none;
+  }
+
+  .work-cta--featured {
+    background: #ff6b9d;
+    color: #0a0a0f;
+    box-shadow: 0 0 24px rgba(255, 107, 157, 0.25);
+  }
+
+  .work-cta--featured:hover {
+    box-shadow: 0 0 32px rgba(255, 107, 157, 0.45);
+    transform: translateY(-1px);
+  }
+
+  .work-cta--xs {
+    border: 1px solid rgba(57, 255, 20, 0.45);
+    color: #39ff14;
+    background: transparent;
+  }
+
+  .work-cta--xs:hover {
+    background: #39ff14;
+    color: #0a0a0f;
+    box-shadow: 0 0 24px rgba(57, 255, 20, 0.2);
+  }
+
+  .work-cta--default {
+    border: 1px solid #2a2a3f;
+    color: #e2e8f0;
+    background: rgba(15, 15, 24, 0.5);
+  }
+
+  .work-cta--default:hover {
+    border-color: rgba(92, 206, 255, 0.5);
+    color: #5cceff;
+  }
+
+  .work-reference blockquote {
+    font-family: var(--font-sans);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-milestone-fill {
+      animation: none;
+    }
+    .work-cta--featured:hover,
+    .work-cta--xs:hover {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .work-tier-ribbon {
+      top: 0.75rem;
+      right: -3rem;
+      font-size: 8px;
+    }
+  }
+</style>
