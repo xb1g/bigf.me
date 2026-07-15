@@ -265,7 +265,7 @@
   will-change: transform;
 }
 
-/* Custom Cursor Styles - Always active in workspace */
+/* Custom Cursor Styles - site-wide via Layout + CustomCursor.astro */
 *, html, body {
   cursor: none !important;
 }

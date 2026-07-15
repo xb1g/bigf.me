@@ -1,6 +1,6 @@
 {
   "setup": [
-    "pnpmi"
+    "pnpm i"
   ],
   "teardown": [],
   "run": [

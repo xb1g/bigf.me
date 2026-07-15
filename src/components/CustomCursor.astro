@@ -1,0 +1,44 @@
+<div id="cursor-dot" aria-hidden="true"></div>
+
+<script>
+  const cursorDot = document.getElementById('cursor-dot');
+  if (!cursorDot) {
+    // Layout should always render the dot; bail if missing.
+  } else {
+    const isCanvasPage = Boolean(document.getElementById('viewport'));
+
+    const updateHover = (target: HTMLElement) => {
+      if (isCanvasPage) return;
+
+      const isText = target.closest('input, textarea, [contenteditable="true"]');
+      const isHoverable = target.closest('button, a, [role="button"], .cursor-pointer, label[for]');
+
+      if (isText) {
+        document.body.classList.add('cursor-text-hover');
+        document.body.classList.remove('cursor-hover');
+      } else if (isHoverable) {
+        document.body.classList.add('cursor-hover');
+        document.body.classList.remove('cursor-text-hover');
+      } else {
+        document.body.classList.remove('cursor-hover', 'cursor-text-hover');
+      }
+    };
+
+    window.addEventListener(
+      'mousemove',
+      (e) => {
+        cursorDot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        updateHover(e.target as HTMLElement);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener('mousedown', () => {
+      document.body.classList.add('cursor-clicking');
+    });
+
+    window.addEventListener('mouseup', () => {
+      document.body.classList.remove('cursor-clicking');
+    });
+  }
+</script>

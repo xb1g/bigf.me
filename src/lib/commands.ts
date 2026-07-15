@@ -331,6 +331,22 @@ Type 'gallery' or [Click Here to View the Life Postcards Gallery](/life)
 
 ---
 *"I'm glad we get to learn to be human, the most human of humankind. Pushed by AI taking our jobs, we gotta build real personality and sense of self."*`,
+
+  work: `bigseed@bigf.me:~$ cat work.md
+
+# 🛠 Software Build Plans
+
+Fixed-scope quote tiers for web apps, marketplaces, tools, and SaaS.
+
+Type 'work' or [View tiers on /work](/work)
+
+## Tiers (THB)
+- **XS** — 49,000 · 3–5 days · consult + starter surface (credit toward Small)
+- **Small** — 120,000 · 2 weeks · MVP / landing / single flow
+- **Medium** — 195,000 · 3 weeks · production app + admin + 1 integration
+- **Large** — 265,000 · 4–6 weeks · full platform, monetization, multi-role
+
+Milestone payments: XS 50/50 · Small–Large 40% deposit → 40% demo → 20% launch.`,
 };
 
 function getAllProjects(): string[] {
@@ -371,7 +387,8 @@ export function executeCommand(input: string, currentPath: string): CommandResul
   ls         - List projects by category (with visual cards)
   highlights - ✨ Show my best curated projects
   life       - 🎨 Personal side: places, art, music, reflections
-  cat        - Display content pages (about, books, philosophy, now)
+  work       - 🛠 Software build quote tiers (XS / Small / Medium / Large)
+  cat        - Display content pages (about, books, philosophy, now, work)
   cd         - Navigate to project directory
   ai         - 🤖 Chat with MiniMax M2.7 AI (e.g. ai what is bigf.me?)
   shadow     - 👻 Panning and focus onto the Shadow Catcher
@@ -588,6 +605,12 @@ ${project.description}
     case 'gallery':
       return {
         output: `Opening life gallery...`,
+        html: true,
+      };
+
+    case 'work':
+      return {
+        output: `Opening build plans...`,
         html: true,
       };
 
