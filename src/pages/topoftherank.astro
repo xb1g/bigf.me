@@ -88,7 +88,7 @@ const canonical = new URL('/topoftherank', siteBase).href;
       .info { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; margin: 8px 0 0; align-items: end; }
       @media (max-width: 760px) { .info { grid-template-columns: 1fr; gap: 22px; } }
       .specs { display: flex; flex-wrap: wrap; gap: 10px; }
-      .chip { display: inline-flex; flex-direction: column; gap: 2px; padding: 10px 15px; border: 1px solid var(--line); border-radius: 10px; background: linear-gradient(180deg, var(--panel), var(--bg2)); min-width: 92px; }
+      .chip { display: inline-flex; flex-direction: column; gap: 5px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 10px; background: linear-gradient(180deg, var(--panel), var(--bg2)); min-width: 92px; }
       .chip b { font-size: 15px; font-weight: 600; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
       .chip b i { font-style: normal; font-size: 11px; font-weight: 400; color: var(--mut); margin-left: 3px; }
       .chip span { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
@@ -125,7 +125,7 @@ const canonical = new URL('/topoftherank', siteBase).href;
         .presets { flex-wrap: wrap; }
         /* specs become one even stat strip with dividers (not a grid) */
         .specs { display: flex; flex-wrap: nowrap; gap: 0; width: 100%; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: linear-gradient(180deg, var(--panel), var(--bg2)); }
-        .chip { flex: 1 1 0; min-width: 0; align-items: center; text-align: center; gap: 3px; padding: 12px 6px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: transparent; }
+        .chip { flex: 1 1 0; min-width: 0; align-items: center; text-align: center; gap: 6px; padding: 18px 6px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: transparent; }
         .chip:last-child { border-right: 0; }
         .chip-key { background: linear-gradient(180deg, rgba(185,152,91,.12), transparent); }
         .chip b { font-size: 15px; }
@@ -133,6 +133,12 @@ const canonical = new URL('/topoftherank', siteBase).href;
         .chip span { font-size: 9px; letter-spacing: .06em; }
         /* drop the two least-critical chips on narrow screens (engine, colour) */
         .chip:nth-child(4), .chip:nth-child(5) { display: none; }
+        /* price + CTA breathing room */
+        .info { gap: 28px; }
+        .specs { margin-top: 4px; }
+        .pricebox { margin-top: 2px; }
+        .price { margin-top: 6px; }
+        .cta { display: flex; width: 100%; justify-content: center; margin-top: 22px; padding: 17px 24px; font-size: 15px; }
       }
     </style>
   </head>
@@ -162,7 +168,7 @@ const canonical = new URL('/topoftherank', siteBase).href;
               <g class="marker" id="marker"><circle cx="43" cy="23" r="3" fill="#B9985B"></circle></g>
             </svg>
           </div>
-          <div class="hint" id="hint"><span class="ico">&#8596;</span> Drag to rotate &middot; ลากเพื่อหมุน</div>
+          <div class="hint" id="hint"><span class="ico">&#8596;</span> Drag to rotate</div>
         </div>
         <div class="presets" role="group" aria-label="Quick angles">
           <button type="button" class="preset" data-frame="0">Front &middot; หน้า</button>
