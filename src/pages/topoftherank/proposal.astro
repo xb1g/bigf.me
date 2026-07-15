@@ -1,0 +1,221 @@
+---
+const pageTitle = 'Top of the Rank — Website Proposal';
+const pageDesc = 'Website build proposal for Top of the Rank: Live Showroom (฿100,000) and Showroom + Control (฿220,000), founding-client pricing.';
+const siteBase = Astro.site ?? new URL('https://bigf.me');
+const canonical = new URL('/topoftherank/proposal', siteBase).href;
+
+const small = {
+  name: 'Live Showroom',
+  tag: 'Get live fast, prove it sells',
+  list: '135,000',
+  price: '100,000',
+  timeline: '2–3 weeks',
+  best: 'The founding bet',
+  includes: [
+    'Showroom grid + full car detail pages (the demo, productionised)',
+    'Curated real inventory (~20–40 cars) loaded for you',
+    'Mobile-first, swipe photo gallery per car',
+    'One featured car with the 360° spin as hero showpiece',
+    'LINE / Facebook share flyers (auto OG image per car)',
+    'SOLD · Available · Reserved status badges',
+    'Inquiry via LINE + phone (one tap)',
+    'Domain, deploy, and launch',
+  ],
+  excludes: ['Custom admin panel', 'Staff logins / photo uploads', 'Saved lead database'],
+  updates: 'Inventory updated in Supabase Studio (or by us on retainer)',
+};
+
+const full = {
+  name: 'Showroom + Control',
+  tag: 'The real product — Canon runs it himself',
+  list: '290,000',
+  price: '220,000',
+  timeline: '4–6 weeks',
+  best: 'The full flagship',
+  includes: [
+    'Everything in Live Showroom',
+    'Secure admin panel — add / edit cars, mark SOLD, staff logins',
+    '4K photo upload pipeline (fast, unlimited photos per car)',
+    'Full 150-car inventory with search + spec filters',
+    'Saved lead capture — every inquiry stored, not just a chat',
+    'Inventory database built to scale',
+  ],
+  excludes: [],
+  updates: 'Canon and staff manage everything in a private admin',
+};
+
+const phase2 = [
+  'Customer CRM + lead scoring',
+  'LINE Business auto-reply + flyer on inquiry',
+  'AI concierge — "find me a V12 under 15M" in chat',
+  'Analytics — which cars get viewed → sold',
+  'Private VIP preview portal for collectors',
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0A0B0D" />
+    <meta name="robots" content="noindex" />
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+    <title>{pageTitle}</title>
+    <style>
+      @font-face { font-family:"LS"; font-weight:300; font-display:swap; src:url("/topoftherank/fonts/LINESeedSansTH_Th.woff2") format("woff2"); }
+      @font-face { font-family:"LS"; font-weight:400; font-display:swap; src:url("/topoftherank/fonts/LINESeedSansTH_Rg.woff2") format("woff2"); }
+      @font-face { font-family:"LS"; font-weight:700; font-display:swap; src:url("/topoftherank/fonts/LINESeedSansTH_Bd.woff2") format("woff2"); }
+      @font-face { font-family:"LS"; font-weight:800; font-display:swap; src:url("/topoftherank/fonts/LINESeedSansTH_XBd.woff2") format("woff2"); }
+      :root {
+        --bg:#0A0B0D; --bg2:#0E1013; --panel:#14161A; --line:#23262C;
+        --silver:#C7CCD4; --silver-dim:#8A9099; --gold:#B9985B; --gold-hi:#D8BC85;
+        --text:#F2F3F5; --mut:#8A9099;
+      }
+      * { box-sizing:border-box; }
+      html,body { margin:0; padding:0; }
+      body {
+        background: radial-gradient(120% 70% at 50% -10%, #16191F 0%, var(--bg) 55%), var(--bg);
+        color:var(--text); font-family:"LS","Helvetica Neue",Arial,sans-serif;
+        -webkit-font-smoothing:antialiased; line-height:1.55;
+      }
+      .wrap { max-width:1080px; margin:0 auto; padding:0 24px; }
+      header { display:flex; align-items:center; justify-content:space-between; padding:26px 0 10px; }
+      .brand img { height:32px; display:block; }
+      .conf { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--silver-dim); }
+      .hero { padding:26px 0 8px; }
+      .eyebrow { display:flex; align-items:center; gap:12px; font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+      .eyebrow::before { content:""; width:30px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); }
+      h1 { font-size:clamp(28px,5vw,46px); font-weight:800; letter-spacing:-.01em; margin:0; line-height:1.05; text-wrap:balance; }
+      .lede { color:var(--mut); font-size:16px; margin:14px 0 0; max-width:62ch; }
+      .lede b { color:var(--silver); font-weight:600; }
+
+      .sectitle { font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--silver-dim); margin:46px 0 16px; padding-bottom:10px; border-bottom:1px solid var(--line); }
+
+      .tiers { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+      @media (max-width:760px){ .tiers { grid-template-columns:1fr; } }
+      .tier { border:1px solid var(--line); border-radius:16px; padding:26px 24px; background:linear-gradient(180deg,var(--panel),var(--bg2)); display:flex; flex-direction:column; }
+      .tier.feature { border-color:rgba(185,152,91,.45); box-shadow:0 20px 50px rgba(0,0,0,.35); }
+      .tier .badge { align-self:flex-start; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-hi); border:1px solid rgba(185,152,91,.4); border-radius:999px; padding:5px 12px; margin-bottom:14px; }
+      .tier h2 { font-size:24px; font-weight:800; margin:0; }
+      .tier .tag { color:var(--mut); font-size:14px; margin:4px 0 18px; }
+      .price-row { display:flex; align-items:baseline; gap:12px; margin-bottom:4px; }
+      .price { font-size:40px; font-weight:800; color:var(--gold-hi); letter-spacing:-.01em; font-variant-numeric:tabular-nums; }
+      .price small { font-size:20px; font-weight:400; color:var(--gold); margin-right:6px; }
+      .list { font-size:17px; color:var(--mut); text-decoration:line-through; }
+      .save { font-size:12px; color:var(--gold); letter-spacing:.04em; margin-bottom:16px; }
+      .timeline { font-size:13px; color:var(--silver-dim); margin-bottom:18px; }
+      .timeline b { color:var(--silver); }
+      ul.feat { list-style:none; margin:0 0 4px; padding:0; display:flex; flex-direction:column; gap:9px; }
+      ul.feat li { display:flex; gap:10px; font-size:14px; color:var(--text); }
+      ul.feat li svg { flex:none; width:16px; height:16px; margin-top:2px; stroke:var(--gold); }
+      .exl { margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+      .exl li { color:var(--mut); }
+      .exl li svg { stroke:var(--silver-dim); }
+      .updnote { margin-top:16px; font-size:12px; color:var(--mut); font-style:normal; padding:10px 12px; border:1px dashed var(--line); border-radius:10px; }
+
+      .rows { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+      @media (max-width:760px){ .rows { grid-template-columns:1fr; } }
+      .row { border:1px solid var(--line); border-radius:12px; padding:18px 20px; background:linear-gradient(180deg,var(--panel),var(--bg2)); }
+      .row h3 { margin:0 0 6px; font-size:15px; font-weight:700; }
+      .row p { margin:0; font-size:13px; color:var(--mut); }
+      .row .amt { color:var(--gold-hi); font-weight:700; }
+
+      .phase2 { border:1px solid var(--line); border-radius:16px; padding:24px; background:linear-gradient(180deg,var(--panel),var(--bg2)); }
+      .phase2 .p2head { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+      .phase2 h3 { margin:0; font-size:18px; font-weight:800; }
+      .phase2 .p2price { color:var(--gold); font-size:14px; letter-spacing:.04em; }
+      .chips { display:flex; flex-wrap:wrap; gap:8px; }
+      .chips span { font-size:13px; color:var(--silver); border:1px solid var(--line); border-radius:999px; padding:8px 14px; background:var(--bg2); }
+
+      .note { margin-top:16px; font-size:13px; color:var(--mut); line-height:1.6; }
+      .note b { color:var(--silver); }
+
+      .cta-wrap { margin:44px 0 10px; display:flex; flex-wrap:wrap; align-items:center; gap:16px; justify-content:space-between; padding:24px; border:1px solid rgba(185,152,91,.4); border-radius:16px; background:linear-gradient(180deg, rgba(185,152,91,.08), var(--bg2)); }
+      .cta-wrap .ct { font-size:16px; font-weight:700; }
+      .cta-wrap .cs { font-size:13px; color:var(--mut); margin-top:2px; }
+      .cta { display:inline-flex; align-items:center; gap:10px; padding:14px 26px; border-radius:999px; text-decoration:none; background:linear-gradient(180deg,var(--gold-hi),var(--gold)); color:#1a1406; font-weight:700; font-size:15px; }
+      .cta:focus-visible { outline:2px solid var(--gold-hi); outline-offset:3px; }
+
+      footer { margin:36px 0 40px; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--mut); display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:space-between; }
+      footer a { color:var(--silver); text-decoration:none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand"><img src="/topoftherank/logo.png" alt="Top of the Rank" /></div>
+        <div class="conf">Proposal · Confidential</div>
+      </header>
+
+      <section class="hero">
+        <div class="eyebrow">Website Build Proposal</div>
+        <h1>A digital flagship for Top&nbsp;of&nbsp;the&nbsp;Rank</h1>
+        <p class="lede">Turn 19,000 followers and 150 cars into a showroom that sells while you sleep. Two ways to start — a fast <b>Live Showroom</b> to prove it, or the full <b>Showroom + Control</b> you run yourself. Founding-client pricing below.</p>
+      </section>
+
+      <div class="sectitle">Choose your start</div>
+      <div class="tiers">
+        <div class="tier">
+          <span class="badge">{small.best}</span>
+          <h2>{small.name}</h2>
+          <div class="tag">{small.tag}</div>
+          <div class="price-row"><div class="price"><small>฿</small>{small.price}</div><div class="list">฿{small.list}</div></div>
+          <div class="save">Founding-client rate · 25% off</div>
+          <div class="timeline">Delivery <b>{small.timeline}</b></div>
+          <ul class="feat">
+            {small.includes.map((f) => (<li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg>{f}</li>))}
+          </ul>
+          <ul class="feat exl">
+            {small.excludes.map((f) => (<li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>{f}</li>))}
+          </ul>
+          <div class="updnote">{small.updates}</div>
+        </div>
+
+        <div class="tier feature">
+          <span class="badge">{full.best}</span>
+          <h2>{full.name}</h2>
+          <div class="tag">{full.tag}</div>
+          <div class="price-row"><div class="price"><small>฿</small>{full.price}</div><div class="list">฿{full.list}</div></div>
+          <div class="save">Founding-client rate · 25% off</div>
+          <div class="timeline">Delivery <b>{full.timeline}</b></div>
+          <ul class="feat">
+            {full.includes.map((f) => (<li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><path d="M5 12l4 4 10-10"></path></svg>{f}</li>))}
+          </ul>
+          <div class="updnote">{full.updates}</div>
+        </div>
+      </div>
+
+      <div class="note"><b>Start small, upgrade anytime.</b> Live Showroom is built on the same foundation as the full version — add the admin, uploads and lead database later as a ~฿120,000 upgrade once the site is moving cars. No rebuild, no waste.</div>
+
+      <div class="sectitle">Payment &amp; running costs</div>
+      <div class="rows">
+        <div class="row"><h3>Payment</h3><p><span class="amt">50% deposit</span> to lock your build slot, <span class="amt">50% on launch</span>. Deposit starts the work.</p></div>
+        <div class="row"><h3>Hosting &amp; infrastructure</h3><p><span class="amt">~฿0–2,500 / mo</span> — Vercel, Supabase, Cloudflare, Backblaze. Paid directly, scales with traffic. Starts near free.</p></div>
+        <div class="row"><h3>Care &amp; updates (optional)</h3><p><span class="amt">฿5,000–15,000 / mo</span> — we add cars, tweak, keep it fast and live. Cancel anytime.</p></div>
+        <div class="row"><h3>What you provide</h3><p>Car photos, specs, and prices. The faster these arrive, the faster it ships.</p></div>
+      </div>
+
+      <div class="sectitle">The ceiling — Phase 2, when you're ready</div>
+      <div class="phase2">
+        <div class="p2head"><h3>From showroom to sales machine</h3><div class="p2price">Future scope · quoted when needed</div></div>
+        <div class="chips">{phase2.map((p) => (<span>{p}</span>))}</div>
+        <div class="note">Phase 1 is a small, low-risk bet that proves the model. Once it moves metal, it scales into a full customer + AI operation — the kind no roadside competitor can touch.</div>
+      </div>
+
+      <div class="cta-wrap">
+        <div>
+          <div class="ct">Ready when you are.</div>
+          <div class="cs">Founding-client rate holds for this project only.</div>
+        </div>
+        <a class="cta" href="tel:0648599168">Let's talk · คุยกันเลย</a>
+      </div>
+
+      <footer>
+        <div>Prepared for <a href="/topoftherank">Top of the Rank</a> · Certified pre-owned European vehicles</div>
+        <div>All figures in THB · demo data is illustrative</div>
+      </footer>
+    </div>
+  </body>
+</html>
