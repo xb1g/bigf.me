@@ -44,6 +44,15 @@ const full = {
   updates: 'Canon and staff manage everything in a private admin',
 };
 
+const stack = [
+  { n: 'Astro', r: 'Web framework', d: 'Open-source, built for speed — ships almost no JavaScript, so pages load instantly.', v: '50k+ GitHub stars' },
+  { n: 'Vercel', r: 'Hosting & deploy', d: 'Global edge network with auto-scaling and zero-downtime deploys.', v: 'Creators of Next.js · powers OpenAI, Notion' },
+  { n: 'Supabase', r: 'Database · auth · storage', d: 'Open-source Postgres with bank-grade row-level security for inventory + leads.', v: 'Y Combinator-backed' },
+  { n: 'Cloudflare', r: 'CDN · DNS · security', d: 'Fast worldwide delivery with DDoS protection built in.', v: 'NYSE: NET · serves ~20% of the web' },
+  { n: 'Backblaze B2', r: '4K photo storage', d: 'Durable, low-cost cloud storage for unlimited car photos.', v: 'NASDAQ: BLZE' },
+  { n: 'TypeScript', r: 'Language', d: 'Typed code means fewer bugs and safer long-term maintenance.', v: 'By Microsoft' },
+];
+
 const phase2 = [
   'Customer CRM + lead scoring',
   'LINE Business auto-reply + flyer on inquiry',
@@ -122,6 +131,15 @@ const phase2 = [
       .row p { margin:0; font-size:13px; color:var(--mut); }
       .row .amt { color:var(--gold-hi); font-weight:700; }
 
+      .stack { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+      @media (max-width:760px){ .stack { grid-template-columns:1fr 1fr; } }
+      @media (max-width:460px){ .stack { grid-template-columns:1fr; } }
+      .st { border:1px solid var(--line); border-radius:12px; padding:16px 18px; background:linear-gradient(180deg,var(--panel),var(--bg2)); display:flex; flex-direction:column; gap:7px; }
+      .st-head { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+      .st-head b { font-size:16px; font-weight:800; }
+      .st-role { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); }
+      .st p { margin:0; font-size:13px; color:var(--mut); line-height:1.5; }
+      .st-v { margin-top:auto; font-size:11px; letter-spacing:.04em; color:var(--silver-dim); padding-top:8px; border-top:1px solid var(--line); }
       .phase2 { border:1px solid var(--line); border-radius:16px; padding:24px; background:linear-gradient(180deg,var(--panel),var(--bg2)); }
       .phase2 .p2head { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
       .phase2 h3 { margin:0; font-size:18px; font-weight:800; }
@@ -196,6 +214,18 @@ const phase2 = [
         <div class="row"><h3>Care &amp; updates (optional)</h3><p><span class="amt">฿5,000–15,000 / mo</span> — we add cars, tweak, keep it fast and live. Cancel anytime.</p></div>
         <div class="row"><h3>What you provide</h3><p>Car photos, specs, and prices. The faster these arrive, the faster it ships.</p></div>
       </div>
+
+      <div class="sectitle">Built on · verify it yourself</div>
+      <div class="stack">
+        {stack.map((s) => (
+          <div class="st">
+            <div class="st-head"><b>{s.n}</b><span class="st-role">{s.r}</span></div>
+            <p>{s.d}</p>
+            <div class="st-v">{s.v}</div>
+          </div>
+        ))}
+      </div>
+      <div class="note"><b>No lock-in.</b> Every tool above is an open standard or a publicly-traded provider — no proprietary CMS, no monthly platform fees, no hostage code. The site is yours; any competent developer can verify, host, or take it over. Fact-check any name above.</div>
 
       <div class="sectitle">The ceiling — Phase 2, when you're ready</div>
       <div class="phase2">
