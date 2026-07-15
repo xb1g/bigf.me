@@ -59,19 +59,19 @@ const canonical = new URL('/topoftherank', siteBase).href;
       .nav { display: flex; gap: 26px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--silver-dim); }
       .nav span:first-child { color: var(--silver); }
       @media (max-width: 680px) { .nav { display: none; } }
-      .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin: 30px 0 6px; }
+      .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin: 16px 0 6px; }
       .eyebrow::before { content: ""; width: 30px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
       h1 { font-size: clamp(30px, 6vw, 58px); font-weight: 800; letter-spacing: -.01em; margin: 0; text-wrap: balance; line-height: 1.04; }
       h1 .thin { font-weight: 300; color: var(--silver); }
       .sub { color: var(--mut); font-size: 15px; margin: 12px 0 0; max-width: 46ch; }
       .stage-shell { position: relative; margin: 4px 0 0; }
-      .stage { position: relative; width: 100%; aspect-ratio: 16 / 6.6; display: grid; place-items: center; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+      .stage { position: relative; width: 100%; aspect-ratio: 16 / 4.9; display: grid; place-items: center; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
       .stage.dragging { cursor: grabbing; }
       .spotlight { position: absolute; top: -6%; left: 50%; transform: translateX(-50%); width: 78%; height: 90%; background: radial-gradient(ellipse 60% 55% at 50% 38%, rgba(199,204,212,.10) 0%, transparent 70%); pointer-events: none; z-index: 1; }
       .floor { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); width: 66%; height: 20%; background: radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, transparent 72%); filter: blur(7px); pointer-events: none; z-index: 1; }
-      .rig { position: relative; z-index: 2; width: min(98%, 980px); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+      .rig { position: relative; z-index: 2; width: min(72%, 780px); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
       .car { width: 100%; height: auto; display: block; filter: drop-shadow(0 30px 34px rgba(0,0,0,.55)); }
-      .presets { display: flex; align-items: center; gap: 8px; justify-content: center; margin: 2px 0 26px; }
+      .presets { display: flex; align-items: center; gap: 8px; justify-content: center; margin: 2px 0 6px; }
       .preset { font: inherit; font-size: 11px; letter-spacing: .06em; color: var(--silver-dim); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: color .15s ease, border-color .15s ease, background .15s ease; }
       .preset:hover { color: var(--text); border-color: #3a3f47; }
       .preset:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
@@ -104,17 +104,17 @@ const canonical = new URL('/topoftherank', siteBase).href;
       .cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 13px 24px; border-radius: 999px; text-decoration: none; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #1a1406; font-weight: 700; font-size: 14px; letter-spacing: .02em; box-shadow: 0 10px 30px rgba(185,152,91,.24); transition: transform .15s ease, box-shadow .15s ease; }
       .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(185,152,91,.34); }
       .cta:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
-      .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 54px 0 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--line); }
+      .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 28px 0 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--line); }
       @media (max-width: 760px) { .trust { grid-template-columns: repeat(2, 1fr); } }
-      .t { background: linear-gradient(180deg, var(--panel), var(--bg2)); padding: 20px 18px; display: flex; flex-direction: column; gap: 5px; }
+      .t { background: linear-gradient(180deg, var(--panel), var(--bg2)); padding: 15px 18px; display: flex; flex-direction: column; gap: 5px; }
       .t .k { display: flex; align-items: center; gap: 8px; color: var(--silver); }
       .t .k svg { width: 17px; height: 17px; stroke: var(--gold); }
       .t .k b { font-size: 14px; font-weight: 600; }
       .t p { margin: 0; font-size: 12px; color: var(--mut); line-height: 1.45; }
-      footer { margin: 46px 0 30px; padding-top: 22px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px 34px; align-items: center; justify-content: space-between; font-size: 12px; color: var(--mut); }
+      footer { margin: 24px 0 20px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px 34px; align-items: center; justify-content: space-between; font-size: 12px; color: var(--mut); }
       footer .c { display: flex; gap: 22px; flex-wrap: wrap; }
       footer b { color: var(--silver); font-weight: 600; }
-      .pitchline { margin: 26px 0 0; text-align: center; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #5b616b; }
+      .pitchline { margin: 14px 0 0; text-align: center; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #5b616b; }
 
       @media (max-width: 640px) {
         .wrap { padding: 0 16px; }
@@ -122,7 +122,7 @@ const canonical = new URL('/topoftherank', siteBase).href;
         .stage { aspect-ratio: 5 / 4; }
         .rig { width: 100%; }
         .spotlight { width: 100%; height: 78%; }
-        .presets { flex-wrap: wrap; }
+        .presets { flex-wrap: wrap; margin-bottom: 24px; }
         /* specs become one even stat strip with dividers (not a grid) */
         .specs { display: flex; flex-wrap: nowrap; gap: 0; width: 100%; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: linear-gradient(180deg, var(--panel), var(--bg2)); }
         .chip { flex: 1 1 0; min-width: 0; align-items: center; text-align: center; gap: 6px; padding: 18px 6px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: transparent; }
