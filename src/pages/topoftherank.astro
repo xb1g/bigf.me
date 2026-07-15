@@ -1,0 +1,200 @@
+---
+const angles = ['000','030','060','090','120','150','180','210','240','270','300','330'];
+const frames = angles.map((a) => `/topoftherank/frame_${a}.png`);
+---
+
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0A0B0D" />
+    <meta name="description" content="Top of the Rank — Certified pre-owned European vehicles. 360° showroom demo." />
+    <title>Top of the Rank — E-Class Saloon</title>
+    <style>
+      :root {
+        --bg: #0A0B0D; --bg2: #0E1013; --panel: #14161A; --line: #23262C;
+        --silver: #C7CCD4; --silver-dim: #8A9099; --gold: #B9985B; --gold-hi: #D8BC85;
+        --text: #F2F3F5; --mut: #8A9099; --glow: rgba(150,170,200,.16);
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: radial-gradient(120% 80% at 50% -10%, #16191F 0%, var(--bg) 55%), var(--bg);
+        color: var(--text);
+        font-family: "Helvetica Neue", Helvetica, "Bai Jamjuree", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased; line-height: 1.5; overflow-x: hidden;
+      }
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+      header { display: flex; align-items: center; justify-content: space-between; padding: 22px 0 14px; }
+      .brand img { height: 34px; display: block; }
+      .nav { display: flex; gap: 26px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--silver-dim); }
+      .nav span:first-child { color: var(--silver); }
+      @media (max-width: 680px) { .nav { display: none; } }
+      .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin: 30px 0 6px; }
+      .eyebrow::before { content: ""; width: 30px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
+      h1 { font-size: clamp(30px, 6vw, 58px); font-weight: 700; letter-spacing: -.01em; margin: 0; text-wrap: balance; line-height: 1.02; }
+      h1 .thin { font-weight: 200; color: var(--silver); }
+      .sub { color: var(--mut); font-size: 15px; margin: 12px 0 0; max-width: 46ch; }
+      .stage-shell { position: relative; margin: 4px 0 0; }
+      .stage { position: relative; width: 100%; aspect-ratio: 16 / 8.4; display: grid; place-items: center; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+      .stage.dragging { cursor: grabbing; }
+      .floor { position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); width: 70%; height: 26%; background: radial-gradient(ellipse at center, var(--glow) 0%, transparent 70%); filter: blur(6px); pointer-events: none; }
+      .car { position: relative; z-index: 2; width: min(90%, 860px); height: auto; display: block; pointer-events: none; filter: drop-shadow(0 40px 40px rgba(0,0,0,.55)); }
+      .hint { position: absolute; z-index: 3; bottom: 6%; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--silver-dim); transition: opacity .5s ease; pointer-events: none; }
+      .hint.gone { opacity: 0; }
+      .hint .ico { display: inline-flex; animation: sway 2.4s ease-in-out infinite; }
+      @keyframes sway { 0%,100% { transform: translateX(-5px); } 50% { transform: translateX(5px); } }
+      @media (prefers-reduced-motion: reduce) { .hint .ico { animation: none; } }
+      .ring { position: absolute; z-index: 3; top: 18px; right: 4px; width: 46px; height: 46px; }
+      .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+      .ring .marker { transition: transform .12s linear; transform-origin: 23px 23px; }
+      .info { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; margin: 8px 0 0; align-items: end; }
+      @media (max-width: 760px) { .info { grid-template-columns: 1fr; gap: 22px; } }
+      .specs { display: flex; flex-wrap: wrap; gap: 10px; }
+      .chip { display: inline-flex; flex-direction: column; gap: 2px; padding: 10px 15px; border: 1px solid var(--line); border-radius: 10px; background: linear-gradient(180deg, var(--panel), var(--bg2)); min-width: 92px; }
+      .chip b { font-size: 15px; font-weight: 600; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+      .chip span { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
+      .pricebox { text-align: right; }
+      @media (max-width: 760px) { .pricebox { text-align: left; } }
+      .pricebox .tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mut); }
+      .price { font-size: clamp(30px, 6vw, 44px); font-weight: 700; color: var(--gold-hi); font-variant-numeric: tabular-nums; letter-spacing: -.01em; margin: 2px 0 0; }
+      .price small { font-size: 15px; font-weight: 400; color: var(--gold); margin-right: 8px; }
+      .demo-note { font-size: 11px; color: var(--mut); margin-top: 4px; }
+      .cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 13px 24px; border-radius: 999px; text-decoration: none; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #1a1406; font-weight: 700; font-size: 14px; letter-spacing: .02em; box-shadow: 0 10px 30px rgba(185,152,91,.24); transition: transform .15s ease, box-shadow .15s ease; }
+      .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(185,152,91,.34); }
+      .cta:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+      .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 54px 0 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--line); }
+      @media (max-width: 760px) { .trust { grid-template-columns: repeat(2, 1fr); } }
+      .t { background: linear-gradient(180deg, var(--panel), var(--bg2)); padding: 20px 18px; display: flex; flex-direction: column; gap: 5px; }
+      .t .k { display: flex; align-items: center; gap: 8px; color: var(--silver); }
+      .t .k svg { width: 17px; height: 17px; stroke: var(--gold); }
+      .t .k b { font-size: 14px; font-weight: 600; }
+      .t p { margin: 0; font-size: 12px; color: var(--mut); line-height: 1.45; }
+      footer { margin: 46px 0 30px; padding-top: 22px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px 34px; align-items: center; justify-content: space-between; font-size: 12px; color: var(--mut); }
+      footer .c { display: flex; gap: 22px; flex-wrap: wrap; }
+      footer b { color: var(--silver); font-weight: 600; }
+      .pitchline { margin: 26px 0 0; text-align: center; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #5b616b; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand"><img src="/topoftherank/logo.png" alt="Top of the Rank" /></div>
+        <nav class="nav">
+          <span>Showroom</span><span>Selling</span><span>After Sale</span><span>Contact</span>
+        </nav>
+      </header>
+
+      <div class="eyebrow">Certified European &middot; In Stock</div>
+      <h1>Mercedes-Benz <span class="thin">E-Class Saloon</span></h1>
+      <p class="sub">E 300 e &middot; ลากเพื่อหมุนดูรอบคัน &mdash; Drag to rotate the full 360&deg;. เก็บทุกดีเทลก่อนตัดสินใจ.</p>
+
+      <div class="stage-shell">
+        <div class="stage" id="stage" aria-label="360 degree view of the E-Class">
+          <div class="floor"></div>
+          <img class="car" id="car" src={frames[1]} alt="Mercedes-Benz E-Class Saloon" draggable="false" />
+          <div class="ring" aria-hidden="true">
+            <svg viewBox="0 0 46 46">
+              <circle cx="23" cy="23" r="20" fill="none" stroke="#23262C" stroke-width="2"></circle>
+              <g class="marker" id="marker"><circle cx="43" cy="23" r="3" fill="#B9985B"></circle></g>
+            </svg>
+          </div>
+          <div class="hint" id="hint"><span class="ico">&#8596;</span> Drag to rotate &middot; ลากเพื่อหมุน</div>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="specs">
+          <div class="chip"><b>2.0L</b><span>Turbo PHEV</span></div>
+          <div class="chip"><b>313</b><span>Horsepower</span></div>
+          <div class="chip"><b>6.2s</b><span>0&ndash;100 km/h</span></div>
+          <div class="chip"><b>2024</b><span>Model Year</span></div>
+          <div class="chip"><b>Black</b><span>Obsidian</span></div>
+        </div>
+        <div class="pricebox">
+          <div class="tag">Price</div>
+          <div class="price"><small>&#3647;</small>2,890,000</div>
+          <div class="demo-note">ราคาตัวอย่างสำหรับเดโม &middot; sample figure</div>
+          <a class="cta" href="tel:0648599168">จองคิวเข้าชม &middot; Book a viewing</a>
+        </div>
+      </div>
+
+      <div class="trust">
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"></path><path d="M9 12l2 2 4-4"></path></svg><b>2-Year Warranty</b></div>
+          <p>รับประกันซ่อมศูนย์ 2 ปี / 70,000 กม.</p>
+        </div>
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><b>24hr Roadside</b></div>
+          <p>บริการช่วยเหลือฉุกเฉินตลอด 24 ชม.</p>
+        </div>
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"></path><circle cx="18" cy="17" r="3"></circle></svg><b>One2Car Inspected</b></div>
+          <p>ตรวจสภาพตามมาตรฐานระดับโลก</p>
+        </div>
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16.5 7.1 18.2 8 12.7 4 8.8 9.5 8z"></path></svg><b>30 Years, Two Generations</b></div>
+          <p>ประสบการณ์รถยุโรปมือสอง รุ่นพ่อสู่รุ่นลูก</p>
+        </div>
+      </div>
+
+      <footer>
+        <div>Certified pre-owned European vehicles &middot; <b>150+ cars in stock</b></div>
+        <div class="c">
+          <span>&#128222; <b>064-859-9168</b> (Khun Canon)</span>
+          <span>IG <b>@topoftherank</b></span>
+          <span>&#128205; Kaset-Nawamin, Bangkok</span>
+        </div>
+      </footer>
+
+      <div class="pitchline">Top of the Rank &middot; Drive Your Dreams</div>
+    </div>
+
+    <script define:vars={{ frames }}>
+      (function () {
+        var FRAMES = frames;
+        var N = FRAMES.length;
+        var car = document.getElementById('car');
+        var stage = document.getElementById('stage');
+        var hint = document.getElementById('hint');
+        var marker = document.getElementById('marker');
+        var idx = 1;
+        FRAMES.forEach(function (src) { var im = new Image(); im.src = src; });
+        function render() {
+          car.src = FRAMES[((idx % N) + N) % N];
+          marker.style.transform = 'rotate(' + (idx % N) * (360 / N) + 'deg)';
+        }
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var interacted = false, auto = null;
+        function startAuto() { if (reduce) return; auto = setInterval(function () { idx = (idx + 1) % N; render(); }, 130); }
+        function stopAuto() {
+          if (auto) { clearInterval(auto); auto = null; }
+          if (!interacted) { interacted = true; hint.classList.add('gone'); }
+        }
+        setTimeout(startAuto, 700);
+        stage.addEventListener('mouseenter', stopAuto);
+        var dragging = false, lastX = 0, acc = 0, step = 0;
+        function onDown(x) { dragging = true; lastX = x; stopAuto(); stage.classList.add('dragging'); step = Math.max(14, stage.clientWidth / (N * 1.6)); }
+        function onMove(x) {
+          if (!dragging) return;
+          var dx = x - lastX; acc += dx;
+          while (Math.abs(acc) >= step) {
+            if (acc > 0) { idx = (idx - 1 + N) % N; acc -= step; }
+            else { idx = (idx + 1) % N; acc += step; }
+            render();
+          }
+          lastX = x;
+        }
+        function onUp() { dragging = false; acc = 0; stage.classList.remove('dragging'); }
+        stage.addEventListener('mousedown', function (e) { e.preventDefault(); onDown(e.clientX); });
+        window.addEventListener('mousemove', function (e) { onMove(e.clientX); });
+        window.addEventListener('mouseup', onUp);
+        stage.addEventListener('touchstart', function (e) { onDown(e.touches[0].clientX); }, { passive: true });
+        stage.addEventListener('touchmove', function (e) { onMove(e.touches[0].clientX); }, { passive: true });
+        stage.addEventListener('touchend', onUp);
+        render();
+      })();
+    </script>
+  </body>
+</html>
