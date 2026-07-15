@@ -1,14 +1,14 @@
 ---
 const pageTitle = 'Top of the Rank — Website Proposal';
-const pageDesc = 'Website build proposal for Top of the Rank: Live Showroom (฿100,000) and Showroom + Control (฿220,000), founding-client pricing.';
+const pageDesc = 'Website build proposal for Top of the Rank: Live Showroom (฿140,000) and Showroom + Control (฿260,000), founding-client pricing.';
 const siteBase = Astro.site ?? new URL('https://bigf.me');
 const canonical = new URL('/topoftherank/proposal', siteBase).href;
 
 const small = {
   name: 'Live Showroom',
   tag: 'Get live fast, prove it sells',
-  list: '135,000',
-  price: '100,000',
+  list: '185,000',
+  price: '140,000',
   timeline: '2–3 weeks',
   best: 'The founding bet',
   includes: [
@@ -28,20 +28,20 @@ const small = {
 const full = {
   name: 'Showroom + Control',
   tag: 'The real product — Canon runs it himself',
-  list: '290,000',
-  price: '220,000',
+  list: '350,000',
+  price: '260,000',
   timeline: '4–6 weeks',
   best: 'The full flagship',
   includes: [
-    'Everything in Live Showroom',
-    'Secure admin panel — add / edit cars, mark SOLD, staff logins',
-    '4K photo upload pipeline (fast, unlimited photos per car)',
-    'Full 150-car inventory with search + spec filters',
-    'Saved lead capture — every inquiry stored, not just a chat',
-    'Inventory database built to scale',
+    'Everything in Live Showroom — all 150 cars, not a curated subset',
+    'Update anything in seconds — never wait on (or pay) a developer to change a price',
+    'Mark cars SOLD the instant they sell — keep your sold-out reputation live',
+    'Staff add cars and upload photos themselves, from a phone',
+    'Every inquiry saved — no hot lead lost in a LINE thread',
+    'Search + spec filters across the whole inventory',
   ],
   excludes: [],
-  updates: 'Canon and staff manage everything in a private admin',
+  updates: 'Canon and staff run everything from a private admin — no dependency, no per-change fee',
 };
 
 const stack = [
@@ -147,6 +147,11 @@ const phase2 = [
       .chips { display:flex; flex-wrap:wrap; gap:8px; }
       .chips span { font-size:13px; color:var(--silver); border:1px solid var(--line); border-radius:999px; padding:8px 14px; background:var(--bg2); }
 
+      .payback { margin-top:18px; border:1px solid rgba(185,152,91,.4); border-radius:14px; padding:20px 22px; background:linear-gradient(180deg, rgba(185,152,91,.08), var(--bg2)); }
+      .payback .pb-h { font-size:15px; font-weight:800; color:var(--gold-hi); margin-bottom:8px; }
+      .payback p { margin:0; font-size:14px; color:var(--text); line-height:1.6; }
+      .payback p b { color:var(--gold-hi); }
+      .payback .pb-math { margin-top:8px; font-size:13px; color:var(--silver); }
       .note { margin-top:16px; font-size:13px; color:var(--mut); line-height:1.6; }
       .note b { color:var(--silver); }
 
@@ -205,7 +210,12 @@ const phase2 = [
         </div>
       </div>
 
-      <div class="note"><b>Start small, upgrade anytime.</b> Live Showroom is built on the same foundation as the full version — add the admin, uploads and lead database later as a ~฿120,000 upgrade once the site is moving cars. No rebuild, no waste.</div>
+      <div class="payback">
+        <div class="pb-h">Why Control pays for itself</div>
+        <p>Live Showroom keeps you dependent — every price change, new car, or SOLD mark runs through us (that's the ฿5–15k/mo care fee). <b>Control hands you the keys:</b> self-manage all 150 fast-moving cars, drop the ongoing fee, and capture every lead instead of losing it in a chat thread.</p>
+        <p class="pb-math">Over two years, the saved care fee alone (~฿120k–360k) covers the difference. And a single rescued lead is a car sold.</p>
+      </div>
+      <div class="note"><b>Start small, upgrade anytime.</b> Live Showroom is built on the same foundation as the full version — add admin, uploads and the lead database later, no rebuild, no waste.</div>
 
       <div class="sectitle">Payment &amp; running costs</div>
       <div class="rows">
