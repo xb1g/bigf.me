@@ -269,8 +269,8 @@ const canonical = new URL('/topoftherank', siteBase).href;
           if (!dragging) return;
           var dx = x - lastX; acc += dx; vel = 0.7 * vel + 0.3 * dx;
           while (Math.abs(acc) >= step) {
-            if (acc > 0) { idx = norm(idx - 1); acc -= step; }
-            else { idx = norm(idx + 1); acc += step; }
+            if (acc > 0) { idx = norm(idx + 1); acc -= step; }
+            else { idx = norm(idx - 1); acc += step; }
             render();
           }
           lastX = x;
