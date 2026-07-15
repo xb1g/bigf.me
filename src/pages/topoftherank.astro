@@ -44,10 +44,18 @@ const frames = angles.map((a) => `/topoftherank/frame_${a}.png`);
       h1 .thin { font-weight: 300; color: var(--silver); }
       .sub { color: var(--mut); font-size: 15px; margin: 12px 0 0; max-width: 46ch; }
       .stage-shell { position: relative; margin: 4px 0 0; }
-      .stage { position: relative; width: 100%; aspect-ratio: 16 / 8.4; display: grid; place-items: center; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+      .stage { position: relative; width: 100%; aspect-ratio: 16 / 6.6; display: grid; place-items: center; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
       .stage.dragging { cursor: grabbing; }
-      .floor { position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); width: 70%; height: 26%; background: radial-gradient(ellipse at center, var(--glow) 0%, transparent 70%); filter: blur(6px); pointer-events: none; }
-      .car { position: relative; z-index: 2; width: min(90%, 860px); height: auto; display: block; pointer-events: none; filter: drop-shadow(0 40px 40px rgba(0,0,0,.55)); }
+      .spotlight { position: absolute; top: -6%; left: 50%; transform: translateX(-50%); width: 78%; height: 90%; background: radial-gradient(ellipse 60% 55% at 50% 38%, rgba(199,204,212,.10) 0%, transparent 70%); pointer-events: none; z-index: 1; }
+      .floor { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); width: 66%; height: 20%; background: radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, transparent 72%); filter: blur(7px); pointer-events: none; z-index: 1; }
+      .rig { position: relative; z-index: 2; width: min(98%, 980px); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+      .car { width: 100%; height: auto; display: block; filter: drop-shadow(0 30px 34px rgba(0,0,0,.55)); }
+      .presets { display: flex; align-items: center; gap: 8px; justify-content: center; margin: 2px 0 0; }
+      .preset { font: inherit; font-size: 11px; letter-spacing: .06em; color: var(--silver-dim); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: color .15s ease, border-color .15s ease, background .15s ease; }
+      .preset:hover { color: var(--text); border-color: #3a3f47; }
+      .preset:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+      .preset.active { color: #1a1406; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); border-color: transparent; font-weight: 700; }
+      .preset-360 { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #5b616b; margin-left: 4px; }
       .hint { position: absolute; z-index: 3; bottom: 6%; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--silver-dim); transition: opacity .5s ease; pointer-events: none; }
       .hint.gone { opacity: 0; }
       .hint .ico { display: inline-flex; animation: sway 2.4s ease-in-out infinite; }
@@ -61,7 +69,11 @@ const frames = angles.map((a) => `/topoftherank/frame_${a}.png`);
       .specs { display: flex; flex-wrap: wrap; gap: 10px; }
       .chip { display: inline-flex; flex-direction: column; gap: 2px; padding: 10px 15px; border: 1px solid var(--line); border-radius: 10px; background: linear-gradient(180deg, var(--panel), var(--bg2)); min-width: 92px; }
       .chip b { font-size: 15px; font-weight: 600; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+      .chip b i { font-style: normal; font-size: 11px; font-weight: 400; color: var(--mut); margin-left: 3px; }
       .chip span { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
+      .chip-key { border-color: rgba(185,152,91,.4); background: linear-gradient(180deg, rgba(185,152,91,.10), var(--bg2)); }
+      .chip-key b { color: var(--gold-hi); }
+      .chip:hover { border-color: #3a3f47; }
       .pricebox { text-align: right; }
       @media (max-width: 760px) { .pricebox { text-align: left; } }
       .pricebox .tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mut); }
@@ -99,8 +111,11 @@ const frames = angles.map((a) => `/topoftherank/frame_${a}.png`);
 
       <div class="stage-shell">
         <div class="stage" id="stage" aria-label="360 degree view of the E-Class">
+          <div class="spotlight"></div>
           <div class="floor"></div>
-          <img class="car" id="car" src={frames[1]} alt="Mercedes-Benz E-Class Saloon" draggable="false" />
+          <div class="rig">
+            <img class="car" id="car" src={frames[1]} alt="Mercedes-Benz E-Class Saloon" draggable="false" />
+          </div>
           <div class="ring" aria-hidden="true">
             <svg viewBox="0 0 46 46">
               <circle cx="23" cy="23" r="20" fill="none" stroke="#23262C" stroke-width="2"></circle>
@@ -109,15 +124,21 @@ const frames = angles.map((a) => `/topoftherank/frame_${a}.png`);
           </div>
           <div class="hint" id="hint"><span class="ico">&#8596;</span> Drag to rotate &middot; ลากเพื่อหมุน</div>
         </div>
+        <div class="presets" role="group" aria-label="Quick angles">
+          <button type="button" class="preset" data-frame="0">Front &middot; หน้า</button>
+          <button type="button" class="preset" data-frame="3">Side &middot; ข้าง</button>
+          <button type="button" class="preset" data-frame="6">Rear &middot; หลัง</button>
+          <span class="preset-360">360&deg;</span>
+        </div>
       </div>
 
       <div class="info">
         <div class="specs">
+          <div class="chip chip-key"><b>32,000<i>km</i></b><span>Mileage &middot; ไมล์</span></div>
+          <div class="chip"><b>2022</b><span>Reg. Year &middot; ปีจด</span></div>
+          <div class="chip"><b>1</b><span>Owner &middot; มือ</span></div>
           <div class="chip"><b>2.0L</b><span>Turbo PHEV</span></div>
-          <div class="chip"><b>313</b><span>Horsepower</span></div>
-          <div class="chip"><b>6.2s</b><span>0&ndash;100 km/h</span></div>
-          <div class="chip"><b>2024</b><span>Model Year</span></div>
-          <div class="chip"><b>Black</b><span>Obsidian</span></div>
+          <div class="chip"><b>Obsidian</b><span>Black &middot; ดำ</span></div>
         </div>
         <div class="pricebox">
           <div class="tag">Price</div>
@@ -166,40 +187,93 @@ const frames = angles.map((a) => `/topoftherank/frame_${a}.png`);
         var stage = document.getElementById('stage');
         var hint = document.getElementById('hint');
         var marker = document.getElementById('marker');
-        var idx = 1;
-        FRAMES.forEach(function (src) { var im = new Image(); im.src = src; });
-        function render() {
-          car.src = FRAMES[((idx % N) + N) % N];
-          marker.style.transform = 'rotate(' + (idx % N) * (360 / N) + 'deg)';
-        }
+        var presets = Array.prototype.slice.call(document.querySelectorAll('.preset'));
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var idx = 1;
+
+        FRAMES.forEach(function (src) { var im = new Image(); im.src = src; });
+
+        function norm(i) { return ((i % N) + N) % N; }
+        function render() {
+          car.src = FRAMES[norm(idx)];
+          marker.style.transform = 'rotate(' + norm(idx) * (360 / N) + 'deg)';
+          var active = norm(idx);
+          presets.forEach(function (p) { p.classList.toggle('active', parseInt(p.dataset.frame, 10) === active); });
+        }
+
+        // idle auto-spin until first interaction
         var interacted = false, auto = null;
-        function startAuto() { if (reduce) return; auto = setInterval(function () { idx = (idx + 1) % N; render(); }, 130); }
+        function startAuto() { if (reduce || interacted) return; auto = setInterval(function () { idx = norm(idx + 1); render(); }, 130); }
         function stopAuto() {
           if (auto) { clearInterval(auto); auto = null; }
           if (!interacted) { interacted = true; hint.classList.add('gone'); }
         }
         setTimeout(startAuto, 700);
         stage.addEventListener('mouseenter', stopAuto);
-        var dragging = false, lastX = 0, acc = 0, step = 0;
-        function onDown(x) { dragging = true; lastX = x; stopAuto(); stage.classList.add('dragging'); step = Math.max(14, stage.clientWidth / (N * 1.6)); }
+
+        // drag with velocity tracking -> momentum on release
+        var dragging = false, lastX = 0, acc = 0, step = 0, vel = 0, momentum = null;
+        function stepPx() { return Math.max(14, stage.clientWidth / (N * 1.6)); }
+        function onDown(x) {
+          dragging = true; lastX = x; acc = 0; vel = 0;
+          if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
+          stopAuto(); stage.classList.add('dragging'); step = stepPx();
+        }
         function onMove(x) {
           if (!dragging) return;
-          var dx = x - lastX; acc += dx;
+          var dx = x - lastX; acc += dx; vel = 0.7 * vel + 0.3 * dx;
           while (Math.abs(acc) >= step) {
-            if (acc > 0) { idx = (idx - 1 + N) % N; acc -= step; }
-            else { idx = (idx + 1) % N; acc += step; }
+            if (acc > 0) { idx = norm(idx - 1); acc -= step; }
+            else { idx = norm(idx + 1); acc += step; }
             render();
           }
           lastX = x;
         }
-        function onUp() { dragging = false; acc = 0; stage.classList.remove('dragging'); }
+        function onUp() {
+          if (!dragging) return;
+          dragging = false; acc = 0; stage.classList.remove('dragging');
+          if (reduce) { vel = 0; return; }
+          var v = vel; // px per move event
+          function glide() {
+            if (Math.abs(v) < 1.2) { momentum = null; return; }
+            acc += v; v *= 0.94;
+            while (Math.abs(acc) >= step) {
+              if (acc > 0) { idx = norm(idx - 1); acc -= step; }
+              else { idx = norm(idx + 1); acc += step; }
+              render();
+            }
+            momentum = requestAnimationFrame(glide);
+          }
+          glide();
+        }
         stage.addEventListener('mousedown', function (e) { e.preventDefault(); onDown(e.clientX); });
         window.addEventListener('mousemove', function (e) { onMove(e.clientX); });
         window.addEventListener('mouseup', onUp);
         stage.addEventListener('touchstart', function (e) { onDown(e.touches[0].clientX); }, { passive: true });
         stage.addEventListener('touchmove', function (e) { onMove(e.touches[0].clientX); }, { passive: true });
         stage.addEventListener('touchend', onUp);
+
+        // preset quick-angles: tween to target along shortest arc
+        function goTo(target) {
+          stopAuto();
+          if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
+          target = norm(target);
+          function tick() {
+            var cur = norm(idx);
+            if (cur === target) return;
+            var diff = target - cur;
+            if (diff > N / 2) diff -= N;
+            if (diff < -N / 2) diff += N;
+            idx = norm(idx + (diff > 0 ? 1 : -1));
+            render();
+            if (!reduce) { momentum = requestAnimationFrame(tick); } else { idx = target; render(); }
+          }
+          tick();
+        }
+        presets.forEach(function (p) {
+          p.addEventListener('click', function () { goTo(parseInt(p.dataset.frame, 10)); });
+        });
+
         render();
       })();
     </script>
