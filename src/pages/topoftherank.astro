@@ -1,0 +1,327 @@
+---
+const angles = ['000','030','060','090','120','150','180','210','240','270','300','330'];
+const frames = angles.map((a) => `/topoftherank/frame_${a}.png`);
+
+const pageTitle = 'Top of the Rank — Mercedes-Benz E-Class Saloon';
+const pageDesc = 'E 300 e · 32,000 km · 2022 · 1 owner · ฿2,890,000. Certified pre-owned. 2-year warranty, One2Car inspected. จองคิวชมรถได้เลย.';
+const siteBase = Astro.site ?? new URL('https://bigf.me');
+const ogImage = new URL('/topoftherank/og.png', siteBase).href;
+const canonical = new URL('/topoftherank', siteBase).href;
+---
+
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0A0B0D" />
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+    <title>{pageTitle}</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Top of the Rank" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mercedes-Benz E-Class Saloon at Top of the Rank" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={ogImage} />
+    <!-- Typeface: LINE Seed Sans TH by LY Corp, SIL Open Font License 1.1 -->
+    <link rel="preload" as="font" type="font/woff2" href="/topoftherank/fonts/LINESeedSansTH_Rg.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/topoftherank/fonts/LINESeedSansTH_XBd.woff2" crossorigin />
+    <style>
+      @font-face { font-family: "LINE Seed Sans TH"; font-weight: 300; font-style: normal; font-display: swap; src: url("/topoftherank/fonts/LINESeedSansTH_Th.woff2") format("woff2"); }
+      @font-face { font-family: "LINE Seed Sans TH"; font-weight: 400; font-style: normal; font-display: swap; src: url("/topoftherank/fonts/LINESeedSansTH_Rg.woff2") format("woff2"); }
+      @font-face { font-family: "LINE Seed Sans TH"; font-weight: 700; font-style: normal; font-display: swap; src: url("/topoftherank/fonts/LINESeedSansTH_Bd.woff2") format("woff2"); }
+      @font-face { font-family: "LINE Seed Sans TH"; font-weight: 800; font-style: normal; font-display: swap; src: url("/topoftherank/fonts/LINESeedSansTH_XBd.woff2") format("woff2"); }
+      :root {
+        --bg: #0A0B0D; --bg2: #0E1013; --panel: #14161A; --line: #23262C;
+        --silver: #C7CCD4; --silver-dim: #8A9099; --gold: #B9985B; --gold-hi: #D8BC85;
+        --text: #F2F3F5; --mut: #8A9099; --glow: rgba(150,170,200,.16);
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: radial-gradient(120% 80% at 50% -10%, #16191F 0%, var(--bg) 55%), var(--bg);
+        color: var(--text);
+        font-family: "LINE Seed Sans TH", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased; line-height: 1.5; overflow-x: hidden;
+      }
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+      header { display: flex; align-items: center; justify-content: space-between; padding: 22px 0 14px; }
+      .brand img { height: 34px; display: block; }
+      .nav { display: flex; gap: 26px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--silver-dim); }
+      .nav span:first-child { color: var(--silver); }
+      @media (max-width: 680px) { .nav { display: none; } }
+      .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin: 16px 0 6px; }
+      .eyebrow::before { content: ""; width: 30px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
+      h1 { font-size: clamp(30px, 6vw, 58px); font-weight: 800; letter-spacing: -.01em; margin: 0; text-wrap: balance; line-height: 1.04; }
+      h1 .thin { font-weight: 300; color: var(--silver); }
+      .sub { color: var(--mut); font-size: 15px; margin: 12px 0 0; max-width: 46ch; }
+      .stage-shell { position: relative; margin: 4px 0 0; }
+      .stage { position: relative; width: 100%; aspect-ratio: 16 / 4.9; display: grid; place-items: center; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+      .stage.dragging { cursor: grabbing; }
+      .spotlight { position: absolute; top: -6%; left: 50%; transform: translateX(-50%); width: 78%; height: 90%; background: radial-gradient(ellipse 60% 55% at 50% 38%, rgba(199,204,212,.10) 0%, transparent 70%); pointer-events: none; z-index: 1; }
+      .floor { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); width: 66%; height: 20%; background: radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, transparent 72%); filter: blur(7px); pointer-events: none; z-index: 1; }
+      .rig { position: relative; z-index: 2; width: min(72%, 780px); display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+      .car { width: 100%; height: auto; display: block; filter: drop-shadow(0 30px 34px rgba(0,0,0,.55)); }
+      .presets { display: flex; align-items: center; gap: 8px; justify-content: center; margin: 2px 0 6px; }
+      .preset { font: inherit; font-size: 11px; letter-spacing: .06em; color: var(--silver-dim); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: color .15s ease, border-color .15s ease, background .15s ease; }
+      .preset:hover { color: var(--text); border-color: #3a3f47; }
+      .preset:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+      .preset.active { color: #1a1406; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); border-color: transparent; font-weight: 700; }
+      .preset-360 { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #5b616b; margin-left: 4px; }
+      .hint { position: absolute; z-index: 3; bottom: 6%; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--silver-dim); transition: opacity .5s ease; pointer-events: none; }
+      .hint.gone { opacity: 0; }
+      .hint .ico { display: inline-flex; animation: sway 2.4s ease-in-out infinite; }
+      @keyframes sway { 0%,100% { transform: translateX(-5px); } 50% { transform: translateX(5px); } }
+      @media (prefers-reduced-motion: reduce) { .hint .ico { animation: none; } }
+      .ring { position: absolute; z-index: 3; top: 18px; right: 4px; width: 46px; height: 46px; }
+      .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+      .ring .marker { transition: transform .12s linear; transform-origin: 23px 23px; }
+      .info { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; margin: 8px 0 0; align-items: end; }
+      @media (max-width: 760px) { .info { grid-template-columns: 1fr; gap: 22px; } }
+      .specs { display: flex; flex-wrap: wrap; gap: 10px; }
+      .chip { display: inline-flex; flex-direction: column; gap: 5px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 10px; background: linear-gradient(180deg, var(--panel), var(--bg2)); min-width: 92px; }
+      .chip b { font-size: 15px; font-weight: 600; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+      .chip b i { font-style: normal; font-size: 11px; font-weight: 400; color: var(--mut); margin-left: 3px; }
+      .chip span { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
+      .chip-key { border-color: rgba(185,152,91,.4); background: linear-gradient(180deg, rgba(185,152,91,.10), var(--bg2)); }
+      .chip-key b { color: var(--gold-hi); }
+      .chip:hover { border-color: #3a3f47; }
+      .pricebox { text-align: right; }
+      @media (max-width: 760px) { .pricebox { text-align: left; } }
+      .pricebox .tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--mut); }
+      .price { font-size: clamp(30px, 6vw, 44px); font-weight: 700; color: var(--gold-hi); font-variant-numeric: tabular-nums; letter-spacing: -.01em; margin: 2px 0 0; }
+      .price small { font-size: 15px; font-weight: 400; color: var(--gold); margin-right: 8px; }
+      .demo-note { font-size: 11px; color: var(--mut); margin-top: 4px; }
+      .cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 13px 24px; border-radius: 999px; text-decoration: none; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #1a1406; font-weight: 700; font-size: 14px; letter-spacing: .02em; box-shadow: 0 10px 30px rgba(185,152,91,.24); transition: transform .15s ease, box-shadow .15s ease; }
+      .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(185,152,91,.34); }
+      .cta:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+      .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 28px 0 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--line); }
+      @media (max-width: 760px) { .trust { grid-template-columns: repeat(2, 1fr); } }
+      .t { background: linear-gradient(180deg, var(--panel), var(--bg2)); padding: 15px 18px; display: flex; flex-direction: column; gap: 5px; }
+      .t .k { display: flex; align-items: center; gap: 8px; color: var(--silver); }
+      .t .k svg { width: 17px; height: 17px; stroke: var(--gold); }
+      .t .k b { font-size: 14px; font-weight: 600; }
+      .t p { margin: 0; font-size: 12px; color: var(--mut); line-height: 1.45; }
+      footer { margin: 24px 0 20px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px 34px; align-items: center; justify-content: space-between; font-size: 12px; color: var(--mut); }
+      footer .c { display: flex; gap: 22px; flex-wrap: wrap; }
+      footer b { color: var(--silver); font-weight: 600; }
+      .pitchline { margin: 14px 0 0; text-align: center; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #5b616b; }
+
+      @media (max-width: 640px) {
+        .wrap { padding: 0 16px; }
+        /* bigger car: taller stage, full-width rig */
+        .stage { aspect-ratio: 5 / 4; }
+        .rig { width: 100%; }
+        .spotlight { width: 100%; height: 78%; }
+        .presets { flex-wrap: wrap; margin-bottom: 24px; }
+        /* specs become one even stat strip with dividers (not a grid) */
+        .specs { display: flex; flex-wrap: nowrap; gap: 0; width: 100%; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: linear-gradient(180deg, var(--panel), var(--bg2)); }
+        .chip { flex: 1 1 0; min-width: 0; align-items: center; text-align: center; gap: 6px; padding: 18px 6px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: transparent; }
+        .chip:last-child { border-right: 0; }
+        .chip-key { background: linear-gradient(180deg, rgba(185,152,91,.12), transparent); }
+        .chip b { font-size: 15px; }
+        .chip b i { font-size: 10px; }
+        .chip span { font-size: 9px; letter-spacing: .06em; }
+        /* drop the two least-critical chips on narrow screens (engine, colour) */
+        .chip:nth-child(4), .chip:nth-child(5) { display: none; }
+        /* price + CTA breathing room */
+        .info { gap: 28px; }
+        .specs { margin-top: 4px; }
+        .pricebox { margin-top: 2px; }
+        .price { margin-top: 6px; }
+        .cta { display: flex; width: 100%; justify-content: center; margin-top: 22px; padding: 17px 24px; font-size: 15px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand"><img src="/topoftherank/logo.png" alt="Top of the Rank" /></div>
+        <nav class="nav">
+          <span>Showroom</span><span>Selling</span><span>After Sale</span><span>Contact</span>
+        </nav>
+      </header>
+
+      <div class="eyebrow">Certified European &middot; In Stock</div>
+      <h1>Mercedes-Benz <span class="thin">E-Class Saloon</span></h1>
+      <p class="sub">E 300 e &middot; Obsidian Black &middot; รถบ้านมือเดียว</p>
+
+      <div class="stage-shell">
+        <div class="stage" id="stage" aria-label="360 degree view of the E-Class">
+          <div class="spotlight"></div>
+          <div class="floor"></div>
+          <div class="rig">
+            <img class="car" id="car" src={frames[1]} alt="Mercedes-Benz E-Class Saloon" draggable="false" />
+          </div>
+          <div class="ring" aria-hidden="true">
+            <svg viewBox="0 0 46 46">
+              <circle cx="23" cy="23" r="20" fill="none" stroke="#23262C" stroke-width="2"></circle>
+              <g class="marker" id="marker"><circle cx="43" cy="23" r="3" fill="#B9985B"></circle></g>
+            </svg>
+          </div>
+          <div class="hint" id="hint"><span class="ico">&#8596;</span> Drag to rotate</div>
+        </div>
+        <div class="presets" role="group" aria-label="Quick angles">
+          <button type="button" class="preset" data-frame="0">Front &middot; หน้า</button>
+          <button type="button" class="preset" data-frame="3">Side &middot; ข้าง</button>
+          <button type="button" class="preset" data-frame="6">Rear &middot; หลัง</button>
+          <span class="preset-360">360&deg;</span>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="specs">
+          <div class="chip chip-key"><b>32,000<i>km</i></b><span>Mileage &middot; ไมล์</span></div>
+          <div class="chip"><b>2022</b><span>Reg. Year &middot; ปีจด</span></div>
+          <div class="chip"><b>1</b><span>Owner &middot; มือ</span></div>
+          <div class="chip"><b>2.0L</b><span>Turbo PHEV</span></div>
+          <div class="chip"><b>Obsidian</b><span>Black &middot; ดำ</span></div>
+        </div>
+        <div class="pricebox">
+          <div class="tag">Price</div>
+          <div class="price"><small>&#3647;</small>2,890,000</div>
+          <div class="demo-note">ราคาตัวอย่างสำหรับเดโม &middot; sample figure</div>
+          <a class="cta" href="tel:0648599168">จองคิวเข้าชม &middot; Book a viewing</a>
+        </div>
+      </div>
+
+      <div class="trust">
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"></path><path d="M9 12l2 2 4-4"></path></svg><b>2-Year Warranty</b></div>
+          <p>รับประกันซ่อมศูนย์ 2 ปี / 70,000 กม.</p>
+        </div>
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><b>24hr Roadside</b></div>
+          <p>บริการช่วยเหลือฉุกเฉินตลอด 24 ชม.</p>
+        </div>
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"></path><circle cx="18" cy="17" r="3"></circle></svg><b>One2Car Inspected</b></div>
+          <p>ตรวจสภาพตามมาตรฐานระดับโลก</p>
+        </div>
+        <div class="t">
+          <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 16.5 7.1 18.2 8 12.7 4 8.8 9.5 8z"></path></svg><b>30 Years, Two Generations</b></div>
+          <p>ประสบการณ์รถยุโรปมือสอง รุ่นพ่อสู่รุ่นลูก</p>
+        </div>
+      </div>
+
+      <footer>
+        <div>Certified pre-owned European vehicles &middot; <b>150+ cars in stock</b></div>
+        <div class="c">
+          <span>&#128222; <b>064-859-9168</b> (Khun Canon)</span>
+          <span>IG <b>@topoftherank</b></span>
+          <span>&#128205; Kaset-Nawamin, Bangkok</span>
+        </div>
+      </footer>
+
+      <div class="pitchline">Top of the Rank &middot; Drive Your Dreams</div>
+    </div>
+
+    <script define:vars={{ frames }}>
+      (function () {
+        var FRAMES = frames;
+        var N = FRAMES.length;
+        var car = document.getElementById('car');
+        var stage = document.getElementById('stage');
+        var hint = document.getElementById('hint');
+        var marker = document.getElementById('marker');
+        var presets = Array.prototype.slice.call(document.querySelectorAll('.preset'));
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var idx = 1;
+
+        FRAMES.forEach(function (src) { var im = new Image(); im.src = src; });
+
+        function norm(i) { return ((i % N) + N) % N; }
+        function render() {
+          car.src = FRAMES[norm(idx)];
+          marker.style.transform = 'rotate(' + norm(idx) * (360 / N) + 'deg)';
+          var active = norm(idx);
+          presets.forEach(function (p) { p.classList.toggle('active', parseInt(p.dataset.frame, 10) === active); });
+        }
+
+        // idle auto-spin until first interaction
+        var interacted = false, auto = null;
+        function startAuto() { if (reduce || interacted) return; auto = setInterval(function () { idx = norm(idx + 1); render(); }, 130); }
+        function stopAuto() {
+          if (auto) { clearInterval(auto); auto = null; }
+          if (!interacted) { interacted = true; hint.classList.add('gone'); }
+        }
+        setTimeout(startAuto, 700);
+        stage.addEventListener('mouseenter', stopAuto);
+
+        // drag with velocity tracking -> momentum on release
+        var dragging = false, lastX = 0, acc = 0, step = 0, vel = 0, momentum = null;
+        function stepPx() { return Math.max(14, stage.clientWidth / (N * 1.6)); }
+        function onDown(x) {
+          dragging = true; lastX = x; acc = 0; vel = 0;
+          if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
+          stopAuto(); stage.classList.add('dragging'); step = stepPx();
+        }
+        function onMove(x) {
+          if (!dragging) return;
+          var dx = x - lastX; acc += dx; vel = 0.7 * vel + 0.3 * dx;
+          while (Math.abs(acc) >= step) {
+            if (acc > 0) { idx = norm(idx + 1); acc -= step; }
+            else { idx = norm(idx - 1); acc += step; }
+            render();
+          }
+          lastX = x;
+        }
+        function onUp() {
+          if (!dragging) return;
+          dragging = false; acc = 0; stage.classList.remove('dragging');
+          if (reduce) { vel = 0; return; }
+          var v = vel; // px per move event
+          function glide() {
+            if (Math.abs(v) < 1.2) { momentum = null; return; }
+            acc += v; v *= 0.94;
+            while (Math.abs(acc) >= step) {
+              if (acc > 0) { idx = norm(idx - 1); acc -= step; }
+              else { idx = norm(idx + 1); acc += step; }
+              render();
+            }
+            momentum = requestAnimationFrame(glide);
+          }
+          glide();
+        }
+        stage.addEventListener('mousedown', function (e) { e.preventDefault(); onDown(e.clientX); });
+        window.addEventListener('mousemove', function (e) { onMove(e.clientX); });
+        window.addEventListener('mouseup', onUp);
+        stage.addEventListener('touchstart', function (e) { onDown(e.touches[0].clientX); }, { passive: true });
+        stage.addEventListener('touchmove', function (e) { onMove(e.touches[0].clientX); }, { passive: true });
+        stage.addEventListener('touchend', onUp);
+
+        // preset quick-angles: tween to target along shortest arc
+        function goTo(target) {
+          stopAuto();
+          if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
+          target = norm(target);
+          function tick() {
+            var cur = norm(idx);
+            if (cur === target) return;
+            var diff = target - cur;
+            if (diff > N / 2) diff -= N;
+            if (diff < -N / 2) diff += N;
+            idx = norm(idx + (diff > 0 ? 1 : -1));
+            render();
+            if (!reduce) { momentum = requestAnimationFrame(tick); } else { idx = target; render(); }
+          }
+          tick();
+        }
+        presets.forEach(function (p) {
+          p.addEventListener('click', function () { goTo(parseInt(p.dataset.frame, 10)); });
+        });
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
