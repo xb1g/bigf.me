@@ -387,6 +387,7 @@ export function executeCommand(input: string, currentPath: string): CommandResul
   ls         - List projects by category (with visual cards)
   highlights - ✨ Show my best curated projects
   life       - 🎨 Personal side: places, art, music, reflections
+  berkeley   - 🐻 UC Berkeley exchange financial & academic report
   work       - 🛠 Software build quote tiers (XS / Small / Medium / Large)
   cat        - Display content pages (about, books, philosophy, now, work)
   cd         - Navigate to project directory
@@ -611,6 +612,13 @@ ${project.description}
     case 'work':
       return {
         output: `Opening build plans...`,
+        html: true,
+      };
+
+    case 'berkeley':
+    case 'cal':
+      return {
+        output: `Opening UC Berkeley Exchange Report...`,
         html: true,
       };
 

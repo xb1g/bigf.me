@@ -1,0 +1,101 @@
+---
+---
+
+<div class="game-component" data-catapult-component></div>
+
+<script>
+  import * as THREE from 'three';
+
+  type TargetDefinition = { position: [number, number, number]; radius: number; points: number };
+  type BlockDefinition = { position: [number, number, number]; size: [number, number, number]; hits: number };
+  type LevelDefinition = { name: string; shots: number; targets: TargetDefinition[]; blocks: BlockDefinition[] };
+  type AimState = { angle: number; power: number };
+  type ProjectileState = { active: boolean; velocity: THREE.Vector3; age: number; stationaryTime: number };
+  type BlockRuntime = { mesh: THREE.Mesh; size: THREE.Vector3; hits: number; maxHits: number };
+  type SceneRuntime = { scene: THREE.Scene; camera: THREE.PerspectiveCamera; renderer: THREE.WebGLRenderer; catapult: THREE.Group; projectile: THREE.Mesh; targets: THREE.Mesh[]; blocks: BlockRuntime[]; trajectory: THREE.Line; dispose: () => void };
+
+  const LEVELS: readonly LevelDefinition[] = [
+    { name: 'FIRST LIGHT', shots: 5, targets: [{ position: [4.4, 1.3, 0], radius: .58, points: 100 }, { position: [5.7, 2.7, -.3], radius: .42, points: 150 }], blocks: [{ position: [2.4, .8, 0], size: [1, 1.6, 1], hits: 1 }] },
+    { name: 'HIGH VOLTAGE', shots: 6, targets: [{ position: [6.2, 1.2, 0], radius: .55, points: 200 }, { position: [7.1, 2.8, -.2], radius: .48, points: 200 }, { position: [8.2, 1.5, .4], radius: .4, points: 250 }], blocks: [{ position: [3.2, .75, 0], size: [1.1, 1.5, 1.3], hits: 1 }, { position: [5, 1.6, 0], size: [1, 1.3, 1], hits: 2 }] },
+    { name: 'NEON HORIZON', shots: 7, targets: [{ position: [7.2, 1.1, 0], radius: .52, points: 300 }, { position: [8.8, 2.6, -.3], radius: .46, points: 300 }, { position: [10.2, 4, .2], radius: .38, points: 500 }], blocks: [{ position: [3.1, .7, 0], size: [1.1, 1.4, 1.2], hits: 1 }, { position: [5.1, 1.2, -.2], size: [1, 2.4, 1], hits: 2 }, { position: [7.2, 2.3, .2], size: [1.1, 1.8, 1], hits: 2 }] },
+  ];
+
+  const mount = document.getElementById('catapult-game');
+  const fallback = document.getElementById('fallback-panel');
+  const levelValue = document.getElementById('level-value');
+  const shotsValue = document.getElementById('shots-value');
+  const scoreValue = document.getElementById('score-value');
+  const statusValue = document.getElementById('status-value');
+  const restartButton = document.getElementById('restart-button');
+  const nextLevelButton = document.getElementById('next-level-button');
+
+  if (mount && levelValue && shotsValue && scoreValue && statusValue && restartButton && nextLevelButton) {
+    const origin = new THREE.Vector3(-4.8, .8, 0);
+    const aim: AimState = { angle: -.35, power: .65 };
+    const projectileState: ProjectileState = { active: false, velocity: new THREE.Vector3(), age: 0, stationaryTime: 0 };
+    let runtime: SceneRuntime | null = null;
+    let levelIndex = 0;
+    let shots = LEVELS[0].shots;
+    let score = 0;
+    let transitionPending = false;
+    let dragging = false;
+    let lastTime = performance.now();
+    let raf = 0;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shared = { cyan: new THREE.MeshStandardMaterial({ color: 0x5cceff, emissive: 0x006b8a, emissiveIntensity: 1.4 }), pink: new THREE.MeshStandardMaterial({ color: 0xff6b9d, emissive: 0x8a1245, emissiveIntensity: 1.6 }), green: new THREE.MeshStandardMaterial({ color: 0x42ff9e, emissive: 0x087a42, emissiveIntensity: 1.3 }), purple: new THREE.MeshStandardMaterial({ color: 0xf033b4, emissive: 0x6f0e50, emissiveIntensity: 1.4 }), dark: new THREE.MeshStandardMaterial({ color: 0x101522, roughness: .7 }) };
+
+    function makeMaterial(color: THREE.ColorRepresentation) { return new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: .8, roughness: .55 }); }
+
+    function createGameScene(container: HTMLElement, level: LevelDefinition): SceneRuntime {
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x08080c);
+      scene.fog = new THREE.Fog(0x08080c, 13, 29);
+      const camera = new THREE.PerspectiveCamera(42, container.clientWidth / container.clientHeight, .1, 40);
+      camera.position.set(0, 5.8, 13); camera.lookAt(1.2, 1.2, 0);
+      let renderer: THREE.WebGLRenderer;
+      try { renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' }); } catch (error) { console.error('Catapult WebGL initialization failed', error); throw error; }
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(container.clientWidth, container.clientHeight); renderer.outputColorSpace = THREE.SRGBColorSpace;
+      container.replaceChildren(renderer.domElement);
+      scene.add(new THREE.AmbientLight(0x4f557a, 1.2));
+      const key = new THREE.DirectionalLight(0x5cceff, 2.4); key.position.set(-4, 8, 7); scene.add(key);
+      const rim = new THREE.PointLight(0xff6b9d, 20, 18); rim.position.set(2, 4, -4); scene.add(rim);
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(32, 20), makeMaterial(0x0c1220)); ground.rotation.x = -Math.PI / 2; ground.position.y = -.02; scene.add(ground);
+      const grid = new THREE.GridHelper(30, 30, 0x2a5670, 0x18243b); grid.position.y = .01; scene.add(grid);
+      for (let i = -8; i < 13; i += 1) { const height = 1 + ((i * 7 + 13) % 4); const tower = new THREE.Mesh(new THREE.BoxGeometry(.45, height, .45), shared.dark); tower.position.set(i * 1.1, height / 2, -3.7); scene.add(tower); }
+      const catapult = new THREE.Group(); catapult.position.copy(origin); scene.add(catapult);
+      const base = new THREE.Mesh(new THREE.BoxGeometry(1.5, .35, 1.5), shared.dark); base.position.y = -.45; catapult.add(base);
+      const fork = new THREE.Mesh(new THREE.CylinderGeometry(.14, .18, 2.1, 6), shared.pink); fork.rotation.z = -.14; fork.position.set(0, .55, 0); catapult.add(fork);
+      const forkTwo = fork.clone(); forkTwo.rotation.z = .14; forkTwo.position.x = .4; catapult.add(forkTwo);
+      const band = new THREE.Mesh(new THREE.TorusGeometry(.38, .055, 6, 16, Math.PI), shared.cyan); band.rotation.y = Math.PI / 2; band.position.set(.2, .9, 0); catapult.add(band);
+      const projectile = new THREE.Mesh(new THREE.IcosahedronGeometry(.22, 1), shared.pink); projectile.position.set(origin.x + .35, origin.y + .5, 0); scene.add(projectile);
+      const targets = level.targets.map((item) => { const target = new THREE.Mesh(new THREE.TorusGeometry(item.radius, .1, 8, 18), shared.green); target.position.set(...item.position); target.userData = { ...item, hit: false }; scene.add(target); return target; });
+      const blocks = level.blocks.map((item) => { const block = new THREE.Mesh(new THREE.BoxGeometry(...item.size), shared.purple); block.position.set(...item.position); scene.add(block); return { mesh: block, size: new THREE.Vector3(...item.size), hits: item.hits, maxHits: item.hits }; });
+      const trajectory = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xff6b9d, transparent: true, opacity: .55 })); scene.add(trajectory);
+      return { scene, camera, renderer, catapult, projectile, targets, blocks, trajectory, dispose: () => { renderer.dispose(); scene.traverse((object) => { if (object instanceof THREE.Mesh || object instanceof THREE.Line) { object.geometry.dispose(); const materials = Array.isArray(object.material) ? object.material : [object.material]; materials.forEach((material) => material.dispose()); } }); } };
+    }
+
+    function renderHud() { const level = LEVELS[levelIndex]; levelValue.textContent = `${String(levelIndex + 1).padStart(2, '0')} / 03`; shotsValue.textContent = String(shots); scoreValue.textContent = String(score).padStart(4, '0'); statusValue.textContent = transitionPending ? 'LEVEL CLEAR' : projectileState.active ? 'PROJECTILE LIVE' : shots <= 0 ? 'OUT OF SHOTS' : 'READY TO AIM'; nextLevelButton.hidden = !transitionPending; }
+    function resetProjectile() { if (!runtime) return; projectileState.active = false; projectileState.velocity.set(0, 0, 0); projectileState.age = 0; projectileState.stationaryTime = 0; runtime.projectile.position.set(origin.x + .35, origin.y + .5, 0); }
+    function launch(state: AimState) { if (!runtime || projectileState.active || transitionPending || shots <= 0) return; const speed = 7 + state.power * 9; projectileState.velocity.set(Math.cos(state.angle) * speed, Math.sin(state.angle) * speed + 5.5, 0); projectileState.active = true; projectileState.age = 0; shots -= 1; renderHud(); }
+    function sphereAabb(point: THREE.Vector3, radius: number, center: THREE.Vector3, size: THREE.Vector3) { const x = Math.max(center.x - size.x / 2, Math.min(point.x, center.x + size.x / 2)); const y = Math.max(center.y - size.y / 2, Math.min(point.y, center.y + size.y / 2)); const z = Math.max(center.z - size.z / 2, Math.min(point.z, center.z + size.z / 2)); return point.distanceToSquared(new THREE.Vector3(x, y, z)) <= radius * radius; }
+    function updateSimulation(deltaSeconds: number) { if (!runtime || !projectileState.active) return; const delta = Math.min(deltaSeconds, .05); projectileState.age += delta; projectileState.velocity.y -= 9.8 * delta; runtime.projectile.position.addScaledVector(projectileState.velocity, delta); const projectile = runtime.projectile.position;
+      runtime.targets.forEach((target) => { if (!target.userData.hit && projectile.distanceTo(target.position) < .28 + target.userData.radius) { target.userData.hit = true; target.material = shared.pink; score += target.userData.points; target.scale.setScalar(1.25); if (runtime && runtime.targets.every((item) => item.userData.hit)) transitionPending = true; renderHud(); } });
+      runtime.blocks.forEach((block) => { if (block.hits > 0 && sphereAabb(projectile, .22, block.mesh.position, block.size)) { block.hits -= 1; block.mesh.scale.multiplyScalar(.88); projectileState.velocity.multiplyScalar(-.55); if (block.hits === 0) block.mesh.visible = false; } });
+      if (projectile.y < -.8 || Math.abs(projectile.x) > 15 || projectileState.age > 8) resetProjectile(); else if (projectileState.velocity.lengthSq() < .3) { projectileState.stationaryTime += delta; if (projectileState.stationaryTime > .5) resetProjectile(); }
+      if (!transitionPending && shots <= 0 && !projectileState.active) renderHud();
+    }
+    function updateTrajectory() { if (!runtime || projectileState.active || transitionPending) { if (runtime) runtime.trajectory.visible = false; return; } const points: THREE.Vector3[] = []; const velocity = new THREE.Vector3(Math.cos(aim.angle) * (7 + aim.power * 9), Math.sin(aim.angle) * (7 + aim.power * 9) + 5.5, 0); for (let i = 0; i < 18; i += 1) { const t = i * .1; points.push(new THREE.Vector3(origin.x + .35 + velocity.x * t, origin.y + .5 + velocity.y * t - 4.9 * t * t, 0)); } runtime.trajectory.geometry.dispose(); runtime.trajectory.geometry = new THREE.BufferGeometry().setFromPoints(points); runtime.trajectory.visible = true; }
+    function rebuild() { if (runtime) runtime.dispose(); try { runtime = createGameScene(mount!, LEVELS[levelIndex]); fallback!.hidden = true; } catch (error) { console.error('Catapult scene creation failed', error); fallback!.hidden = false; mount!.replaceChildren(); runtime = null; } resetProjectile(); renderHud(); updateTrajectory(); }
+    function restartLevel() { transitionPending = false; shots = LEVELS[levelIndex].shots; runtime?.targets.forEach((target) => { target.userData.hit = false; target.material = shared.green; target.scale.setScalar(1); }); runtime?.blocks.forEach((block) => { block.hits = block.maxHits; block.mesh.visible = true; block.mesh.scale.setScalar(1); }); resetProjectile(); renderHud(); updateTrajectory(); }
+    function startNextLevel() { if (!transitionPending || levelIndex >= LEVELS.length - 1) return; levelIndex += 1; transitionPending = false; shots = LEVELS[levelIndex].shots; rebuild(); }
+    function pointerAim(event: PointerEvent) { const rect = mount!.getBoundingClientRect(); const dx = event.clientX - rect.left; const dy = event.clientY - rect.top; aim.angle = THREE.MathUtils.clamp(-.75 + (dy / rect.height) * 1.1, -.85, .35); aim.power = THREE.MathUtils.clamp(.25 + (dx / rect.width) * .9, .25, 1); if (runtime) runtime.catapult.rotation.z = aim.angle * .08; updateTrajectory(); }
+    mount.addEventListener('pointerdown', (event) => { dragging = true; mount.setPointerCapture(event.pointerId); pointerAim(event); }); mount.addEventListener('pointermove', (event) => { if (dragging) pointerAim(event); }); mount.addEventListener('pointerup', (event) => { if (dragging) { dragging = false; mount.releasePointerCapture(event.pointerId); pointerAim(event); launch(aim); } });
+    window.addEventListener('keydown', (event) => { if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return; if (event.key === 'ArrowUp') aim.power = THREE.MathUtils.clamp(aim.power + .05, .25, 1); if (event.key === 'ArrowDown') aim.power = THREE.MathUtils.clamp(aim.power - .05, .25, 1); if (event.key === 'ArrowLeft') aim.angle = THREE.MathUtils.clamp(aim.angle - .05, -.85, .35); if (event.key === 'ArrowRight') aim.angle = THREE.MathUtils.clamp(aim.angle + .05, -.85, .35); if (event.key === ' ') { event.preventDefault(); launch(aim); } if (event.key.toLowerCase() === 'r') restartLevel(); runtime && updateTrajectory(); });
+    const resize = () => { if (!runtime) return; runtime.camera.aspect = mount!.clientWidth / mount!.clientHeight; runtime.camera.updateProjectionMatrix(); runtime.renderer.setSize(mount!.clientWidth, mount!.clientHeight); }; window.addEventListener('resize', resize);
+    restartButton.addEventListener('click', restartLevel); nextLevelButton.addEventListener('click', startNextLevel);
+    document.addEventListener('visibilitychange', () => { lastTime = performance.now(); });
+    function animate(time: number) { raf = requestAnimationFrame(animate); if (document.hidden || !runtime) return; const delta = (time - lastTime) / 1000; lastTime = time; updateSimulation(delta); updateTrajectory(); if (!reducedMotion && runtime && projectileState.active) runtime.camera.position.x = Math.sin(projectileState.age * 18) * .025; runtime?.renderer.render(runtime.scene, runtime.camera); }
+    rebuild(); raf = requestAnimationFrame(animate);
+    window.addEventListener('astro:before-swap', () => { cancelAnimationFrame(raf); runtime?.dispose(); window.removeEventListener('resize', resize); });
+  }
+</script>

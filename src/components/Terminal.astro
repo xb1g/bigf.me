@@ -54,6 +54,7 @@ const { class: className } = Astro.props;
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="ls">ls</button>
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat about">about</button>
         <button class="quick-btn px-3 py-1 border border-[#39ff14]/10 rounded-full text-xs text-[#39ff14]/60 hover:text-[#39ff14] hover:border-[#39ff14]/30 hover:bg-[#39ff14]/5 hover:shadow-[0_0_15px_rgba(57,255,20,0.2)] transition-all duration-300 shrink-0" data-cmd="cat life">life</button>
+        <button class="quick-btn px-3 py-1 border border-[#ffd700]/20 rounded-full text-xs text-[#ffd700]/70 hover:text-[#ffd700] hover:border-[#ffd700]/50 hover:bg-[#ffd700]/10 hover:shadow-[0_0_15px_rgba(255,215,0,0.2)] transition-all duration-300 shrink-0" data-cmd="berkeley">berkeley 🐻</button>
         <button class="quick-btn px-3 py-1 border border-[#ff6b9d]/10 rounded-full text-xs text-[#ff6b9d]/60 hover:text-[#ff6b9d] hover:border-[#ff6b9d]/30 hover:bg-[#ff6b9d]/5 hover:shadow-[0_0_15px_rgba(255,107,157,0.2)] transition-all duration-300 shrink-0" data-cmd="work">work</button>
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat books">books</button>
         <button class="quick-btn px-3 py-1 border border-[#e2e8f0]/10 rounded-full text-xs text-[#e2e8f0]/50 hover:text-[#00d4ff] hover:border-[#00d4ff]/30 hover:bg-[#00d4ff]/5 hover:shadow-[0_0_15px_rgba(0,212,255,0.2)] transition-all duration-300 shrink-0" data-cmd="cat philosophy">philosophy</button>
@@ -685,6 +686,14 @@ Use 'cd [category]' to explore or click a card above.`, false);
       setTimeout(() => {
         window.location.href = '/work';
       }, 1000);
+      return;
+    }
+
+    if (command === 'berkeley' || command === 'cal') {
+      addOutputToTerminal(result.output, result.error);
+      setTimeout(() => {
+        window.location.href = '/berkeley';
+      }, 800);
       return;
     }
 

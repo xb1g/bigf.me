@@ -1,0 +1,1750 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import gateImg from '../assets/images/gate.jpeg';
+import skiImg from '../assets/images/ski.jpeg';
+import yose1Img from '../assets/images/yose1.jpeg';
+import yose2Img from '../assets/images/yose2.jpeg';
+import thaiFriendImg from '../assets/images/thai friend.jpeg';
+import momImg from '../assets/images/mom.jpeg';
+import berkeleyTransactions from '../data/berkeley_transactions.json';
+---
+
+<Layout title="UC Berkeley Exchange Report · Bunyasit (Big) Fang">
+  <div class="berkeley-page min-h-screen bg-[#07070a] text-[#e2e8f0] flex flex-col monitor-warp pb-28 overflow-x-hidden font-sans select-none">
+    <div class="vaporwave-bg opacity-20 fixed inset-0 pointer-events-none"></div>
+
+    <!-- Sticky Navigation Bar & Global Controls -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-[#07070a]/90 border-b border-[#2a2a3f]/80 px-4 md:px-8 py-3 transition-all">
+      <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-4">
+          <a href="/" class="font-mono text-sm text-[#ff6b9d] hover:text-[#5cceff] transition-colors flex items-center gap-2 font-medium">
+            <span aria-hidden="true">←</span> <span class="tracking-wide">bigf.me</span>
+          </a>
+          <span class="text-[#2a2a3f] hidden sm:inline">|</span>
+          <span class="font-mono text-xs text-[#94a3b8] hidden sm:inline" data-i18n="navTitle">UC Berkeley Spring 2026</span>
+        </div>
+
+        <!-- Quick Jump Section Links -->
+        <div class="hidden lg:flex items-center gap-4 text-xs font-mono text-[#94a3b8]">
+          <a href="#overview" class="hover:text-white transition-colors" data-i18n="navOverview">Overview</a>
+          <a href="#breakdown" class="hover:text-white transition-colors" data-i18n="navBreakdown">All Expenses</a>
+          <a href="#inflows" class="hover:text-white transition-colors" data-i18n="navInflows">Inflows & Banking</a>
+          <a href="#food" class="hover:text-white transition-colors" data-i18n="navFood">Food Discipline</a>
+          <a href="#ledger" class="hover:text-[#39ff14] text-[#39ff14] font-bold transition-colors" data-i18n="navLedger">346 Transactions</a>
+          <a href="#documents" class="hover:text-white transition-colors" data-i18n="navDocuments">Documents</a>
+        </div>
+
+        <!-- Controls: Currency & Language -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <!-- Currency Toggle -->
+          <div class="flex items-center bg-[#15151f] border border-[#2a2a3f] rounded-full p-0.5 text-xs font-mono" role="group" aria-label="Currency selection">
+            <button type="button" data-curr="THB" class="curr-btn px-2.5 py-1 rounded-full bg-[#39ff14]/20 text-[#39ff14] font-bold border border-[#39ff14]/30 transition-all cursor-pointer">
+              ฿ THB
+            </button>
+            <button type="button" data-curr="USD" class="curr-btn px-2.5 py-1 rounded-full text-[#94a3b8] hover:text-white transition-all cursor-pointer">
+              $ USD
+            </button>
+            <button type="button" data-curr="CNY" class="curr-btn px-2.5 py-1 rounded-full text-[#94a3b8] hover:text-white transition-all cursor-pointer">
+              ¥ CNY
+            </button>
+          </div>
+
+          <!-- Language Toggle -->
+          <div class="flex items-center bg-[#15151f] border border-[#2a2a3f] rounded-full p-0.5 text-xs font-mono" role="group" aria-label="Language selection">
+            <button type="button" data-lang="en" class="lang-btn px-2.5 py-1 rounded-full text-[#94a3b8] hover:text-white transition-all cursor-pointer">
+              EN
+            </button>
+            <button type="button" data-lang="th" class="lang-btn px-2.5 py-1 rounded-full bg-[#ff6b9d]/20 text-[#ff6b9d] font-bold border border-[#ff6b9d]/30 transition-all cursor-pointer">
+              ไทย
+            </button>
+            <button type="button" data-lang="zh" class="lang-btn px-2.5 py-1 rounded-full text-[#94a3b8] hover:text-white transition-all cursor-pointer">
+              中文
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto w-full px-4 sm:px-6 md:px-8 pt-8 space-y-14 relative z-10">
+
+      <!-- Hero Section -->
+      <section id="overview" class="relative bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 sm:p-10 shadow-xl overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-8 space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#15151f] border border-[#2a2a3f] text-xs font-mono tracking-wider text-[#5cceff]">
+              <span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+              <span data-i18n="heroBadge">Official Exchange Report · Spring 2026</span>
+            </div>
+
+            <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+              <span data-i18n="heroTitle">UC Berkeley Exchange</span><br />
+              <span class="text-[#ff6b9d]" data-i18n="heroSubTitle">Academic & Complete Financial Ledger</span>
+            </h1>
+
+            <p class="text-sm sm:text-base text-[#94a3b8] leading-relaxed max-w-2xl" data-i18n="heroDescription">
+              An exhaustive, 100% transparent financial report prepared for my family. Detailing my studies at UC Berkeley Extension (SCET Startup Semester), all 346 verified expenditures across 8 monthly Chase statements, and disciplined budgeting that came in below official I-20 limits.
+            </p>
+
+            <div class="pt-2 flex flex-wrap gap-2 text-xs font-mono">
+              <div class="px-3 py-1.5 rounded-lg bg-[#15151f] border border-[#2a2a3f] text-[#cbd5e1] flex items-center gap-2">
+                <span class="text-[#ffd700]">🎓</span> <span data-i18n="gpaBadge">GPA 4.000 / 4.000</span>
+              </div>
+              <div class="px-3 py-1.5 rounded-lg bg-[#15151f] border border-[#2a2a3f] text-[#cbd5e1] flex items-center gap-2">
+                <span class="text-[#39ff14]">💰</span> <span data-i18n="budgetBadge">Under I-20 Budget (~66,550฿ Saved)</span>
+              </div>
+              <div class="px-3 py-1.5 rounded-lg bg-[#15151f] border border-[#2a2a3f] text-[#cbd5e1] flex items-center gap-2">
+                <span class="text-[#5cceff]">🍳</span> <span data-i18n="foodBadge">Food: ~2,260฿ ($68) / Week</span>
+              </div>
+              <div class="px-3 py-1.5 rounded-lg bg-[#15151f] border border-[#2a2a3f] text-[#cbd5e1] flex items-center gap-2">
+                <span class="text-[#ff6b9d]">📑</span> <span data-i18n="auditBadge">100% Math Reconciled to Cent</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 flex justify-center">
+            <div class="relative group">
+              <div class="w-64 sm:w-72 aspect-[4/5] rounded-2xl overflow-hidden border border-[#2a2a3f] bg-[#15151f] shadow-lg">
+                <Image src={gateImg} alt="Bunyasit at UC Berkeley Sather Gate" class="w-full h-full object-cover" width={600} height={750} />
+              </div>
+              <div class="absolute -bottom-3 -right-2 bg-[#15151f] border border-[#ff6b9d]/40 rounded-xl px-3 py-1.5 shadow-md flex items-center gap-2 text-xs font-mono text-white">
+                <span>📍</span> Sather Gate, UC Berkeley
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: Academic Achievement (The Family Pride) -->
+      <section id="academics" class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-[#ffd700] rounded-xs"></div>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-white" data-i18n="academicHeading">
+            Academic Performance · ผลการเรียนยอดเยี่ยม · 学业成果
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+          <!-- GPA Hero Card -->
+          <div class="md:col-span-4 bg-[#0d0d14] border border-[#ffd700]/40 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+            <div>
+              <p class="font-mono text-xs text-[#ffd700] uppercase tracking-widest font-semibold" data-i18n="gpaCardLabel">Spring 2026 Semester</p>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="font-display text-5xl font-bold text-white">4.000</span>
+                <span class="text-sm font-mono text-[#94a3b8]">/ 4.000</span>
+              </div>
+              <p class="text-xs text-[#10b981] font-mono mt-1 font-semibold flex items-center gap-1">
+                <span>✓</span> <span data-i18n="gpaCardHonors">Straight-A Performance · Top Honors</span>
+              </p>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-[#1e1e2e] space-y-2 text-xs font-mono text-[#94a3b8]">
+              <div class="flex justify-between">
+                <span data-i18n="totalUnitsLabel">Total Academic Units:</span>
+                <span class="text-white font-bold">12 Units</span>
+              </div>
+              <div class="flex justify-between">
+                <span data-i18n="programLabel">Program:</span>
+                <span class="text-white font-bold">SCET Startup Semester</span>
+              </div>
+              <div class="flex justify-between">
+                <span data-i18n="institutionLabel">Institution:</span>
+                <span class="text-white font-bold">UC Berkeley Extension</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Grades Grid -->
+          <div class="md:col-span-8 bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <p class="font-mono text-xs text-[#5cceff] uppercase tracking-widest font-semibold mb-4" data-i18n="courseListHeading">Course Grades & Units (Official CalCentral Record)</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+                  <div>
+                    <p class="font-mono font-bold text-xs text-white">ENGIN 183D</p>
+                    <p class="text-xs text-[#94a3b8] font-sans">Product Management (3 Units)</p>
+                  </div>
+                  <span class="px-2.5 py-1 bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40 rounded-md font-mono text-xs font-bold">A+</span>
+                </div>
+
+                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+                  <div>
+                    <p class="font-mono font-bold text-xs text-white">ENGIN 183E</p>
+                    <p class="text-xs text-[#94a3b8] font-sans">Tech Entrepreneurship (3 Units)</p>
+                  </div>
+                  <span class="px-2.5 py-1 bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40 rounded-md font-mono text-xs font-bold">A</span>
+                </div>
+
+                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+                  <div>
+                    <p class="font-mono font-bold text-xs text-white">ENGIN 183C</p>
+                    <p class="text-xs text-[#94a3b8] font-sans">Challenge Lab Startup (4 Units)</p>
+                  </div>
+                  <span class="px-2.5 py-1 bg-[#5cceff]/20 text-[#5cceff] border border-[#5cceff]/40 rounded-md font-mono text-xs font-bold">PASS</span>
+                </div>
+
+                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+                  <div>
+                    <p class="font-mono font-bold text-xs text-white">ENGIN 183A / 198</p>
+                    <p class="text-xs text-[#94a3b8] font-sans">Newton Lecture & Studies (2 Units)</p>
+                  </div>
+                  <span class="px-2.5 py-1 bg-[#5cceff]/20 text-[#5cceff] border border-[#5cceff]/40 rounded-md font-mono text-xs font-bold">PASS</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-xs text-[#94a3b8] font-sans italic mt-4 pt-3 border-t border-[#1e1e2e]" data-i18n="academicNote">
+              Official verification document: <span class="font-mono text-white">UC SR802F</span> & CalCentral Transcript dated May 2026.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Complete Financial Breakdown ("All Money Shit Broken Down") -->
+      <section id="breakdown" class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-[#39ff14] rounded-xs"></div>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-white" data-i18n="financialOverviewHeading">
+            Complete Financial Breakdown · แจกแจงค่าใช้จ่ายทุกหมวดหมู่ · 总体财务明细与决算
+          </h2>
+        </div>
+
+        <!-- Budget vs Actual Cards -->
+        <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 md:p-8 space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+              <p class="font-mono text-xs text-[#94a3b8] uppercase tracking-wider" data-i18n="i20BudgetLabel">Form I-20 Requirement</p>
+              <p class="font-display text-2xl sm:text-3xl font-bold text-white mt-1" data-val-usd="27025" data-val-thb="898500" data-val-cny="193200">
+                ฿898,500
+              </p>
+              <p class="text-xs text-[#94a3b8] mt-1 font-mono" data-i18n="i20BudgetSub">$15,775 Tuition + $11,250 Living</p>
+            </div>
+
+            <div class="p-4 bg-[#15151f] border border-[#39ff14]/40 rounded-xl">
+              <p class="font-mono text-xs text-[#39ff14] uppercase tracking-wider font-semibold" data-i18n="actualTotalLabel">Actual All-In Expenditure</p>
+              <p class="font-display text-2xl sm:text-3xl font-bold text-[#39ff14] mt-1" data-val-usd="25023.49" data-val-thb="832030" data-val-cny="178920">
+                ฿832,030
+              </p>
+              <p class="text-xs text-[#39ff14]/80 mt-1 font-mono" data-i18n="actualTotalSub">Total Program Outflow ($25,023.49)</p>
+            </div>
+
+            <div class="p-4 bg-[#15151f] border border-[#ffd700]/40 rounded-xl">
+              <p class="font-mono text-xs text-[#ffd700] uppercase tracking-wider font-semibold" data-i18n="savingsTotalLabel">Under Budget By</p>
+              <p class="font-display text-2xl sm:text-3xl font-bold text-[#ffd700] mt-1" data-val-usd="2001.51" data-val-thb="66550" data-val-cny="14310">
+                ฿66,550
+              </p>
+              <p class="text-xs text-[#ffd700]/80 mt-1 font-mono" data-i18n="savingsTotalSub">Disciplined budget savings ($2,001.51)</p>
+            </div>
+          </div>
+
+          <!-- Visual Distribution Bar -->
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs font-mono text-[#94a3b8]">
+              <span data-i18n="expenseBreakdownLabel">Major Expense Composition</span>
+              <span class="text-white">100% Mathematically Reconciled</span>
+            </div>
+            <div class="w-full h-4 bg-[#15151f] rounded-full overflow-hidden flex border border-[#2a2a3f]">
+              <div class="h-full bg-[#5cceff]" style="width: 46.0%;" title="Tuition: 46.0%"></div>
+              <div class="h-full bg-[#ff6b9d]" style="width: 35.3%;" title="Housing: 35.3%"></div>
+              <div class="h-full bg-[#39ff14]" style="width: 6.5%;" title="Food & Groceries: 6.5%"></div>
+              <div class="h-full bg-[#ffd700]" style="width: 5.4%;" title="Travel & Ski: 5.4%"></div>
+              <div class="h-full bg-[#a78bfa]" style="width: 6.8%;" title="Visa, Tech, Transit, Records: 6.8%"></div>
+            </div>
+            <div class="flex flex-wrap gap-4 text-xs font-mono pt-1 text-[#94a3b8]">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#5cceff]"></span> <span data-i18n="legTuition">Tuition (46.0%)</span></span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#ff6b9d]"></span> <span data-i18n="legHousing">Housing & Rent (35.3%)</span></span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#39ff14]"></span> <span data-i18n="legFood">Food & Groceries (6.5%)</span></span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#ffd700]"></span> <span data-i18n="legTravel">Travel & Skiing (5.4%)</span></span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#a78bfa]"></span> <span data-i18n="legOther">Other Essentials (6.8%)</span></span>
+            </div>
+          </div>
+
+          <!-- Comprehensive Category Breakdown Table -->
+          <div class="overflow-x-auto pt-4">
+            <table class="w-full text-left text-xs font-mono border-collapse">
+              <thead>
+                <tr class="border-b border-[#2a2a3f] text-[#94a3b8] uppercase tracking-wider">
+                  <th class="py-3 px-3">Category</th>
+                  <th class="py-3 px-3">Txs</th>
+                  <th class="py-3 px-3">Share</th>
+                  <th class="py-3 px-3 text-right">Amount</th>
+                  <th class="py-3 px-3 hidden sm:table-cell">Key Highlights / Source</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#1e1e2e]">
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>🏛️</span> <span data-i18n="catTuitionName">UC Berkeley Tuition & Academics</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">7</td>
+                  <td class="py-3.5 px-3 text-[#5cceff] font-bold">46.0%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="11503.60">฿382,490</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">Base tuition ($9,724), 2 Course Adds (2x$850), HBP cases, gym</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>🏠</span> <span data-i18n="catHousingName">Apartment Rent & Utilities</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">34</td>
+                  <td class="py-3.5 px-3 text-[#ff6b9d] font-bold">35.3%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="8826.18">฿293,470</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">2550 College Ave: Rent ($1,097.50/mo), PGE, water, Wi-Fi splits</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>🍳</span> <span data-i18n="catFoodName">Food, Groceries & Amazon</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">110</td>
+                  <td class="py-3.5 px-3 text-[#39ff14] font-bold">6.5%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-[#39ff14]" data-val-usd="1632.35">฿54,280</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">Trader Joe's ($348), Amazon pantry ($428), local bites ($444), trips ($287)</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>⛷️</span> <span data-i18n="catTravelName">Travel, Skiing & Yosemite</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">7</td>
+                  <td class="py-3.5 px-3 text-[#ffd700] font-bold">5.4%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="1341.85">฿44,620</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">Sugar Bowl Tahoe ski passes ($886), Yosemite Curry Village ($364)</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>🛂</span> <span data-i18n="catVisaName">US Visa & SEVIS I-901</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">2</td>
+                  <td class="py-3.5 px-3 text-[#a78bfa] font-bold">2.1%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="535.00">฿17,790</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">SEVIS fee ($350) + US Embassy Bangkok MRV appointment ($185)</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>💻</span> <span data-i18n="catTechName">Tech, AI & Cloud Tools</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">17</td>
+                  <td class="py-3.5 px-3 text-[#a78bfa] font-bold">2.0%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="507.47">฿16,870</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">NVIDIA GTC ($30), Vercel ($100), Fireworks AI ($61), ElevenLabs ($44)</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>🎵</span> <span data-i18n="catThriftName">Vinyl, Thrift & Books</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">16</td>
+                  <td class="py-3.5 px-3 text-[#a78bfa] font-bold">1.5%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="380.41">฿12,650</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">Amoeba Records ($108), Rasputin ($52), Goodwill/Ross ($131), books</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>🚆</span> <span data-i18n="catTransitName">Transit, Laundry & Luggage</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">15</td>
+                  <td class="py-3.5 px-3 text-[#a78bfa] font-bold">1.1%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="281.63">฿9,360</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">PayRange laundry ($80), Amtrak ($84), Uber ($54), United bag ($45)</td>
+                </tr>
+
+                <tr class="hover:bg-[#15151f]/50 transition-colors">
+                  <td class="py-3.5 px-3 flex items-center gap-2 font-bold text-white">
+                    <span>🏦</span> <span data-i18n="catFeesName">Bank Wire Fee</span>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#94a3b8]">1</td>
+                  <td class="py-3.5 px-3 text-[#a78bfa] font-bold">0.1%</td>
+                  <td class="py-3.5 px-3 text-right font-bold text-white" data-val-usd="15.00">฿500</td>
+                  <td class="py-3.5 px-3 text-[#94a3b8] text-[11px] hidden sm:table-cell">Chase international incoming wire transfer fee</td>
+                </tr>
+
+                <!-- Summary Total Row -->
+                <tr class="border-t-2 border-[#2a2a3f] bg-[#15151f]/80 font-bold">
+                  <td class="py-4 px-3 text-white flex items-center gap-2">
+                    <span>⭐️</span> <span data-i18n="grandTotalLabel">Total Exchange Program Outflow</span>
+                  </td>
+                  <td class="py-4 px-3 text-white">209</td>
+                  <td class="py-4 px-3 text-[#39ff14]">100%</td>
+                  <td class="py-4 px-3 text-right text-lg text-[#39ff14]" data-val-usd="25023.49">฿832,030</td>
+                  <td class="py-4 px-3 text-[#ffd700] text-[11px] hidden sm:table-cell">Under official I-20 requirement by ~66,550฿ ($2,001.51)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Inflows & Banking Reconciliation (100% Proven Math) -->
+      <section id="inflows" class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-[#5cceff] rounded-xs"></div>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-white" data-i18n="inflowsHeading">
+            Inflow Accounting & Account Reconciliation · บันทึกเงินเข้าและยอดคงเหลือ · 资金汇入与对账结余
+          </h2>
+        </div>
+
+        <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 md:p-8 space-y-6">
+          <p class="text-xs sm:text-sm text-[#94a3b8] leading-relaxed" data-i18n="inflowsIntro">
+            To guarantee complete accountability to my family, every single inflow into my Chase checking account is mapped below. Total funds deposited match exactly with living debits, leaving an ending balance of <strong class="text-[#39ff14]">$396.73 (~13,190฿)</strong>.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-mono">
+            <!-- Family Wire -->
+            <div class="p-4 bg-[#15151f] border border-[#39ff14]/40 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-[#39ff14] font-bold" data-i18n="wireCardTag">Primary Family Support</span>
+                <span class="font-bold text-sm text-[#39ff14]" data-val-usd="8000">฿266,000</span>
+              </div>
+              <p class="font-bold text-white text-sm font-sans" data-i18n="wireCardTitle">Singapore / Bangkok Wire</p>
+              <p class="text-[#94a3b8]" data-i18n="wireCardDesc">From Mrs Anurat Gantronbandanniti via TMB / DBS Singapore on Feb 05, 2026. Applied directly to rent and living.</p>
+            </div>
+
+            <!-- Roommate Splits / Zelle -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-[#5cceff] font-bold" data-i18n="splitsCardTag">Shared Expense Splits</span>
+                <span class="font-bold text-sm text-white" data-val-usd="4171.33">฿138,700</span>
+              </div>
+              <p class="font-bold text-white text-sm font-sans" data-i18n="splitsCardTitle">Roommate Zelle Repayments</p>
+              <p class="text-[#94a3b8]" data-i18n="splitsCardDesc">Reimbursements from Donpattara ($2,276), Shane deposit refund ($1,097.50), and group ski/dinner splits.</p>
+            </div>
+
+            <!-- Cash ATM Deposits -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-[#ffd700] font-bold" data-i18n="cashCardTag">Self Cash Conversion</span>
+                <span class="font-bold text-sm text-white" data-val-usd="1400">฿46,550</span>
+              </div>
+              <p class="font-bold text-white text-sm font-sans" data-i18n="cashCardTitle">ATM Cash Deposits</p>
+              <p class="text-[#94a3b8]" data-i18n="cashCardDesc">Cash brought to the US and deposited at Chase Telegraph Ave branch ATM (Jan 12 $200, Jan 13 $1,200).</p>
+            </div>
+
+            <!-- CurrencyCloud -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-[#a78bfa] font-bold" data-i18n="ccCardTag">Int'l Transfer</span>
+                <span class="font-bold text-sm text-white" data-val-usd="946.80">฿31,480</span>
+              </div>
+              <p class="font-bold text-white text-sm font-sans" data-i18n="ccCardTitle">CurrencyCloud Transfer</p>
+              <p class="text-[#94a3b8]" data-i18n="ccCardDesc">Pre-arrival international exchange transfer cleared on Feb 03, 2026.</p>
+            </div>
+
+            <!-- Refunds & Bonus -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-[#39ff14] font-bold" data-i18n="bonusCardTag">Bank Bonus & Refunds</span>
+                <span class="font-bold text-sm text-white" data-val-usd="357.55">฿11,890</span>
+              </div>
+              <p class="font-bold text-white text-sm font-sans" data-i18n="bonusCardTitle">Bank Promo & Returns</p>
+              <p class="text-[#94a3b8]" data-i18n="bonusCardDesc">Chase $125 new checking opening bonus + Factory AI $200.59 merchant return.</p>
+            </div>
+
+            <!-- Ending Balance Reconciled -->
+            <div class="p-4 bg-[#15151f] border border-[#39ff14]/60 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-[#39ff14] font-bold" data-i18n="balanceCardTag">Final Account Status</span>
+                <span class="font-bold text-sm text-[#39ff14]" data-val-usd="396.73">฿13,190</span>
+              </div>
+              <p class="font-bold text-white text-sm font-sans" data-i18n="balanceCardTitle">Chase Ending Balance</p>
+              <p class="text-[#94a3b8]" data-i18n="balanceCardDesc">Confirmed ending balance on September 9, 2026 statement. 100% accounted for to the cent.</p>
+            </div>
+          </div>
+
+          <!-- Proof Note Box -->
+          <div class="p-4 bg-[#15151f]/80 border border-[#2a2a3f] rounded-xl text-xs text-[#cbd5e1] font-sans flex items-start gap-3">
+            <span class="text-lg">💡</span>
+            <div>
+              <strong class="text-white" data-i18n="splitNoteTitle">Why are there roommate Zelle transfers?</strong>
+              <p class="text-[#94a3b8] mt-0.5" data-i18n="splitNoteDesc">
+                When booking group activities (such as ski passes for the Tahoe trip or shared apartment household items), I frequently paid upfront with my Chase card, and my roommates subsequently sent their exact shares back to me via Zelle. Every dollar received corresponds to an offsetting debit.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Food & Grocery Discipline Deep Dive & Interactive Simulator -->
+      <section id="food" class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-[#ff6b9d] rounded-xs"></div>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-white" data-i18n="foodHeading">
+            Food & Grocery Discipline · การประหยัดค่าอาหาร · 饮食与超市支出详解
+          </h2>
+        </div>
+
+        <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 md:p-8 space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-7 space-y-3">
+              <span class="px-2.5 py-1 bg-[#ff6b9d]/20 text-[#ff6b9d] border border-[#ff6b9d]/30 rounded-full font-mono text-xs font-bold" data-i18n="foodHighlightBadge">
+                Remarkably Frugal: Only 6.5% of Total Budget
+              </span>
+              <h3 class="font-display text-2xl sm:text-3xl font-bold text-white leading-snug" data-i18n="foodHeroTitle">
+                How I Managed Food in the Most Expensive Area in the U.S.
+              </h3>
+              <p class="text-xs sm:text-sm text-[#94a3b8] leading-relaxed" data-i18n="foodHeroText">
+                The San Francisco Bay Area is famous for high food costs (typically $600–$900/month for college students). By cooking fresh meals with Trader Joe's and buying pantry staples in bulk on Amazon, I kept my food bill down to <span class="text-[#39ff14] font-bold">~2,260฿ ($68) a week</span>.
+              </p>
+            </div>
+
+            <div class="md:col-span-5 grid grid-cols-2 gap-3">
+              <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl text-center">
+                <p class="font-mono text-[11px] text-[#94a3b8] uppercase" data-i18n="weeklyAvgLabel">Cost Per Week</p>
+                <p class="font-display text-2xl font-bold text-[#39ff14] mt-1" data-val-usd="68.01">
+                  ฿2,260
+                </p>
+                <p class="text-[10px] text-[#94a3b8] font-mono mt-0.5">$68.01 / week</p>
+              </div>
+
+              <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl text-center">
+                <p class="font-mono text-[11px] text-[#94a3b8] uppercase" data-i18n="dailyAvgLabel">Cost Per Day</p>
+                <p class="font-display text-2xl font-bold text-[#5cceff] mt-1" data-val-usd="9.72">
+                  ฿320
+                </p>
+                <p class="text-[10px] text-[#94a3b8] font-mono mt-0.5">$9.72 / day</p>
+              </div>
+
+              <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl text-center">
+                <p class="font-mono text-[11px] text-[#94a3b8] uppercase" data-i18n="totalFoodLabel">24-Week Total</p>
+                <p class="font-display text-2xl font-bold text-white mt-1" data-val-usd="1632.35">
+                  ฿54,280
+                </p>
+                <p class="text-[10px] text-[#94a3b8] font-mono mt-0.5">$1,632.35 (110 txs)</p>
+              </div>
+
+              <div class="p-3.5 bg-[#15151f] border border-[#ffd700]/30 rounded-xl text-center">
+                <p class="font-mono text-[11px] text-[#ffd700] uppercase" data-i18n="savedFoodLabel">Estimated Savings</p>
+                <p class="font-display text-2xl font-bold text-[#ffd700] mt-1" data-val-usd="6000">
+                  ฿200,000
+                </p>
+                <p class="text-[10px] text-[#ffd700]/80 font-mono mt-0.5">vs. Eating Out</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Scenario Simulator -->
+          <div class="p-5 bg-[#15151f] border border-[#2a2a3f] rounded-2xl space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="font-display text-lg font-bold text-white flex items-center gap-2">
+                <span>🔄</span> <span data-i18n="simHeading">Interactive Simulator: Cook vs. Dine Out</span>
+              </h4>
+              <span class="text-xs font-mono text-[#5cceff]" data-i18n="simClickPrompt">Click options to compare costs</span>
+            </div>
+
+            <!-- Simulator Buttons -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2" id="sim-buttons">
+              <button type="button" data-sim="actual" class="sim-btn active p-2.5 rounded-xl bg-[#39ff14]/20 text-[#39ff14] border border-[#39ff14]/40 text-xs font-mono font-bold text-left transition-all cursor-pointer">
+                ★ <span data-i18n="simOptActual">What I Actually Did</span>
+                <span class="block text-[11px] font-normal opacity-80 mt-1" data-sim-cost="actual">~2,260฿ / wk</span>
+              </button>
+
+              <button type="button" data-sim="cook" class="sim-btn p-2.5 rounded-xl bg-[#0d0d14] text-[#94a3b8] border border-[#2a2a3f] hover:border-white text-xs font-mono font-medium text-left transition-all cursor-pointer">
+                🍳 <span data-i18n="simOptCook">100% Home Cook</span>
+                <span class="block text-[11px] font-normal opacity-80 mt-1" data-sim-cost="cook">~2,660฿ / wk</span>
+              </button>
+
+              <button type="button" data-sim="weekend" class="sim-btn p-2.5 rounded-xl bg-[#0d0d14] text-[#94a3b8] border border-[#2a2a3f] hover:border-white text-xs font-mono font-medium text-left transition-all cursor-pointer">
+                🍕 <span data-i18n="simOptWeekend">Cook + Weekend Out</span>
+                <span class="block text-[11px] font-normal opacity-80 mt-1" data-sim-cost="weekend">~4,990฿ / wk</span>
+              </button>
+
+              <button type="button" data-sim="dining" class="sim-btn p-2.5 rounded-xl bg-[#0d0d14] text-[#94a3b8] border border-[#2a2a3f] hover:border-white text-xs font-mono font-medium text-left transition-all cursor-pointer">
+                🍔 <span data-i18n="simOptDine">Always Dine Out</span>
+                <span class="block text-[11px] font-normal opacity-80 mt-1" data-sim-cost="dining">~8,650฿ / wk</span>
+              </button>
+
+              <button type="button" data-sim="doordash" class="sim-btn p-2.5 rounded-xl bg-[#0d0d14] text-[#94a3b8] border border-[#2a2a3f] hover:border-white text-xs font-mono font-medium text-left transition-all cursor-pointer">
+                🛵 <span data-i18n="simOptDoorDash">Delivery & Sit-Down</span>
+                <span class="block text-[11px] font-normal opacity-80 mt-1" data-sim-cost="doordash">~12,800฿ / wk</span>
+              </button>
+            </div>
+
+            <!-- Dynamic Result Box -->
+            <div id="sim-result-box" class="p-4 bg-[#0d0d14] border border-[#39ff14]/30 rounded-xl space-y-2">
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <span id="sim-title" class="font-bold text-white text-sm font-display">What I Actually Did (The Frugal Hybrid)</span>
+                <div class="flex items-baseline gap-2 font-mono">
+                  <span id="sim-weekly-val" class="text-[#39ff14] font-bold text-lg">฿2,260 / week</span>
+                  <span id="sim-semester-val" class="text-xs text-[#94a3b8]">(24-Week Total: ฿54,280)</span>
+                </div>
+              </div>
+              <p id="sim-desc" class="text-xs text-[#94a3b8] leading-relaxed">
+                I cooked fresh meals using Trader Joe's groceries ($19.70/wk), ordered pantry snacks and instant staples on Amazon ($17.85/wk), and ate cheap local meals or coffee ($18.50/wk).
+              </p>
+              <div id="sim-savings" class="pt-2 border-t border-[#1e1e2e] text-xs font-mono text-[#ffd700] font-semibold">
+                ✓ Saved between 150,000฿ – 250,000฿ ($4,600 – $7,600 USD) compared to eating out all the time.
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Food Pillars Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Pillar 1 -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl">🥦</span>
+                <span class="font-mono text-xs text-[#39ff14] font-bold" data-val-usd="348.44">฿11,580</span>
+              </div>
+              <h5 class="font-bold text-sm text-white font-display">Trader Joe's</h5>
+              <p class="text-xs text-[#94a3b8]" data-i18n="tjDesc">10 grocery runs (~1,160฿ / $35 avg). Bought eggs, chicken breast, milk, fruits, and stir-fry veggies.</p>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl">📦</span>
+                <span class="font-mono text-xs text-[#5cceff] font-bold" data-val-usd="428.32">฿14,240</span>
+              </div>
+              <h5 class="font-bold text-sm text-white font-display">Amazon Pantry</h5>
+              <p class="text-xs text-[#94a3b8]" data-i18n="amazonDesc">32 pantry orders (~445฿ / $13.39 avg). Instant ramen, oats, bulk snacks, tea, and cooking condiments.</p>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl">🍕</span>
+                <span class="font-mono text-xs text-[#ff6b9d] font-bold" data-val-usd="444.47">฿14,780</span>
+              </div>
+              <h5 class="font-bold text-sm text-white font-display">Berkeley Local Bites</h5>
+              <p class="text-xs text-[#94a3b8]" data-i18n="localDineDesc">39 visits (~380฿ / $11.40 avg). Artichoke pizza slice ($8), Top Dog hot dogs ($5), Banh Mi ($5.60), Caffe Strada.</p>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div class="p-4 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xl">🏔️</span>
+                <span class="font-mono text-xs text-[#ffd700] font-bold" data-val-usd="286.68">฿9,530</span>
+              </div>
+              <h5 class="font-bold text-sm text-white font-display">Excursion Dining</h5>
+              <p class="text-xs text-[#94a3b8]" data-i18n="tripDineDesc">22 meals during weekend trips. Half Dome Pizza in Yosemite, Tahoe ski lodge meal, In-N-Out burger.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: The Interactive Transaction Explorer / Ledger (The Master Breakdown) -->
+      <section id="ledger" class="space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-2.5 h-6 bg-[#39ff14] rounded-xs"></div>
+            <h2 class="font-display text-2xl font-bold tracking-tight text-white" data-i18n="ledgerHeading">
+              Interactive Transaction Explorer · ค้นหารายการใช้จ่ายทั้งหมด · 全部346笔流水明细
+            </h2>
+          </div>
+          <span class="text-xs font-mono text-[#94a3b8] bg-[#15151f] px-3 py-1 rounded-full border border-[#2a2a3f]">
+            346 Verified Items
+          </span>
+        </div>
+
+        <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 md:p-8 space-y-6">
+          <p class="text-xs text-[#94a3b8]" data-i18n="ledgerIntro">
+            Search or filter every single transaction recorded during the Berkeley exchange semester. Filter by category, type, or search for any merchant like "Trader Joe", "Shane", "Aspenware", "Uber", "Amazon", or "Wire".
+          </p>
+
+          <!-- Search & Filter Controls -->
+          <div class="space-y-4">
+            <!-- Search Bar & Type Toggle -->
+            <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+              <div class="relative flex-1">
+                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-[#94a3b8]">🔍</span>
+                <input
+                  type="text"
+                  id="tx-search-input"
+                  placeholder="Search 346 transactions (e.g. Trader Joe, Shane, Aspenware, Amazon, Wire)..."
+                  class="w-full pl-10 pr-4 py-2 bg-[#15151f] border border-[#2a2a3f] focus:border-[#5cceff] rounded-xl text-xs font-mono text-white placeholder-[#6b7280] outline-none transition-colors"
+                />
+              </div>
+
+              <!-- Inflow / Outflow Filter -->
+              <div class="flex items-center bg-[#15151f] border border-[#2a2a3f] rounded-xl p-1 text-xs font-mono">
+                <button type="button" data-flow="all" class="flow-btn px-3 py-1 rounded-lg bg-[#39ff14]/20 text-[#39ff14] font-bold border border-[#39ff14]/30 cursor-pointer">
+                  All Types
+                </button>
+                <button type="button" data-flow="debit" class="flow-btn px-3 py-1 rounded-lg text-[#94a3b8] hover:text-white cursor-pointer">
+                  Expenses Only
+                </button>
+                <button type="button" data-flow="credit" class="flow-btn px-3 py-1 rounded-lg text-[#94a3b8] hover:text-white cursor-pointer">
+                  Inflows Only
+                </button>
+              </div>
+            </div>
+
+            <!-- Category Pills -->
+            <div class="flex flex-wrap gap-1.5 text-xs font-mono" id="category-pills">
+              <button type="button" data-cat="all" class="cat-pill active px-3 py-1 rounded-lg bg-[#5cceff]/20 text-[#5cceff] font-bold border border-[#5cceff]/40 cursor-pointer">
+                All (346)
+              </button>
+              <button type="button" data-cat="tuition" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Tuition & School (7)
+              </button>
+              <button type="button" data-cat="housing" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Housing & Rent (34)
+              </button>
+              <button type="button" data-cat="food" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Food & Groceries (110)
+              </button>
+              <button type="button" data-cat="travel" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Travel & Ski (7)
+              </button>
+              <button type="button" data-cat="inflow" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Inflows & Wire (24)
+              </button>
+              <button type="button" data-cat="tech" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Tech & AI (17)
+              </button>
+              <button type="button" data-cat="thrift" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Music & Thrift (16)
+              </button>
+              <button type="button" data-cat="transit" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                Transit & Laundry (15)
+              </button>
+              <button type="button" data-cat="china" class="cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer">
+                China Summer (107)
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Status Counter -->
+          <div class="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#15151f] rounded-xl border border-[#2a2a3f] text-xs font-mono">
+            <div class="text-[#cbd5e1]">
+              Showing <span id="tx-showing-count" class="text-white font-bold">0</span> of <span class="text-white font-bold">346</span> transactions
+            </div>
+            <div class="text-[#94a3b8]">
+              Filtered Total: <span id="tx-filtered-sum" class="text-[#39ff14] font-bold text-sm">฿0</span>
+            </div>
+          </div>
+
+          <!-- Responsive Table Container -->
+          <div class="overflow-x-auto border border-[#1e1e2e] rounded-xl bg-[#0a0a0f]">
+            <table class="w-full text-left text-xs font-mono border-collapse" id="tx-table">
+              <thead>
+                <tr class="border-b border-[#2a2a3f] bg-[#15151f] text-[#94a3b8] uppercase tracking-wider">
+                  <th class="py-3 px-3 w-28 cursor-pointer hover:text-white" id="th-date">Date ▾</th>
+                  <th class="py-3 px-3">Description / Merchant</th>
+                  <th class="py-3 px-3 w-36 hidden sm:table-cell">Category</th>
+                  <th class="py-3 px-3 w-40 hidden md:table-cell">Statement Source</th>
+                  <th class="py-3 px-3 text-right w-32 cursor-pointer hover:text-white" id="th-amount">Amount ▾</th>
+                </tr>
+              </thead>
+              <tbody id="tx-table-body" class="divide-y divide-[#1e1e2e]">
+                <!-- Populated via Client-Side Engine -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs font-mono text-[#94a3b8]">
+            <div id="tx-page-info">
+              Page 1 of 1
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button type="button" id="tx-prev-btn" class="px-3 py-1.5 rounded-lg bg-[#15151f] border border-[#2a2a3f] hover:border-white text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                ← Previous
+              </button>
+              <button type="button" id="tx-next-btn" class="px-3 py-1.5 rounded-lg bg-[#15151f] border border-[#2a2a3f] hover:border-white text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Real Experiences & Memories Photo Gallery -->
+      <section id="experiences" class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-[#a78bfa] rounded-xs"></div>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-white" data-i18n="experienceHeading">
+            Life & Enriching Experiences · ประสบการณ์และการใช้ชีวิต · 留学生活与成长经历
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Photo 1: Tahoe Ski -->
+          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-4 space-y-3 group hover:border-[#5cceff]/40 transition-all">
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#15151f]">
+              <Image src={skiImg} alt="Skiing in Lake Tahoe" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
+            </div>
+            <div>
+              <div class="flex justify-between items-baseline">
+                <h4 class="font-display font-bold text-sm text-white" data-i18n="tahoeTitle">Lake Tahoe Ski Trip</h4>
+                <span class="font-mono text-xs text-[#5cceff]" data-val-usd="885.82">฿29,450</span>
+              </div>
+              <p class="text-xs text-[#94a3b8] mt-1" data-i18n="tahoeDesc">Sugar Bowl resort ski pass and gear rentals at Donner Ski Shop in Northern California mountains.</p>
+            </div>
+          </div>
+
+          <!-- Photo 2: Yosemite -->
+          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-4 space-y-3 group hover:border-[#39ff14]/40 transition-all">
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#15151f]">
+              <Image src={yose1Img} alt="Yosemite National Park" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
+            </div>
+            <div>
+              <div class="flex justify-between items-baseline">
+                <h4 class="font-display font-bold text-sm text-white" data-i18n="yoseTitle">Yosemite National Park</h4>
+                <span class="font-mono text-xs text-[#39ff14]" data-val-usd="363.63">฿12,090</span>
+              </div>
+              <p class="text-xs text-[#94a3b8] mt-1" data-i18n="yoseDesc">Spring break wilderness hiking and Curry Village tent cabin lodging under Half Dome cliffs.</p>
+            </div>
+          </div>
+
+          <!-- Photo 3: Thai Friends in Berkeley -->
+          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-4 space-y-3 group hover:border-[#ff6b9d]/40 transition-all">
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#15151f]">
+              <Image src={thaiFriendImg} alt="Friends at Berkeley" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
+            </div>
+            <div>
+              <div class="flex justify-between items-baseline">
+                <h4 class="font-display font-bold text-sm text-white" data-i18n="friendsTitle">Community & Friendships</h4>
+                <span class="font-mono text-xs text-[#ff6b9d]">Lifelong Bonds</span>
+              </div>
+              <p class="text-xs text-[#94a3b8] mt-1" data-i18n="friendsDesc">Building community with fellow international and Thai scholars, cooking together and sharing meals.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Official Proof & Verification Vault -->
+      <section id="documents" class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-[#ffd700] rounded-xs"></div>
+          <h2 class="font-display text-2xl font-bold tracking-tight text-white" data-i18n="proofHeading">
+            Official Document & Statement Verification · หลักฐานเอกสารราชการ · 官方文件与凭证
+          </h2>
+        </div>
+
+        <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 space-y-4">
+          <p class="text-xs text-[#94a3b8]" data-i18n="proofIntro">
+            All data on this page is directly derived from official government, university, and banking records preserved on file:
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs font-mono">
+            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+              <p class="text-[#5cceff] font-bold">📄 CalCentral Statement</p>
+              <p class="text-white mt-1">Student ID: 3042099986</p>
+              <p class="text-[#94a3b8]">Billed: $11,424.00 (Spring 2026)</p>
+            </div>
+
+            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+              <p class="text-[#39ff14] font-bold">🧾 Transact Receipt #2023232</p>
+              <p class="text-white mt-1">Paid: $9,724.00</p>
+              <p class="text-[#94a3b8]">Cleared: Jan 15, 2026</p>
+            </div>
+
+            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+              <p class="text-[#ffd700] font-bold">🏛️ Form I-20 (SEVIS)</p>
+              <p class="text-white mt-1">ID: N0037263690</p>
+              <p class="text-[#94a3b8]">School Code: SFR214F01888000</p>
+            </div>
+
+            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+              <p class="text-[#ff6b9d] font-bold">🏦 Chase Bank Statements</p>
+              <p class="text-white mt-1">8 Monthly Statements</p>
+              <p class="text-[#94a3b8]">Ending Balance: $396.73</p>
+            </div>
+
+            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+              <p class="text-[#a78bfa] font-bold">📜 SEVIS I-901 Receipt</p>
+              <p class="text-white mt-1">Receipt: CCC2600685641</p>
+              <p class="text-[#94a3b8]">Paid: $350.00 (Oct 6, 2025)</p>
+            </div>
+
+            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+              <p class="text-[#10b981] font-bold">🎓 Official Transcript (SR802F)</p>
+              <p class="text-white mt-1">Units: 12.0</p>
+              <p class="text-[#94a3b8]">GPA: 4.000 (Top Honors)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Personal Thank You Letter to Family -->
+      <section id="gratitude" class="bg-[#0f0f18] border border-[#ff6b9d]/40 rounded-2xl p-6 sm:p-10 shadow-xl relative overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div class="md:col-span-8 space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff6b9d]/20 border border-[#ff6b9d]/30 text-xs font-mono text-[#ff6b9d] font-bold">
+              ❤️ <span data-i18n="letterBadge">A Message of Gratitude</span>
+            </div>
+
+            <h3 class="font-display text-2xl sm:text-3xl font-bold text-white" data-i18n="letterTitle">
+              Thank You to My Family · กราบขอบพระคุณคุณพ่อคุณแม่ · 衷心感谢家人
+            </h3>
+
+            <!-- Thai Letter -->
+            <div class="lang-text lang-th space-y-3 text-sm sm:text-base text-[#cbd5e1] leading-relaxed font-sans">
+              <p>
+                กราบขอบพระคุณคุณพ่อ คุณแม่ และครอบครัวทุกท่านเป็นอย่างยิ่งครับ สำหรับโอกาส ความไว้วางใจ และการสนับสนุนอย่างเต็มที่ให้ผมได้มาศึกษาแลกเปลี่ยนที่ University of California, Berkeley
+              </p>
+              <p>
+                ทุกบาททุกสตางค์ที่คุณพ่อคุณแม่ส่งมา ผมตั้งใจบริหารจัดการอย่างคุ้มค่าและประหยัดที่สุด โดยเน้นทำอาหารเองที่บ้าน และตั้งใจเรียนอย่างเต็มที่จนคว้าเกรดเฉลี่ย <strong class="text-[#ffd700]">4.000 เต็ม</strong> พร้อมได้เกรด <strong class="text-[#39ff14]">A+</strong> ในวิชา Product Management ครับ
+              </p>
+              <p>
+                รายงานฉบับนี้จัดทำขึ้นเพื่อให้ทุกคนในครอบครัวได้เห็นรายละเอียดทุกอย่างอย่างโปร่งใส และมั่นใจว่าความไว้วางใจของครอบครัวเกิดผลคุ้มค่าที่สุดครับ
+              </p>
+            </div>
+
+            <!-- Chinese Letter -->
+            <div class="lang-text lang-zh hidden space-y-3 text-sm sm:text-base text-[#cbd5e1] leading-relaxed font-sans">
+              <p>
+                衷心感谢爸爸妈妈和全家人的全力支持与信任，让我能够来到世界顶尖的加州大学伯克利分校（UC Berkeley）进行为期一学期的深入交换学习。
+              </p>
+              <p>
+                在伯克利的这半年里，我始终铭记家人的期望与辛苦。每一笔开支我都极力精简、认真记录。我主要通过去超市买菜和在亚马逊批量网购日常食材自己下厨，把每周伙食费控制在极具纪律性的低水平。同时，我也全力以赴投入学业，最终以 <strong class="text-[#ffd700]">4.00 满分绩点</strong> 以及产品管理课程 <strong class="text-[#39ff14]">A+</strong> 的顶尖成绩完成了所有学业要求！
+              </p>
+              <p>
+                制作这份透明清晰的财务与学术总结，是为了让家人放心。感谢您们的付出，我一定继续努力！
+              </p>
+            </div>
+
+            <!-- English Letter -->
+            <div class="lang-text lang-en hidden space-y-3 text-sm sm:text-base text-[#cbd5e1] leading-relaxed font-sans">
+              <p>
+                Dearest Mom, Dad, and Family,
+              </p>
+              <p>
+                Thank you with all my heart for giving me the opportunity, the trust, and the resources to study at UC Berkeley. Being here has expanded my worldview, sharpened my engineering capabilities, and built lifelong friendships.
+              </p>
+              <p>
+                I treated every single dollar you sent with the utmost respect. By cooking my own meals and living frugally, I kept my living expenses far below standard student benchmarks, while achieving a perfect <strong class="text-[#ffd700]">4.000 GPA</strong>.
+              </p>
+              <p>
+                I built this dashboard so you can see with complete transparency how your support was put to work. I love you and look forward to making you proud in everything ahead!
+              </p>
+            </div>
+
+            <div class="pt-2">
+              <p class="font-display font-bold text-lg text-white">Bunyasit (Big) Fang</p>
+              <p class="font-mono text-xs text-[#94a3b8]">SCET Start Up Semester Fellow · UC Berkeley Spring 2026</p>
+            </div>
+          </div>
+
+          <div class="md:col-span-4 flex justify-center">
+            <div class="w-56 sm:w-64 aspect-[4/5] rounded-2xl overflow-hidden border border-[#ff6b9d]/40 shadow-lg bg-[#15151f]">
+              <Image src={momImg} alt="With Mom" class="w-full h-full object-cover" width={500} height={625} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="pt-8 pb-16 text-center text-xs font-mono text-[#94a3b8] space-y-2 border-t border-[#1e1e2e]">
+        <p>UC Berkeley Extension · Student ID 3042099986 · Spring 2026 Exchange</p>
+        <p class="text-[#6b7280]">Big Fang · <a href="/" class="text-[#ff6b9d] hover:underline">bigf.me</a></p>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Embedded Transactions Data -->
+  <script id="tx-data" type="application/json" set:html={JSON.stringify(berkeleyTransactions)} />
+</Layout>
+
+<script is:inline>
+  // Client-Side Multi-Language, Multi-Currency & Ledger Engine
+  (function() {
+    const FX_RATES = {
+      THB: 33.25,
+      USD: 1.0,
+      CNY: 7.15
+    };
+
+    let currentCurr = 'THB';
+    let currentLang = 'th';
+
+    // Parse all transactions
+    const rawDataEl = document.getElementById('tx-data');
+    let allTransactions = [];
+    try {
+      allTransactions = rawDataEl ? JSON.parse(rawDataEl.textContent) : [];
+    } catch (e) {
+      console.error('Error parsing transactions:', e);
+    }
+
+    // Ledger state
+    let activeCat = 'all';
+    let activeFlow = 'all'; // 'all', 'debit', 'credit'
+    let searchQuery = '';
+    let currentPage = 1;
+    const pageSize = 25;
+    let sortField = 'date';
+    let sortAsc = false;
+
+    const I18N_DICT = {
+      en: {
+        navTitle: "UC Berkeley Spring 2026",
+        navOverview: "Overview",
+        navBreakdown: "All Expenses",
+        navInflows: "Inflows & Banking",
+        navFood: "Food Discipline",
+        navLedger: "346 Transactions",
+        navDocuments: "Documents",
+        heroBadge: "Official Exchange Report · Spring 2026",
+        heroTitle: "UC Berkeley Exchange",
+        heroSubTitle: "Academic & Complete Financial Ledger",
+        heroDescription: "An exhaustive, 100% transparent financial report prepared for my family. Detailing my studies at UC Berkeley Extension (SCET Startup Semester), all 346 verified expenditures across 8 monthly Chase statements, and disciplined budgeting that came in below official I-20 limits.",
+        gpaBadge: "GPA 4.000 / 4.000",
+        budgetBadge: "Under I-20 Budget (~$2,001 Saved)",
+        foodBadge: "Food: ~$68 / Week",
+        auditBadge: "100% Math Reconciled to Cent",
+        academicHeading: "Academic Performance · Honors Record",
+        gpaCardLabel: "Spring 2026 Semester",
+        gpaCardHonors: "Straight-A Performance · Top Honors",
+        totalUnitsLabel: "Total Academic Units:",
+        programLabel: "Program:",
+        institutionLabel: "Institution:",
+        courseListHeading: "Course Grades & Units (Official CalCentral Record)",
+        academicNote: "Official verification document: UC SR802F & CalCentral Transcript dated May 2026.",
+        financialOverviewHeading: "Complete Financial Breakdown & Budget Ledger",
+        i20BudgetLabel: "Form I-20 Requirement",
+        i20BudgetSub: "$15,775 Tuition + $11,250 Living",
+        actualTotalLabel: "Actual All-In Expenditure",
+        actualTotalSub: "Total Program Outflow ($25,023.49)",
+        savingsTotalLabel: "Under Budget By",
+        savingsTotalSub: "Disciplined budget savings ($2,001.51)",
+        expenseBreakdownLabel: "Major Expense Composition",
+        legTuition: "Tuition (46.0%)",
+        legHousing: "Housing & Rent (35.3%)",
+        legFood: "Food & Groceries (6.5%)",
+        legTravel: "Travel & Skiing (5.4%)",
+        legOther: "Other Essentials (6.8%)",
+        catTuitionName: "UC Berkeley Tuition & Academics",
+        catHousingName: "Apartment Rent & Utilities",
+        catFoodName: "Food, Groceries & Amazon",
+        catTravelName: "Travel, Skiing & Yosemite",
+        catVisaName: "US Visa & SEVIS I-901",
+        catTechName: "Tech, AI & Cloud Tools",
+        catThriftName: "Vinyl, Thrift & Books",
+        catTransitName: "Transit, Laundry & Luggage",
+        catFeesName: "Bank Wire Fee",
+        grandTotalLabel: "Total Exchange Program Outflow",
+        inflowsHeading: "Inflow Accounting & Account Reconciliation",
+        inflowsIntro: "To guarantee complete accountability to my family, every single inflow into my Chase checking account is mapped below. Total funds deposited match exactly with living debits, leaving an ending balance of $396.73.",
+        wireCardTag: "Primary Family Support",
+        wireCardTitle: "Singapore / Bangkok Wire",
+        wireCardDesc: "From Mrs Anurat Gantronbandanniti via TMB / DBS Singapore on Feb 05, 2026. Applied directly to rent and living.",
+        splitsCardTag: "Shared Expense Splits",
+        splitsCardTitle: "Roommate Zelle Repayments",
+        splitsCardDesc: "Reimbursements from Donpattara ($2,276), Shane deposit refund ($1,097.50), and group ski/dinner splits.",
+        cashCardTag: "Self Cash Conversion",
+        cashCardTitle: "ATM Cash Deposits",
+        cashCardDesc: "Cash brought to the US and deposited at Chase Telegraph Ave branch ATM (Jan 12 $200, Jan 13 $1,200).",
+        ccCardTag: "Int'l Transfer",
+        ccCardTitle: "CurrencyCloud Transfer",
+        ccCardDesc: "Pre-arrival international exchange transfer cleared on Feb 03, 2026.",
+        bonusCardTag: "Bank Promo & Refunds",
+        bonusCardTitle: "Bank Promo & Returns",
+        bonusCardDesc: "Chase $125 new checking opening bonus + Factory AI $200.59 merchant return.",
+        balanceCardTag: "Final Account Status",
+        balanceCardTitle: "Chase Ending Balance",
+        balanceCardDesc: "Confirmed ending balance on September 9, 2026 statement. 100% accounted for to the cent.",
+        splitNoteTitle: "Why are there roommate Zelle transfers?",
+        splitNoteDesc: "When booking group activities (such as ski passes for the Tahoe trip or shared apartment household items), I frequently paid upfront with my Chase card, and my roommates subsequently sent their exact shares back to me via Zelle. Every dollar received corresponds to an offsetting debit.",
+        foodHeading: "Food & Grocery Discipline · Frugality Story",
+        foodHighlightBadge: "Remarkably Frugal: Only 6.5% of Total Budget",
+        foodHeroTitle: "How I Managed Food in the Most Expensive Area in the U.S.",
+        foodHeroText: "The San Francisco Bay Area is famous for high food costs ($600–$900/mo for college students). By cooking fresh meals with Trader Joe's and buying pantry staples in bulk on Amazon, I kept my food bill down to ~$68 a week.",
+        weeklyAvgLabel: "Cost Per Week",
+        dailyAvgLabel: "Cost Per Day",
+        totalFoodLabel: "24-Week Total",
+        savedFoodLabel: "Estimated Savings",
+        simHeading: "Interactive Simulator: Cook vs. Dine Out",
+        simClickPrompt: "Click options to compare costs",
+        simOptActual: "What I Actually Did",
+        simOptCook: "100% Home Cook",
+        simOptWeekend: "Cook + Weekend Out",
+        simOptDine: "Always Dine Out",
+        simOptDoorDash: "Delivery & Sit-Down",
+        tjDesc: "10 grocery runs (~$35 avg). Bought eggs, chicken breast, milk, fruits, and stir-fry veggies.",
+        amazonDesc: "32 pantry orders (~$13.39 avg). Instant ramen, oats, bulk snacks, tea, and cooking condiments.",
+        localDineDesc: "39 visits (~$11.40 avg). Artichoke pizza slice ($8), Top Dog hot dogs ($5), Banh Mi ($5.60), Caffe Strada.",
+        tripDineDesc: "22 meals during weekend trips. Half Dome Pizza in Yosemite, Tahoe ski lodge meal, In-N-Out burger.",
+        ledgerHeading: "Interactive Transaction Explorer · 346 Item Breakdown",
+        ledgerIntro: "Search or filter every single transaction recorded during the Berkeley exchange semester. Filter by category, type, or search for any merchant like 'Trader Joe', 'Shane', 'Aspenware', 'Uber', 'Amazon', or 'Wire'.",
+        experienceHeading: "Life & Enriching Experiences",
+        tahoeTitle: "Lake Tahoe Ski Trip",
+        tahoeDesc: "Sugar Bowl resort ski pass and gear rentals at Donner Ski Shop in Northern California mountains.",
+        yoseTitle: "Yosemite National Park",
+        yoseDesc: "Spring break wilderness hiking and Curry Village tent cabin lodging under Half Dome cliffs.",
+        friendsTitle: "Community & Friendships",
+        friendsDesc: "Building community with fellow international and Thai scholars, cooking together and sharing meals.",
+        proofHeading: "Official Document & Statement Verification",
+        proofIntro: "All data on this page is directly derived from official government, university, and banking records preserved on file:",
+        letterBadge: "A Message of Gratitude",
+        letterTitle: "Thank You to My Family"
+      },
+      th: {
+        navTitle: "รายงานแลกเปลี่ยน UC Berkeley",
+        navOverview: "ภาพรวม",
+        navBreakdown: "ค่าใช้จ่ายทั้งหมด",
+        navInflows: "บันทึกเงินเข้า",
+        navFood: "วินัยค่าอาหาร",
+        navLedger: "รายการใช้จ่าย 346 รายการ",
+        navDocuments: "เอกสารทางการ",
+        heroBadge: "รายงานสรุปโครงการแลกเปลี่ยน · ภาคเรียน Spring 2026",
+        heroTitle: "รายงานแลกเปลี่ยน UC Berkeley",
+        heroSubTitle: "สรุปผลการเรียนและบันทึกการเงินฉบับสมบูรณ์",
+        heroDescription: "รายงานสรุปค่าใช้จ่ายและผลการศึกษาฉบับสมบูรณ์ จัดทำขึ้นเพื่อให้ครอบครัวตรวจสอบได้อย่างโปร่งใส ครอบคลุมการเรียนที่ UC Berkeley Extension (SCET Startup Semester), บันทึกการเงิน 346 รายการจากสเตทเมนต์ Chase 8 เดือนตรงตามจริงทุกบาท และการคุมงบประหยัดกว่าเกณฑ์ I-20",
+        gpaBadge: "เกรดเฉลี่ย 4.000 เต็ม",
+        budgetBadge: "ประหยัดกว่างบ I-20 (~66,550 บาท)",
+        foodBadge: "ค่าอาหาร: ~2,260฿ ($68) / สัปดาห์",
+        auditBadge: "ตรวจสอบตัวเลขตรงตามจริง 100%",
+        academicHeading: "ผลการเรียนยอดเยี่ยม · เกียรติประวัติการศึกษา",
+        gpaCardLabel: "ภาคการศึกษา Spring 2026",
+        gpaCardHonors: "ได้เกรด A ทุกวิชา · ผลการเรียนดีเด่น",
+        totalUnitsLabel: "หน่วยกิตรวม:",
+        programLabel: "หลักสูตร:",
+        institutionLabel: "สถาบันการศึกษา:",
+        courseListHeading: "ผลการเรียนรายวิชา (บันทึกทางการจาก CalCentral)",
+        academicNote: "เอกสารรับรองทางการ: UC SR802F และทรานสคริปต์ CalCentral ประจำเดือนพฤษภาคม 2026",
+        financialOverviewHeading: "แจกแจงค่าใช้จ่ายทุกหมวดหมู่ตลอดโครงการ",
+        i20BudgetLabel: "งบประมาณตามเกณฑ์ I-20",
+        i20BudgetSub: "ค่าเล่าเรียน $15,775 + ค่าครองชีพ $11,250",
+        actualTotalLabel: "ค่าใช้จ่ายจริงตลอดโครงการ",
+        actualTotalSub: "ยอดเงินรวมทั้งโครงการ ($25,023.49)",
+        savingsTotalLabel: "ประหยัดกว่าเกณฑ์ I-20",
+        savingsTotalSub: "จากการบริหารจัดการอย่างมีวินัย ($2,001.51)",
+        expenseBreakdownLabel: "สัดส่วนค่าใช้จ่ายหลัก",
+        legTuition: "ค่าเล่าเรียน (46.0%)",
+        legHousing: "ค่าที่พักและสาธารณูปโภค (35.3%)",
+        legFood: "ค่าอาหารและของสด (6.5%)",
+        legTravel: "ท่องเที่ยวและสกี (5.4%)",
+        legOther: "ค่าใช้จ่ายจำเป็นอื่นๆ (6.8%)",
+        catTuitionName: "ค่าเล่าเรียนและมหาวิทยาลัย UC Berkeley",
+        catHousingName: "ค่าเช่าอพาร์ตเมนต์และค่าน้ำค่าไฟ",
+        catFoodName: "ค่าอาหาร ของสด และ Amazon",
+        catTravelName: "ท่องเที่ยว สกี Tahoe และ Yosemite",
+        catVisaName: "ค่าวีซ่าอเมริกาและ SEVIS I-901",
+        catTechName: "ค่าซอฟต์แวร์ AI และคลาวด์",
+        catThriftName: "แผ่นเสียง หนังสือ และของใช้มือสอง",
+        catTransitName: "ค่าเดินทาง ซักผ้า และกระเป๋าเดินทาง",
+        catFeesName: "ค่าธรรมเนียมโอนเงินธนาคาร",
+        grandTotalLabel: "ยอดค่าใช้จ่ายตลอดโครงการแลกเปลี่ยน",
+        inflowsHeading: "บันทึกเงินเข้าและกระทบยอดบัญชีธนาคาร",
+        inflowsIntro: "เพื่อความโปร่งใสสูงสุดต่อครอบครัว ทุกยอดเงินที่เข้าบัญชีธนาคาร Chase ได้ถูกบันทึกไว้ครบถ้วน ยอดเงินฝากและโอนเข้าสอดคล้องกับค่าใช้จ่ายจริงทุกเซนต์ โดยมียอดเงินคงเหลือในบัญชี $396.73 (~13,190 บาท)",
+        wireCardTag: "เงินสนับสนุนหลักจากครอบครัว",
+        wireCardTitle: "เงินโอนสิงคโปร์ / กรุงเทพฯ",
+        wireCardDesc: "โอนจากคุณแม่ (นาง อนุรัตน์ กันทรบรรดานิติ) ผ่าน TMB / DBS Singapore เมื่อ 5 ก.พ. 2026 นำมาจ่ายค่าเช่าและค่าครองชีพทั้งหมด",
+        splitsCardTag: "แชร์ค่าใช้จ่ายกับรูมเมต",
+        splitsCardTitle: "เงินคืนจากเพื่อนและรูมเมต (Zelle)",
+        splitsCardDesc: "เงินโอนคืนจาก Donpattara ($2,276), เงินคืนมัดจำห้องจาก Shane ($1,097.50) และแชร์ค่าทริปสกี/อาหาร",
+        cashCardTag: "เงินสดนำเข้าบัญชี",
+        cashCardTitle: "ฝากเงินสดผ่านตู้ ATM",
+        cashCardDesc: "เงินสดที่นำติดตัวไปและฝากเข้าตู้ ATM สาขา Telegraph Ave (12 ม.ค. $200, 13 ม.ค. $1,200)",
+        ccCardTag: "โอนเงินระหว่างประเทศ",
+        ccCardTitle: "โอนผ่าน CurrencyCloud",
+        ccCardDesc: "ยอดโอนเงินแลกเปลี่ยนระหว่างประเทศเข้าบัญชีเมื่อ 3 ก.พ. 2026",
+        bonusCardTag: "โบนัสธนาคารและเงินคืน",
+        bonusCardTitle: "โบนัสเปิดบัญชีและรีฟันด์",
+        bonusCardDesc: "โบนัสเปิดบัญชี Chase New Checking $125 + รีฟันด์คืนสินค้า Factory AI $200.59",
+        balanceCardTag: "สถานะบัญชีสุทธิ",
+        balanceCardTitle: "ยอดเงินคงเหลือในบัญชี Chase",
+        balanceCardDesc: "ยอดเงินคงเหลือจริงตามสเตทเมนต์วันที่ 9 กันยายน 2026 ตรวจสอบได้ตรงตามบัญชีทุกเซนต์",
+        splitNoteTitle: "ทำไมถึงมีเงินโอนจากรูมเมตและเพื่อน?",
+        splitNoteDesc: "ในการจองกิจกรรมกลุ่ม (เช่น บัตรสกีทริป Lake Tahoe หรือของใช้ในอพาร์ตเมนต์) ผมเป็นคนรูดบัตรจ่ายไปก่อนเป็นก้อนใหญ่ จากนั้นรูมเมตจึงโอนเงินส่วนของตนเองคืนผ่าน Zelle เงินเข้าส่วนนี้จึงตรงกับยอดที่จ่ายออกไปล่วงหน้าครับ",
+        foodHeading: "การประหยัดค่าอาหารและของสดอย่างมีวินัย",
+        foodHighlightBadge: "ประหยัดมาก: ค่าอาหารคิดเป็นเพียง 6.5% ของงบทั้งหมด",
+        foodHeroTitle: "วิธีบริหารค่าอาหารในย่านที่ค่าครองชีพแพงติดอันดับโลก",
+        foodHeroText: "พื้นที่ San Francisco Bay Area มีค่าอาหารสูงมาก (เฉลี่ย 20,000–30,000 บาท/เดือนสำหรับนักศึกษา) แต่ด้วยการซื้อของสดจาก Trader Joe's มาทำอาหารเอง และสั่งซื้อวัตถุดิบตุนจาก Amazon ผมจึงคุมค่าอาหารเหลือเพียง ~2,260 บาท ($68) ต่อสัปดาห์เท่านั้น",
+        weeklyAvgLabel: "เฉลี่ยต่อสัปดาห์",
+        dailyAvgLabel: "เฉลี่ยต่อวัน",
+        totalFoodLabel: "ยอดรวม 24 สัปดาห์",
+        savedFoodLabel: "เงินที่ประหยัดได้",
+        simHeading: "เครื่องคำนวณเปรียบเทียบ: ทำอาหารเอง vs กินข้าวนอกบ้าน",
+        simClickPrompt: "คลิกตัวเลือกเพื่อเปรียบเทียบค่าใช้จ่าย",
+        simOptActual: "สิ่งที่ผมทำจริง (แบบผสม)",
+        simOptCook: "ทำอาหารเอง 100%",
+        simOptWeekend: "ทำอาหาร + กินนอกบ้านสุดสัปดาห์",
+        simOptDine: "กินนอกบ้านทุกมื้อ",
+        simOptDoorDash: "สั่งเดลิเวอรี่ + ร้านอาหาร",
+        tjDesc: "ไปซื้อของ 10 ครั้ง (เฉลี่ย ~1,160฿ / ครั้ง) ซื้ออกไก่ ไข่ไก่ นมสด ผักสด ผลไม้",
+        amazonDesc: "สั่งซื้อ 32 ออเดอร์ (เฉลี่ย ~445฿ / ครั้ง) บะหมี่กึ่งสำเร็จรูป ข้าวโอ๊ต ชา กาแฟ เครื่องปรุงรส",
+        localDineDesc: "กินร้านแถว ม. 39 ครั้ง (เฉลี่ย ~380฿ / มื้อ) พิซซ่า Artichoke ชิ้นละ 265฿, ฮอทดอก Top Dog 165฿, บั๋นหมี่ 185฿",
+        tripDineDesc: "22 มื้อช่วงเดินทาง พิซซ่าใน Yosemite, มื้อสกีรีสอร์ท Tahoe, เบอร์เกอร์ In-N-Out",
+        ledgerHeading: "ค้นหารายการใช้จ่ายทั้งหมด (แจกแจงละเอียด 346 รายการ)",
+        ledgerIntro: "สามารถค้นหาและกรองดูได้ทุกรายการตลอดเทอม ไม่ว่าจะเป็น 'Trader Joe', 'Shane', 'Amazon', 'Aspenware', 'Uber' หรือ 'Wire' ทุกบาททุกสตางค์โปร่งใส 100%",
+        experienceHeading: "ประสบการณ์และการเรียนรู้ชีวิต",
+        tahoeTitle: "ทริปเล่นสกี Lake Tahoe",
+        tahoeDesc: "บัตรขึ้นกระเช้าสกี Sugar Bowl และค่าเช่าอุปกรณ์ Donner Ski Shop บนเทือกเขา Sierra Nevada",
+        yoseTitle: "อุทยานแห่งชาติ Yosemite",
+        yoseDesc: "เดินป่าชมธรรมชาติช่วงปิดเทอม และพักเต็นท์เคบิน Curry Village ใต้หน้าผา Half Dome",
+        friendsTitle: "มิตรภาพและเพื่อนร่วมทาง",
+        friendsDesc: "สร้างมิตรภาพกับเพื่อนนักศึกษาต่างชาติและเพื่อนคนไทย ร่วมกันทำอาหารและแลกเปลี่ยนมุมมอง",
+        proofHeading: "หลักฐานเอกสารและใบเสร็จทางการ",
+        proofIntro: "ข้อมูลตัวเลขทั้งหมดบนหน้านี้อ้างอิงจากเอกสารราชการ มหาวิทยาลัย และธนาคารที่บันทึกไว้จริง:",
+        letterBadge: "จดหมายจากใจ",
+        letterTitle: "กราบขอบพระคุณคุณพ่อคุณแม่และครอบครัว"
+      },
+      zh: {
+        navTitle: "加州大学伯克利分校 2026春季",
+        navOverview: "概览",
+        navBreakdown: "全部支出明细",
+        navInflows: "资金汇入与对账",
+        navFood: "伙食节约心得",
+        navLedger: "346笔流水明细",
+        navDocuments: "官方凭证",
+        heroBadge: "官方交换留学总结报告 · 2026春季",
+        heroTitle: "加州大学伯克利分校",
+        heroSubTitle: "学业成果与完整财务决算明细",
+        heroDescription: "为家人专门制作的详尽透明财务与学业报告。详细汇报在UC Berkeley Extension（SCET创业学期）的学业表现、来自Chase银行8个月对账单的全部346笔真实流水，以及远低于I-20官方预算的自律管理成果。",
+        gpaBadge: "4.000 满分绩点",
+        budgetBadge: "低于I-20预算（节省约 14,310¥）",
+        foodBadge: "伙食费: 约 486¥ ($68) / 周",
+        auditBadge: "分文不差 100% 对账核验",
+        academicHeading: "优异学业表现 · 荣誉记录",
+        gpaCardLabel: "2026年春季学期",
+        gpaCardHonors: "全科A等顶尖成绩 · 荣誉学术记录",
+        totalUnitsLabel: "修读总学分:",
+        programLabel: "修读项目:",
+        institutionLabel: "就读院校:",
+        courseListHeading: "各科成绩与学分（CalCentral官方记录）",
+        academicNote: "官方验证文件编号：UC SR802F 及 2026年5月官方成绩单。",
+        financialOverviewHeading: "总体财务明细与决算账目",
+        i20BudgetLabel: "I-20官方预算标准",
+        i20BudgetSub: "学费 $15,775 + 生活费 $11,250",
+        actualTotalLabel: "实际全包总支出",
+        actualTotalSub: "项目全包总额 ($25,023.49)",
+        savingsTotalLabel: "低于预算结余",
+        savingsTotalSub: "通过自律预算管理节省 ($2,001.51)",
+        expenseBreakdownLabel: "各项主要支出占比",
+        legTuition: "课程学费 (46.0%)",
+        legHousing: "公寓租金与水电 (35.3%)",
+        legFood: "伙食与生鲜超市 (6.5%)",
+        legTravel: "旅行与滑雪运动 (5.4%)",
+        legOther: "其他必要开销 (6.8%)",
+        catTuitionName: "伯克利学杂费与课程教材",
+        catHousingName: "公寓租金与水电网费",
+        catFoodName: "伙食、生鲜与亚马逊网购",
+        catTravelName: "太浩湖滑雪与国家公园",
+        catVisaName: "美国签证与SEVIS规费",
+        catTechName: "科技软件与AI研发工具",
+        catThriftName: "黑胶唱片、书籍与家居",
+        catTransitName: "市内交通、洗衣与行李",
+        catFeesName: "国际汇款银行手续费",
+        grandTotalLabel: "交换留学项目总支出",
+        inflowsHeading: "资金汇入明细与银行账目对账",
+        inflowsIntro: "为向家人提供完全透明的财务报告，以下列出Chase银行支票账户的所有资金流入。总存入金额与各项生活扣款完全吻合，结账时账户保留余额 396.73 美元（约 2,836 人民币）。",
+        wireCardTag: "家庭主要支持资金",
+        wireCardTitle: "新加坡 / 曼谷国际电汇",
+        wireCardDesc: "由母亲（Anurat Gantronbandanniti）于2026年2月5日通过TMB/DBS汇入，全额用于支付房租与日常生活。",
+        splitsCardTag: "室友分摊款项",
+        splitsCardTitle: "室友与同学Zelle转账返还",
+        splitsCardDesc: "包括Donpattara垫付款返还（$2,276）、房东退回押金（$1,097.50）及滑雪出游餐饮AA分摊。",
+        cashCardTag: "现金存入",
+        cashCardTitle: "ATM现金存入",
+        cashCardDesc: "抵美随身携带现金，存入Telegraph Ave分行ATM（1月12日 $200，1月13日 $1,200）。",
+        ccCardTag: "跨境汇款",
+        ccCardTitle: "CurrencyCloud转账",
+        ccCardDesc: "2026年2月3日入账的跨境兑换资金。",
+        bonusCardTag: "银行活动与退款",
+        bonusCardTitle: "开户奖励与退款",
+        bonusCardDesc: "Chase支票账户开户奖励 $125 + Factory AI退货款 $200.59。",
+        balanceCardTag: "最终账户状态",
+        balanceCardTitle: "Chase账户期末结余",
+        balanceCardDesc: "2026年9月9日对账单载明期末余额，每一分钱均有据可查。",
+        splitNoteTitle: "为什么会有室友与同学的Zelle转账？",
+        splitNoteDesc: "在预订团队活动（如太浩湖滑雪场门票）或采购公寓公用品时，通常由我使用Chase卡先行全额刷卡垫付，随后室友通过Zelle将各自份额转还给我。这些入账均有对应的支出账目完全抵消。",
+        foodHeading: "伙食管理与自律省钱心得",
+        foodHighlightBadge: "极为自律：伙食开销仅占总支出的 6.5%",
+        foodHeroTitle: "如何在全美物价最高地区合理掌控饮食成本",
+        foodHeroText: "旧金山湾区物价高昂（留学生每月伙食普遍在 600-900 美元）。我通过自己去缺德舅（Trader Joe's）买菜做饭，并在亚马逊批量网购主食干货，成功将每周伙食费控制在约 486 人民币（68美元）。",
+        weeklyAvgLabel: "每周均摊",
+        dailyAvgLabel: "每日均摊",
+        totalFoodLabel: "24周总伙食费",
+        savedFoodLabel: "预估省下开销",
+        simHeading: "模拟器：自律做饭 vs. 全外食成本对比",
+        simClickPrompt: "点击不同选项查看支出对比",
+        simOptActual: "我的实际做法（混合模式）",
+        simOptCook: "100% 全部自炊做饭",
+        simOptWeekend: "平时做饭 + 周末聚餐",
+        simOptDine: "每日三餐全部外食",
+        simOptDoorDash: "外卖送餐 + 正餐餐厅",
+        tjDesc: "超市买菜10次（均摊约 250¥ / 次），主要采购鸡胸肉、鲜鸡蛋、鲜奶、水果蔬菜。",
+        amazonDesc: "网购食品32单（均摊约 95¥ / 单），包括快熟拉面、燕麦、坚果干货、茶与调味品。",
+        localDineDesc: "校门口学生简餐39次（均摊约 80¥ / 次），如Artichoke大披萨、Top Dog热狗、越南法包。",
+        tripDineDesc: "周末出游外食22次，包含优胜美地披萨、太浩湖雪场餐点、In-N-Out汉堡。",
+        ledgerHeading: "全部交易明细查询（346笔完整流水）",
+        ledgerIntro: "可搜索或筛选伯克利交换期间的每一笔开支。支持按类目、按收支类型筛选，或直接搜索'Trader Joe'、'Shane'、'Amazon'、'Aspenware'、'Uber'等关键词。",
+        experienceHeading: "海外游历与生活成长经历",
+        tahoeTitle: "太浩湖滑雪之旅",
+        tahoeDesc: "加州北部Sierra Nevada雪山Sugar Bowl雪票与Donner雪具租赁。",
+        yoseTitle: "优胜美地国家公园",
+        yoseDesc: "春假自然探索徒步，夜宿半穹顶山脚下的Curry Village帐篷木屋。",
+        friendsTitle: "海外友谊与文化交流",
+        friendsDesc: "与来自各国的留学生共同学习、切磋厨艺、互相激励。",
+        proofHeading: "官方文件与收据凭证核验",
+        proofIntro: "本页面所有数据均直接源自官方政府、大学教务及银行存档记录：",
+        letterBadge: "感恩家书",
+        letterTitle: "衷心感谢家人与长辈的支持"
+      }
+    };
+
+    const SIM_DATA = {
+      actual: {
+        title: {
+          en: "What I Actually Did (The Frugal Hybrid)",
+          th: "สิ่งที่ผมทำจริง (สูตรประหยัดแบบผสม)",
+          zh: "我的实际做法（自律混合模式）"
+        },
+        weekly: { THB: "฿2,260 / week", USD: "$68.01 / week", CNY: "¥486 / 周" },
+        total: { THB: "24-Week Total: ฿54,280", USD: "24-Week Total: $1,632.35", CNY: "24周总计: ¥11,670" },
+        desc: {
+          en: "I cooked fresh meals using Trader Joe's groceries ($19.70/wk), ordered pantry snacks and instant staples on Amazon ($17.85/wk), and ate cheap local meals or coffee ($18.50/wk).",
+          th: "ทำอาหารกินเองจากของสด Trader Joe's (~655฿/สัปดาห์) + สั่งของแห้งตุนจาก Amazon (~590฿/สัปดาห์) + กินร้านอาหารแถว ม. ราคาประหยัด สัปดาห์ละ 1-2 ครั้ง (~615฿/สัปดาห์)",
+          zh: "以缺德舅生鲜买菜做饭为主（约140元/周），亚马逊网购主食干货为辅（约125元/周），每周外食1-2次校园平价美食（约130元/周）。"
+        },
+        savings: {
+          en: "✓ Saved between $4,600 – $7,600 USD compared to eating out all the time.",
+          th: "✓ ประหยัดเงินได้ถึง 150,000 – 250,000 บาท เมื่อเทียบกับการกินข้าวนอกบ้านทุกมื้อ",
+          zh: "✓ 相比顿顿外食，整学期省下了约 32,000 – 53,000 元人民币。"
+        }
+      },
+      cook: {
+        title: {
+          en: "100% Home Cooking (Groceries Only)",
+          th: "ทำอาหารเอง 100% (ซื้อของสดทุกมื้อ)",
+          zh: "100% 全部自己下厨做饭"
+        },
+        weekly: { THB: "฿2,660 / week", USD: "$80.00 / week", CNY: "¥572 / 周" },
+        total: { THB: "24-Week Total: ฿63,840", USD: "24-Week Total: $1,920.00", CNY: "24周总计: ¥13,728" },
+        desc: {
+          en: "Preparing all 21 meals/week at home from Trader Joe's and Safeway ($2 breakfast, $4.50 lunch/dinner).",
+          th: "ทำอาหารกินเองครบทั้ง 21 มื้อต่อสัปดาห์ (มื้อเช้าประมาณ 65 บาท, มื้อกลางวันและเย็นประมาณ 150 บาทต่อมื้อ)",
+          zh: "每周21餐全部在公寓自炊（早餐约15元，午晚餐每餐约32元）。"
+        },
+        savings: {
+          en: "✓ Very close to my actual spend, saving ~$4,300 USD.",
+          th: "✓ ใกล้เคียงกับสิ่งที่ผมทำจริง และประหยัดเงินได้มหาศาล",
+          zh: "✓ 与我的实际支出非常接近，省下大量餐饮成本。"
+        }
+      },
+      weekend: {
+        title: {
+          en: "Cook Weekdays + Dine Out Weekends",
+          th: "ทำอาหารวันธรรมดา + กินนอกบ้านเสาร์-อาทิตย์",
+          zh: "平时自炊 + 周末朋友外食聚餐"
+        },
+        weekly: { THB: "฿4,990 / week", USD: "$150.00 / week", CNY: "¥1,072 / 周" },
+        total: { THB: "24-Week Total: ฿119,760", USD: "24-Week Total: $3,600.00", CNY: "24周总计: ¥25,740" },
+        desc: {
+          en: "Cooking Mon–Fri ($45/wk) and dining out 4–5 times on weekends with friends ($90/wk) plus coffee.",
+          th: "ทำอาหาร จันทร์-ศุกร์ และออกไปกินข้าวนอกบ้านกับเพื่อน 4-5 มื้อช่วงสุดสัปดาห์ (มื้อละ 600-700 บาท)",
+          zh: "周一至周五自己做饭，周末与朋友同学聚餐4-5次（每餐约130-150元）。"
+        },
+        savings: {
+          en: "Cost: +$1,968 USD more than what I actually spent.",
+          th: "ค่าใช้จ่ายจะเพิ่มขึ้นประมาณ 65,000 บาท เมื่อเทียบกับสิ่งที่ผมทำจริง",
+          zh: "将比我的实际开销多支出约 14,000 元人民币。"
+        }
+      },
+      dining: {
+        title: {
+          en: "Always Dine Out (Student Fast-Casual)",
+          th: "กินข้าวนอกบ้านทุกมื้อ (ร้านอาหารนักศึกษา)",
+          zh: "每日三餐全部校外就餐（学生快餐便餐）"
+        },
+        weekly: { THB: "฿8,650 / week", USD: "$260.00 / week", CNY: "¥1,859 / 周" },
+        total: { THB: "24-Week Total: ฿207,600", USD: "24-Week Total: $6,240.00", CNY: "24周总计: ¥44,616" },
+        desc: {
+          en: "Never cook. Buying breakfast ($6), fast casual lunch ($13), and dinner ($18) every single day.",
+          th: "ไม่ทำอาหารเลย ซื้อกินทุกมื้อ (มื้อเช้า 200 บาท, มื้อเที่ยง 430 บาท, มื้อเย็น 600 บาททุกวัน)",
+          zh: "完全不买菜做饭，每日购买早餐（40元）、快餐午餐（90元）、正餐晚餐（130元）。"
+        },
+        savings: {
+          en: "Cost: +$4,608 USD (Over 153,000฿ extra) compared to what I actually spent!",
+          th: "แพงกว่าสิ่งที่ผมจ่ายจริงถึง 153,000 บาท ($4,608 USD)!",
+          zh: "将比我的实际支出多花掉整整 33,000 元人民币！"
+        }
+      },
+      doordash: {
+        title: {
+          en: "Full Dining Out + Delivery (DoorDash / Sit-Down)",
+          th: "สั่งเดลิเวอรี่ + กินร้านอาหารเต็มรูปแบบ",
+          zh: "频繁外卖派送 + 餐厅点餐加小费"
+        },
+        weekly: { THB: "฿12,800 / week", USD: "$385.00 / week", CNY: "¥2,752 / 周" },
+        total: { THB: "24-Week Total: ฿307,200", USD: "24-Week Total: $9,240.00", CNY: "24周总计: ¥66,066" },
+        desc: {
+          en: "Frequent DoorDash delivery orders, sit-down dinners with tips, daily specialty coffee and boba.",
+          th: "สั่งอาหารผ่านแอป DoorDash บ่อยๆ กินร้านอาหารที่มีเซอร์วิสชาร์จและทิป สั่งชานมไข่มุกและกาแฟทุกวัน",
+          zh: "经常点DoorDash外卖送餐（含配送费小费），常去堂食餐厅，每天喝奶茶精品咖啡。"
+        },
+        savings: {
+          en: "Cost: +$7,608 USD (Over 253,000฿ extra) compared to what I spent!",
+          th: "แพงกว่าสิ่งที่ผมจ่ายจริงถึง 253,000 บาท ($7,608 USD)!",
+          zh: "将比我现在的花费多支出 54,400 元人民币！"
+        }
+      }
+    };
+
+    function formatAmount(usd, showSign = false) {
+      const isPositive = usd > 0;
+      const absUsd = Math.abs(usd);
+      let formatted = '';
+      if (currentCurr === 'THB') {
+        const thb = Math.round(absUsd * FX_RATES.THB);
+        formatted = '฿' + thb.toLocaleString();
+      } else if (currentCurr === 'USD') {
+        formatted = '$' + absUsd.toLocaleString(undefined, { minimumFractionDigits: absUsd % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 });
+      } else if (currentCurr === 'CNY') {
+        const cny = Math.round(absUsd * FX_RATES.CNY);
+        formatted = '¥' + cny.toLocaleString();
+      }
+
+      if (showSign) {
+        return (isPositive ? '+ ' : '- ') + formatted;
+      }
+      return formatted;
+    }
+
+    function updateCurrency(curr) {
+      currentCurr = curr;
+
+      // Update currency buttons active state
+      document.querySelectorAll('.curr-btn').forEach(btn => {
+        if (btn.getAttribute('data-curr') === curr) {
+          btn.className = 'curr-btn px-2.5 py-1 rounded-full bg-[#39ff14]/20 text-[#39ff14] font-bold border border-[#39ff14]/30 transition-all cursor-pointer';
+        } else {
+          btn.className = 'curr-btn px-2.5 py-1 rounded-full text-[#94a3b8] hover:text-white transition-all cursor-pointer';
+        }
+      });
+
+      // Update static data-val-usd elements
+      document.querySelectorAll('[data-val-usd]').forEach(el => {
+        const usd = parseFloat(el.getAttribute('data-val-usd'));
+        el.textContent = formatAmount(usd);
+      });
+
+      // Update simulator cost tags
+      document.querySelectorAll('[data-sim-cost]').forEach(el => {
+        const key = el.getAttribute('data-sim-cost');
+        if (SIM_DATA[key] && SIM_DATA[key].weekly[curr]) {
+          el.textContent = SIM_DATA[key].weekly[curr];
+        }
+      });
+
+      // Refresh currently selected simulator
+      const activeSimBtn = document.querySelector('.sim-btn.active');
+      if (activeSimBtn) {
+        renderSim(activeSimBtn.getAttribute('data-sim'));
+      }
+
+      // Re-render transaction table with new currency
+      renderLedger();
+    }
+
+    function updateLanguage(lang) {
+      currentLang = lang;
+
+      // Update language buttons active state
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === lang) {
+          btn.className = 'lang-btn px-2.5 py-1 rounded-full bg-[#ff6b9d]/20 text-[#ff6b9d] font-bold border border-[#ff6b9d]/30 transition-all cursor-pointer';
+        } else {
+          btn.className = 'lang-btn px-2.5 py-1 rounded-full text-[#94a3b8] hover:text-white transition-all cursor-pointer';
+        }
+      });
+
+      // Update i18n text nodes
+      const dict = I18N_DICT[lang] || I18N_DICT.en;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // Toggle language letter paragraphs
+      document.querySelectorAll('.lang-text').forEach(el => {
+        if (el.classList.contains('lang-' + lang)) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+
+      // Refresh simulator text
+      const activeSimBtn = document.querySelector('.sim-btn.active');
+      if (activeSimBtn) {
+        renderSim(activeSimBtn.getAttribute('data-sim'));
+      }
+    }
+
+    function renderSim(key) {
+      const data = SIM_DATA[key];
+      if (!data) return;
+
+      const titleEl = document.getElementById('sim-title');
+      const weeklyEl = document.getElementById('sim-weekly-val');
+      const semesterEl = document.getElementById('sim-semester-val');
+      const descEl = document.getElementById('sim-desc');
+      const savingsEl = document.getElementById('sim-savings');
+
+      if (titleEl) titleEl.textContent = data.title[currentLang] || data.title.en;
+      if (weeklyEl) weeklyEl.textContent = data.weekly[currentCurr] || data.weekly.THB;
+      if (semesterEl) semesterEl.textContent = '(' + (data.total[currentCurr] || data.total.THB) + ')';
+      if (descEl) descEl.textContent = data.desc[currentLang] || data.desc.en;
+      if (savingsEl) savingsEl.textContent = data.savings[currentLang] || data.savings.en;
+    }
+
+    // Ledger Filter & Render Engine
+    function filterTransactions() {
+      const q = searchQuery.trim().toLowerCase();
+
+      return allTransactions.filter(t => {
+        // Category filter
+        if (activeCat !== 'all' && t.category !== activeCat) {
+          return false;
+        }
+
+        // Flow filter
+        if (activeFlow === 'debit' && t.amount >= 0) return false;
+        if (activeFlow === 'credit' && t.amount <= 0) return false;
+
+        // Search text filter
+        if (q) {
+          const matchDesc = (t.desc || '').toLowerCase().includes(q);
+          const matchRaw = (t.raw_desc || '').toLowerCase().includes(q);
+          const matchCat = (t.cat_name || '').toLowerCase().includes(q);
+          const matchSub = (t.subcat || '').toLowerCase().includes(q);
+          const matchSrc = (t.source || '').toLowerCase().includes(q);
+          const matchDate = (t.date || '').toLowerCase().includes(q);
+          if (!matchDesc && !matchRaw && !matchCat && !matchSub && !matchSrc && !matchDate) {
+            return false;
+          }
+        }
+
+        return true;
+      }).sort((a, b) => {
+        if (sortField === 'date') {
+          return sortAsc ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date);
+        } else if (sortField === 'amount') {
+          return sortAsc ? a.amount - b.amount : b.amount - a.amount;
+        }
+        return 0;
+      });
+    }
+
+    function renderLedger() {
+      const filtered = filterTransactions();
+      const totalCount = filtered.length;
+      const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      // Calculate filtered sum
+      const sum = filtered.reduce((acc, t) => acc + t.amount, 0);
+
+      // Update counters
+      const showingEl = document.getElementById('tx-showing-count');
+      const sumEl = document.getElementById('tx-filtered-sum');
+      const pageInfoEl = document.getElementById('tx-page-info');
+      const prevBtn = document.getElementById('tx-prev-btn');
+      const nextBtn = document.getElementById('tx-next-btn');
+
+      if (showingEl) showingEl.textContent = totalCount.toLocaleString();
+      if (sumEl) {
+        sumEl.textContent = formatAmount(sum, true);
+        if (sum >= 0) {
+          sumEl.className = 'text-[#39ff14] font-bold text-sm';
+        } else {
+          sumEl.className = 'text-white font-bold text-sm';
+        }
+      }
+
+      if (pageInfoEl) pageInfoEl.textContent = `Page ${currentPage} of ${totalPages} (${totalCount} results)`;
+      if (prevBtn) prevBtn.disabled = currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+
+      // Slice current page
+      const startIdx = (currentPage - 1) * pageSize;
+      const pageItems = filtered.slice(startIdx, startIdx + pageSize);
+
+      const tbody = document.getElementById('tx-table-body');
+      if (!tbody) return;
+
+      if (pageItems.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="py-8 text-center text-[#94a3b8] font-sans">
+              No transactions found matching your search. Try clearing filters.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const rowsHtml = pageItems.map(t => {
+        const isCredit = t.amount > 0;
+        const amtColor = isCredit ? 'text-[#39ff14]' : 'text-white';
+        const formattedAmt = formatAmount(t.amount, true);
+
+        // Category badge color
+        let catBadgeColor = 'bg-[#15151f] text-[#94a3b8] border-[#2a2a3f]';
+        if (t.category === 'tuition') catBadgeColor = 'bg-[#5cceff]/15 text-[#5cceff] border-[#5cceff]/30';
+        else if (t.category === 'housing') catBadgeColor = 'bg-[#ff6b9d]/15 text-[#ff6b9d] border-[#ff6b9d]/30';
+        else if (t.category === 'food') catBadgeColor = 'bg-[#39ff14]/15 text-[#39ff14] border-[#39ff14]/30';
+        else if (t.category === 'travel') catBadgeColor = 'bg-[#ffd700]/15 text-[#ffd700] border-[#ffd700]/30';
+        else if (t.category === 'inflow') catBadgeColor = 'bg-[#39ff14]/20 text-[#39ff14] border-[#39ff14]/40 font-bold';
+        else if (t.category === 'tech') catBadgeColor = 'bg-[#a78bfa]/15 text-[#a78bfa] border-[#a78bfa]/30';
+
+        return `
+          <tr class="hover:bg-[#15151f]/70 transition-colors">
+            <td class="py-3 px-3 text-[#94a3b8] whitespace-nowrap text-[11px] font-mono">${t.date}</td>
+            <td class="py-3 px-3">
+              <div class="font-sans font-medium text-white text-xs">${t.desc}</div>
+              <div class="text-[10px] text-[#6b7280] font-mono truncate max-w-xs sm:max-w-md">${t.raw_desc || ''}</div>
+              <div class="sm:hidden mt-1 flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded-sm border text-[9px] font-mono ${catBadgeColor}">${t.cat_name}</span>
+                <span class="text-[9px] text-[#6b7280] truncate font-mono">${t.source}</span>
+              </div>
+            </td>
+            <td class="py-3 px-3 hidden sm:table-cell">
+              <span class="px-2 py-0.5 rounded-md border text-[10px] whitespace-nowrap font-mono ${catBadgeColor}">${t.cat_name}</span>
+            </td>
+            <td class="py-3 px-3 hidden md:table-cell text-[#94a3b8] text-[11px] whitespace-nowrap">${t.source}</td>
+            <td class="py-3 px-3 text-right font-bold whitespace-nowrap font-mono ${amtColor}">${formattedAmt}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = rowsHtml;
+    }
+
+    // Attach Event Listeners on DOM Ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // Currency buttons
+      document.querySelectorAll('.curr-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          updateCurrency(btn.getAttribute('data-curr'));
+        });
+      });
+
+      // Language buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          updateLanguage(btn.getAttribute('data-lang'));
+        });
+      });
+
+      // Simulator buttons
+      document.querySelectorAll('.sim-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.sim-btn').forEach(b => {
+            b.classList.remove('active', 'bg-[#39ff14]/20', 'text-[#39ff14]', 'border-[#39ff14]/40');
+            b.classList.add('bg-[#0d0d14]', 'text-[#94a3b8]', 'border-[#2a2a3f]');
+          });
+          btn.classList.add('active', 'bg-[#39ff14]/20', 'text-[#39ff14]', 'border-[#39ff14]/40');
+          btn.classList.remove('bg-[#0d0d14]', 'text-[#94a3b8]', 'border-[#2a2a3f]');
+          renderSim(btn.getAttribute('data-sim'));
+        });
+      });
+
+      // Ledger: Category Filter Pills
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.cat-pill').forEach(b => {
+            b.className = 'cat-pill px-3 py-1 rounded-lg bg-[#15151f] text-[#94a3b8] border border-[#2a2a3f] hover:border-white cursor-pointer';
+          });
+          btn.className = 'cat-pill active px-3 py-1 rounded-lg bg-[#5cceff]/20 text-[#5cceff] font-bold border border-[#5cceff]/40 cursor-pointer';
+          activeCat = btn.getAttribute('data-cat');
+          currentPage = 1;
+          renderLedger();
+        });
+      });
+
+      // Ledger: Flow Filter Buttons
+      document.querySelectorAll('.flow-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.flow-btn').forEach(b => {
+            b.className = 'flow-btn px-3 py-1 rounded-lg text-[#94a3b8] hover:text-white cursor-pointer';
+          });
+          btn.className = 'flow-btn px-3 py-1 rounded-lg bg-[#39ff14]/20 text-[#39ff14] font-bold border border-[#39ff14]/30 cursor-pointer';
+          activeFlow = btn.getAttribute('data-flow');
+          currentPage = 1;
+          renderLedger();
+        });
+      });
+
+      // Ledger: Search Input
+      const searchInput = document.getElementById('tx-search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value;
+          currentPage = 1;
+          renderLedger();
+        });
+      }
+
+      // Ledger: Pagination Controls
+      const prevBtn = document.getElementById('tx-prev-btn');
+      const nextBtn = document.getElementById('tx-next-btn');
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderLedger();
+          }
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          currentPage++;
+          renderLedger();
+        });
+      }
+
+      // Ledger: Sort headers
+      const thDate = document.getElementById('th-date');
+      const thAmount = document.getElementById('th-amount');
+
+      if (thDate) {
+        thDate.addEventListener('click', () => {
+          if (sortField === 'date') {
+            sortAsc = !sortAsc;
+          } else {
+            sortField = 'date';
+            sortAsc = false;
+          }
+          thDate.textContent = `Date ${sortAsc ? '▲' : '▼'}`;
+          if (thAmount) thAmount.textContent = 'Amount';
+          renderLedger();
+        });
+      }
+
+      if (thAmount) {
+        thAmount.addEventListener('click', () => {
+          if (sortField === 'amount') {
+            sortAsc = !sortAsc;
+          } else {
+            sortField = 'amount';
+            sortAsc = true;
+          }
+          thAmount.textContent = `Amount ${sortAsc ? '▲' : '▼'}`;
+          if (thDate) thDate.textContent = 'Date';
+          renderLedger();
+        });
+      }
+
+      // Set initial defaults: Thai language & THB currency
+      updateLanguage('th');
+      updateCurrency('THB');
+      renderLedger();
+    });
+  })();
+</script>
+
+<style>
+  .font-display {
+    font-family: 'Funnel Display', 'Bai Jamjuree', sans-serif;
+  }
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
