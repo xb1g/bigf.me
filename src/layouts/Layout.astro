@@ -1,5 +1,4 @@
 ---
-import LoadingScreen from '../components/LoadingScreen.astro';
 import CustomCursor from '../components/CustomCursor.astro';
 
 interface Props {
@@ -23,7 +22,6 @@ const { title, description } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700;800&family=Funnel+Sans:wght@300;400;500;600;700&family=Bai+Jamjuree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <LoadingScreen />
     <slot />
     <CustomCursor />
   </body>
