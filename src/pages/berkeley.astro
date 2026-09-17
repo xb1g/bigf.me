@@ -5,6 +5,7 @@ import gateImg from '../assets/images/gate.jpeg';
 import skiImg from '../assets/images/ski.jpeg';
 import yose1Img from '../assets/images/yose1.jpeg';
 import yose2Img from '../assets/images/yose2.jpeg';
+import tahoeGroupImg from '../assets/images/tahoe_group.jpeg';
 import thaiFriendImg from '../assets/images/thai friend.jpeg';
 import momImg from '../assets/images/mom.jpeg';
 import berkeleyTransactions from '../data/berkeley_transactions.json';
@@ -106,10 +107,10 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
           <div class="lg:col-span-4 flex justify-center">
             <div class="relative group">
               <div class="w-64 sm:w-72 aspect-[4/5] rounded-2xl overflow-hidden border border-[#2a2a3f] bg-[#15151f] shadow-lg">
-                <Image src={gateImg} alt="Bunyasit at UC Berkeley Sather Gate" class="w-full h-full object-cover" width={600} height={750} />
+                <Image src={gateImg} alt="Bunyasit at Golden Gate Bridge, San Francisco" class="w-full h-full object-cover" width={600} height={750} />
               </div>
               <div class="absolute -bottom-3 -right-2 bg-[#15151f] border border-[#ff6b9d]/40 rounded-xl px-3 py-1.5 shadow-md flex items-center gap-2 text-xs font-mono text-white">
-                <span>📍</span> Sather Gate, UC Berkeley
+                <span>📍</span> Golden Gate Bridge, SF
               </div>
             </div>
           </div>
@@ -763,11 +764,11 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
           </h2>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Photo 1: Tahoe Ski -->
-          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-4 space-y-3 group hover:border-[#5cceff]/40 transition-all">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Photo 1: Tahoe Ski Group (New Photo) -->
+          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-3.5 space-y-3 group hover:border-[#5cceff]/40 transition-all flex flex-col justify-between">
             <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#15151f]">
-              <Image src={skiImg} alt="Skiing in Lake Tahoe" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
+              <Image src={tahoeGroupImg} alt="Skiing at Lake Tahoe Sugar Bowl with friends" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
             </div>
             <div>
               <div class="flex justify-between items-baseline">
@@ -778,10 +779,10 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
             </div>
           </div>
 
-          <!-- Photo 2: Yosemite -->
-          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-4 space-y-3 group hover:border-[#39ff14]/40 transition-all">
+          <!-- Photo 2: Yosemite Merced River & Half Dome -->
+          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-3.5 space-y-3 group hover:border-[#39ff14]/40 transition-all flex flex-col justify-between">
             <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#15151f]">
-              <Image src={yose1Img} alt="Yosemite National Park" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
+              <Image src={yose2Img} alt="Bunyasit at Yosemite National Park" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
             </div>
             <div>
               <div class="flex justify-between items-baseline">
@@ -793,7 +794,7 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
           </div>
 
           <!-- Photo 3: Thai Friends in Berkeley -->
-          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-4 space-y-3 group hover:border-[#ff6b9d]/40 transition-all">
+          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-3.5 space-y-3 group hover:border-[#ff6b9d]/40 transition-all flex flex-col justify-between">
             <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#15151f]">
               <Image src={thaiFriendImg} alt="Friends at Berkeley" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
             </div>
@@ -803,6 +804,20 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
                 <span class="font-mono text-xs text-[#ff6b9d]">Lifelong Bonds</span>
               </div>
               <p class="text-xs text-[#94a3b8] mt-1" data-i18n="friendsDesc">Building community with fellow international and Thai scholars, cooking together and sharing meals.</p>
+            </div>
+          </div>
+
+          <!-- Photo 4: Alpine Ski Slopes -->
+          <div class="bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-3.5 space-y-3 group hover:border-[#ffd700]/40 transition-all flex flex-col justify-between">
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#15151f]">
+              <Image src={skiImg} alt="Skiing down the slopes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={600} height={450} />
+            </div>
+            <div>
+              <div class="flex justify-between items-baseline">
+                <h4 class="font-display font-bold text-sm text-white" data-i18n="alpineTitle">Sierra Nevada Slopes</h4>
+                <span class="font-mono text-xs text-[#ffd700]">Lake Tahoe</span>
+              </div>
+              <p class="text-xs text-[#94a3b8] mt-1" data-i18n="alpineDesc">Exploring California powder snow and outdoor recreation during exchange semester breaks.</p>
             </div>
           </div>
         </div>
@@ -1066,11 +1081,13 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
         ledgerIntro: "Search or filter every single transaction recorded during the Berkeley exchange semester. Filter by category, type, or search for any merchant like 'Trader Joe', 'Shane', 'Aspenware', 'Uber', 'Amazon', or 'Wire'.",
         experienceHeading: "Life & Enriching Experiences",
         tahoeTitle: "Lake Tahoe Ski Trip",
-        tahoeDesc: "Sugar Bowl resort ski pass and gear rentals at Donner Ski Shop in Northern California mountains.",
+        tahoeDesc: "Sugar Bowl resort ski group and Donner Ski Shop rentals in Northern California mountains.",
         yoseTitle: "Yosemite National Park",
         yoseDesc: "Spring break wilderness hiking and Curry Village tent cabin lodging under Half Dome cliffs.",
         friendsTitle: "Community & Friendships",
         friendsDesc: "Building community with fellow international and Thai scholars, cooking together and sharing meals.",
+        alpineTitle: "Sierra Nevada Slopes",
+        alpineDesc: "Exploring California powder snow and outdoor recreation during exchange semester breaks.",
         proofHeading: "Official Document & Statement Verification",
         proofIntro: "All data on this page is directly derived from official government, university, and banking records preserved on file:",
         letterBadge: "A Message of Gratitude",
@@ -1168,11 +1185,13 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
         ledgerIntro: "สามารถค้นหาและกรองดูได้ทุกรายการตลอดเทอม ไม่ว่าจะเป็น 'Trader Joe', 'Shane', 'Amazon', 'Aspenware', 'Uber' หรือ 'Wire' ทุกบาททุกสตางค์โปร่งใส 100%",
         experienceHeading: "ประสบการณ์และการเรียนรู้ชีวิต",
         tahoeTitle: "ทริปเล่นสกี Lake Tahoe",
-        tahoeDesc: "บัตรขึ้นกระเช้าสกี Sugar Bowl และค่าเช่าอุปกรณ์ Donner Ski Shop บนเทือกเขา Sierra Nevada",
+        tahoeDesc: "ทริปสกี Sugar Bowl กับเพื่อนๆ และเช่าอุปกรณ์ Donner Ski Shop บนเทือกเขา Sierra Nevada",
         yoseTitle: "อุทยานแห่งชาติ Yosemite",
         yoseDesc: "เดินป่าชมธรรมชาติช่วงปิดเทอม และพักเต็นท์เคบิน Curry Village ใต้หน้าผา Half Dome",
         friendsTitle: "มิตรภาพและเพื่อนร่วมทาง",
         friendsDesc: "สร้างมิตรภาพกับเพื่อนนักศึกษาต่างชาติและเพื่อนคนไทย ร่วมกันทำอาหารและแลกเปลี่ยนมุมมอง",
+        alpineTitle: "ลานสกีเทือกเขา Sierra Nevada",
+        alpineDesc: "เปิดประสบการณ์เล่นสกีหิมะธรรมชาติในแคลิฟอร์เนียช่วงหยุดพักระหว่างภาคเรียน",
         proofHeading: "หลักฐานเอกสารและใบเสร็จทางการ",
         proofIntro: "ข้อมูลตัวเลขทั้งหมดบนหน้านี้อ้างอิงจากเอกสารราชการ มหาวิทยาลัย และธนาคารที่บันทึกไว้จริง:",
         letterBadge: "จดหมายจากใจ",
@@ -1234,23 +1253,23 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
         splitsCardTitle: "室友与同学Zelle转账返还",
         splitsCardDesc: "包括Donpattara垫付款返还（$2,276）、房东退回押金（$1,097.50）及滑雪出游餐饮AA分摊。",
         cashCardTag: "现金存入",
-        cashCardTitle: "ATM现金存入",
-        cashCardDesc: "抵美随身携带现金，存入Telegraph Ave分行ATM（1月12日 $200，1月13日 $1,200）。",
+        cashCardTitle: "ATM现钞存入",
+        cashCardDesc: "入美随身携带现金，存入Telegraph Ave分行ATM（1月12日 $200，1月13日 $1,200）。",
         ccCardTag: "跨境汇款",
         ccCardTitle: "CurrencyCloud转账",
-        ccCardDesc: "2026年2月3日入账的跨境兑换资金。",
+        ccCardDesc: "抵美前国际外汇汇款，于2026年2月3日入账确认。",
         bonusCardTag: "银行活动与退款",
-        bonusCardTitle: "开户奖励与退款",
-        bonusCardDesc: "Chase支票账户开户奖励 $125 + Factory AI退货款 $200.59。",
-        balanceCardTag: "最终账户状态",
-        balanceCardTitle: "Chase账户期末结余",
-        balanceCardDesc: "2026年9月9日对账单载明期末余额，每一分钱均有据可查。",
-        splitNoteTitle: "为什么会有室友与同学的Zelle转账？",
-        splitNoteDesc: "在预订团队活动（如太浩湖滑雪场门票）或采购公寓公用品时，通常由我使用Chase卡先行全额刷卡垫付，随后室友通过Zelle将各自份额转还给我。这些入账均有对应的支出账目完全抵消。",
-        foodHeading: "伙食管理与自律省钱心得",
-        foodHighlightBadge: "极为自律：伙食开销仅占总支出的 6.5%",
-        foodHeroTitle: "如何在全美物价最高地区合理掌控饮食成本",
-        foodHeroText: "旧金山湾区物价高昂（留学生每月伙食普遍在 600-900 美元）。我通过自己去缺德舅（Trader Joe's）买菜做饭，并在亚马逊批量网购主食干货，成功将每周伙食费控制在约 486 人民币（68美元）。",
+        bonusCardTitle: "开户奖励与商户退款",
+        bonusCardDesc: "Chase支票账户开户奖励 $125 + Factory AI退款 $200.59。",
+        balanceCardTag: "账户期末状态",
+        balanceCardTitle: "Chase期末账户余额",
+        balanceCardDesc: "2026年9月9日对账单确认结余 $396.73，账目分文不差核对完毕。",
+        splitNoteTitle: "为什么会有室友和同学转账？",
+        splitNoteDesc: "在预订集体活动（如太浩湖滑雪票或公寓生活公用品）时，我常先用Chase卡刷卡垫付大额开支，随后室友通过Zelle将各自份额AA转账给我。这些汇入与前面的消费支出完全对应。",
+        foodHeading: "自律伙食管理与生鲜采购",
+        foodHighlightBadge: "极度自律：伙食仅占总预算 6.5%",
+        foodHeroTitle: "如何在全美物价最高地区把控伙食开支",
+        foodHeroText: "旧金山湾区物价高昂（大学生平均每月伙食费约4,000–6,500元人民币）。通过缺德舅买新鲜菜自己下厨，并在亚马逊批发速食干货，我将每周伙食费控制在约 486 元人民币（68美元）。",
         weeklyAvgLabel: "每周均摊",
         dailyAvgLabel: "每日均摊",
         totalFoodLabel: "24周总伙食费",
@@ -1270,11 +1289,13 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
         ledgerIntro: "可搜索或筛选伯克利交换期间的每一笔开支。支持按类目、按收支类型筛选，或直接搜索'Trader Joe'、'Shane'、'Amazon'、'Aspenware'、'Uber'等关键词。",
         experienceHeading: "海外游历与生活成长经历",
         tahoeTitle: "太浩湖滑雪之旅",
-        tahoeDesc: "加州北部Sierra Nevada雪山Sugar Bowl雪票与Donner雪具租赁。",
+        tahoeDesc: "与好友同游Sierra Nevada雪山Sugar Bowl滑雪场与Donner雪具租赁。",
         yoseTitle: "优胜美地国家公园",
         yoseDesc: "春假自然探索徒步，夜宿半穹顶山脚下的Curry Village帐篷木屋。",
         friendsTitle: "海外友谊与文化交流",
         friendsDesc: "与来自各国的留学生共同学习、切磋厨艺、互相激励。",
+        alpineTitle: "内华达山脉雪道",
+        alpineDesc: "在加州雪山体验天然粉雪滑行与户外运动，丰富交换学期视野。",
         proofHeading: "官方文件与收据凭证核验",
         proofIntro: "本页面所有数据均直接源自官方政府、大学教务及银行存档记录：",
         letterBadge: "感恩家书",
