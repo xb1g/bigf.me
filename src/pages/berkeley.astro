@@ -8,6 +8,8 @@ import yose2Img from '../assets/images/yose2.jpeg';
 import tahoeGroupImg from '../assets/images/tahoe_group.jpeg';
 import thaiFriendImg from '../assets/images/thai friend.jpeg';
 import momImg from '../assets/images/mom.jpeg';
+import calcentralImg from '../assets/images/calcentral_transcript.png';
+import ucTranscriptImg from '../assets/images/uc_transcript.png';
 import berkeleyTransactions from '../data/berkeley_transactions.json';
 ---
 
@@ -160,35 +162,43 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
           <div class="md:col-span-8 bg-[#0d0d14] border border-[#1e1e2e] rounded-2xl p-6 flex flex-col justify-between">
             <div>
               <p class="font-mono text-xs text-[#5cceff] uppercase tracking-widest font-semibold mb-4" data-i18n="courseListHeading">Course Grades & Units (Official CalCentral Record)</p>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
                   <div>
                     <p class="font-mono font-bold text-xs text-white">ENGIN 183D</p>
-                    <p class="text-xs text-[#94a3b8] font-sans">Product Management (3 Units)</p>
+                    <p class="text-[11px] text-[#94a3b8] font-sans">Product Management (3 U)</p>
                   </div>
                   <span class="px-2.5 py-1 bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40 rounded-md font-mono text-xs font-bold">A+</span>
                 </div>
 
-                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+                <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
                   <div>
                     <p class="font-mono font-bold text-xs text-white">ENGIN 183E</p>
-                    <p class="text-xs text-[#94a3b8] font-sans">Tech Entrepreneurship (3 Units)</p>
+                    <p class="text-[11px] text-[#94a3b8] font-sans">Tech Entrepreneurship (3 U)</p>
                   </div>
                   <span class="px-2.5 py-1 bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40 rounded-md font-mono text-xs font-bold">A</span>
                 </div>
 
-                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+                <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
                   <div>
                     <p class="font-mono font-bold text-xs text-white">ENGIN 183C</p>
-                    <p class="text-xs text-[#94a3b8] font-sans">Challenge Lab Startup (4 Units)</p>
+                    <p class="text-[11px] text-[#94a3b8] font-sans">Challenge Lab Startup (4 U)</p>
                   </div>
                   <span class="px-2.5 py-1 bg-[#5cceff]/20 text-[#5cceff] border border-[#5cceff]/40 rounded-md font-mono text-xs font-bold">PASS</span>
                 </div>
 
-                <div class="p-3.5 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
+                <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between">
                   <div>
-                    <p class="font-mono font-bold text-xs text-white">ENGIN 183A / 198</p>
-                    <p class="text-xs text-[#94a3b8] font-sans">Newton Lecture & Studies (2 Units)</p>
+                    <p class="font-mono font-bold text-xs text-white">ENGIN 183A</p>
+                    <p class="text-[11px] text-[#94a3b8] font-sans">Newton Lecture Series (1 U)</p>
+                  </div>
+                  <span class="px-2.5 py-1 bg-[#5cceff]/20 text-[#5cceff] border border-[#5cceff]/40 rounded-md font-mono text-xs font-bold">PASS</span>
+                </div>
+
+                <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl flex items-center justify-between sm:col-span-2 lg:col-span-1">
+                  <div>
+                    <p class="font-mono font-bold text-xs text-white">ENGIN 198</p>
+                    <p class="text-[11px] text-[#94a3b8] font-sans">Directed Group Studies (1 U)</p>
                   </div>
                   <span class="px-2.5 py-1 bg-[#5cceff]/20 text-[#5cceff] border border-[#5cceff]/40 rounded-md font-mono text-xs font-bold">PASS</span>
                 </div>
@@ -198,6 +208,99 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
             <p class="text-xs text-[#94a3b8] font-sans italic mt-4 pt-3 border-t border-[#1e1e2e]" data-i18n="academicNote">
               Official verification document: <span class="font-mono text-white">UC SR802F</span> & CalCentral Transcript dated May 2026.
             </p>
+          </div>
+        </div>
+
+        <!-- Official Transcript Documents Showcase -->
+        <div class="bg-[#0d0d14] border border-[#ffd700]/30 rounded-2xl p-5 sm:p-7 space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#1e1e2e]">
+            <div>
+              <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#ffd700]/15 border border-[#ffd700]/30 text-xs font-mono text-[#ffd700] font-semibold">
+                📜 <span data-i18n="transcriptBadge">Official University Document</span>
+              </div>
+              <h3 class="text-xl font-display font-bold text-white mt-2" data-i18n="transcriptHeading">
+                UC Berkeley Official Academic Transcript & Record
+              </h3>
+              <p class="text-xs text-[#94a3b8] mt-0.5" data-i18n="transcriptDesc">
+                Direct export from CalCentral (May 23, 2026) and Office of the Registrar confirming 4.000 GPA & 12 units.
+              </p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex items-center gap-1.5 bg-[#15151f] p-1.5 rounded-xl border border-[#2a2a3f] self-start sm:self-auto">
+              <button id="tab-btn-calcentral" class="transcript-tab-btn active px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all bg-[#ffd700]/20 text-[#ffd700] border border-[#ffd700]/40 cursor-pointer" data-target="doc-calcentral" data-i18n="transcriptTab1">
+                CalCentral Summary
+              </button>
+              <button id="tab-btn-sr802f" class="transcript-tab-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all text-[#94a3b8] hover:text-white border border-transparent cursor-pointer" data-target="doc-sr802f" data-i18n="transcriptTab2">
+                Registrar Form SR802F
+              </button>
+            </div>
+          </div>
+
+          <!-- Document Previews Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <!-- Document Viewport -->
+            <div class="lg:col-span-7 bg-[#07070b] border border-[#2a2a3f] rounded-2xl p-4 sm:p-6 flex justify-center items-center overflow-hidden group relative">
+              <!-- CalCentral Panel -->
+              <div id="doc-calcentral" class="transcript-doc-panel w-full max-w-sm sm:max-w-md bg-white rounded-xl shadow-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all border border-black/10" data-img-src={calcentralImg.src} data-img-title="UC Berkeley CalCentral Academic Summary">
+                <Image src={calcentralImg} alt="Official UC Berkeley CalCentral Academic Summary Transcript" class="w-full h-auto object-contain pointer-events-none" width={800} height={1100} />
+              </div>
+
+              <!-- Registrar SR802F Panel -->
+              <div id="doc-sr802f" class="transcript-doc-panel hidden w-full max-w-sm sm:max-w-md bg-white rounded-xl shadow-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all border border-black/10" data-img-src={ucTranscriptImg.src} data-img-title="UC Berkeley Registrar Verification (Form SR802F)">
+                <Image src={ucTranscriptImg} alt="Official UC Berkeley Registrar Verification of Attendance and Degrees SR802F" class="w-full h-auto object-contain pointer-events-none" width={800} height={1100} />
+              </div>
+
+              <!-- Enlarge Button Overlay -->
+              <button id="btn-enlarge-transcript" class="absolute bottom-6 right-6 bg-[#0d0d14]/90 backdrop-blur-md border border-[#ffd700]/50 text-white hover:text-[#ffd700] px-4 py-2 rounded-xl text-xs font-mono flex items-center gap-2 shadow-2xl transition-all cursor-pointer">
+                <span>🔍</span> <span data-i18n="transcriptEnlarge">View Official Transcript (Full Resolution)</span>
+              </button>
+            </div>
+
+            <!-- Verification Details & Badges -->
+            <div class="lg:col-span-5 space-y-4 text-xs font-mono">
+              <div class="p-5 bg-[#15151f] border border-[#2a2a3f] rounded-xl space-y-3">
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#2a2a3f]">
+                  <span class="text-[#94a3b8]">Student Name:</span>
+                  <span class="text-white font-bold">Bunyasit Fang</span>
+                </div>
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#2a2a3f]">
+                  <span class="text-[#94a3b8]">Student ID:</span>
+                  <span class="text-[#5cceff] font-bold">3042099986</span>
+                </div>
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#2a2a3f]">
+                  <span class="text-[#94a3b8]">Academic Career:</span>
+                  <span class="text-white">UC Berkeley Extension</span>
+                </div>
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#2a2a3f]">
+                  <span class="text-[#94a3b8]">Term / Cohort:</span>
+                  <span class="text-white font-bold">Spring 2026</span>
+                </div>
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#2a2a3f]">
+                  <span class="text-[#94a3b8]">Cumulative GPA:</span>
+                  <span class="text-[#ffd700] font-bold text-sm">4.000 / 4.000</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[#94a3b8]">Total Completed Units:</span>
+                  <span class="text-[#10b981] font-bold">12.0 Units</span>
+                </div>
+              </div>
+
+              <div class="p-4 bg-[#15151f] border border-[#ffd700]/30 rounded-xl space-y-2">
+                <p class="text-[#ffd700] font-bold flex items-center gap-1.5">
+                  <span>🏛️</span> CalCentral Direct Verification
+                </p>
+                <p class="text-[#94a3b8] font-sans leading-relaxed text-xs">
+                  All 12 units and straight-A grades (including A+ in ENGIN 183D Product Management and A in ENGIN 183E Tech Entrepreneurship) are officially recorded under the Regents of the University of California.
+                </p>
+              </div>
+
+              <div>
+                <button id="btn-open-transcript-primary" class="w-full py-2.5 px-4 bg-[#ffd700]/15 hover:bg-[#ffd700]/25 text-[#ffd700] border border-[#ffd700]/40 rounded-xl font-mono text-xs font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                  <span>📜</span> <span data-i18n="transcriptEnlarge">View Official Transcript (Full Resolution)</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -862,16 +965,19 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
               <p class="text-[#94a3b8]">Ending Balance: $396.73</p>
             </div>
 
-            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
+            <div class="p-3 bg-[#15151f] border border-[#a78bfa]/40 rounded-xl">
               <p class="text-[#a78bfa] font-bold">📜 SEVIS I-901 Receipt</p>
               <p class="text-white mt-1">Receipt: CCC2600685641</p>
               <p class="text-[#94a3b8]">Paid: $350.00 (Oct 6, 2025)</p>
             </div>
 
-            <div class="p-3 bg-[#15151f] border border-[#2a2a3f] rounded-xl">
-              <p class="text-[#10b981] font-bold">🎓 Official Transcript (SR802F)</p>
-              <p class="text-white mt-1">Units: 12.0</p>
-              <p class="text-[#94a3b8]">GPA: 4.000 (Top Honors)</p>
+            <div id="vault-card-transcript" class="p-3 bg-[#15151f] border border-[#10b981]/40 hover:border-[#10b981] rounded-xl cursor-pointer transition-all group">
+              <div class="flex justify-between items-center">
+                <p class="text-[#10b981] font-bold">🎓 Official Transcript (SR802F)</p>
+                <span class="text-[10px] text-[#10b981] group-hover:underline">View ↗</span>
+              </div>
+              <p class="text-white mt-1">Units: 12.0 · GPA: 4.000</p>
+              <p class="text-[#94a3b8]">Verified CalCentral Record</p>
             </div>
           </div>
         </div>
@@ -944,6 +1050,33 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
           </div>
         </div>
       </section>
+
+      <!-- Transcript Full Screen Lightbox Modal -->
+      <div id="transcript-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+        <div class="relative w-full max-w-3xl max-h-[92vh] bg-[#0d0d14] border border-[#ffd700]/40 rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+          <!-- Modal Header -->
+          <div class="px-5 py-3.5 border-b border-[#1e1e2e] flex items-center justify-between bg-[#15151f]">
+            <div class="flex items-center gap-2 font-mono text-xs text-white">
+              <span class="text-[#ffd700]">🎓</span>
+              <span id="modal-title" class="font-bold">UC Berkeley Official Academic Transcript</span>
+            </div>
+            <button id="btn-close-transcript-modal" class="w-8 h-8 rounded-lg bg-[#2a2a3f] hover:bg-[#3b3b55] text-[#94a3b8] hover:text-white flex items-center justify-center text-sm font-bold transition-colors cursor-pointer" aria-label="Close modal">
+              ✕
+            </button>
+          </div>
+          <!-- Modal Content Body -->
+          <div class="flex-1 overflow-y-auto p-4 flex justify-center items-start bg-[#07070b]">
+            <div class="bg-white rounded-lg shadow-xl max-w-xl w-full p-2 sm:p-4">
+              <img id="modal-transcript-img" src={calcentralImg.src} alt="Official UC Berkeley Transcript" class="w-full h-auto object-contain" />
+            </div>
+          </div>
+          <!-- Modal Footer -->
+          <div class="px-5 py-3 border-t border-[#1e1e2e] bg-[#15151f] flex flex-wrap justify-between items-center gap-2 text-xs font-mono text-[#94a3b8]">
+            <span>Student ID: 3042099986 · Cumulative GPA: 4.000</span>
+            <button id="btn-modal-close-footer" class="px-3 py-1 bg-[#2a2a3f] text-white rounded-md hover:bg-[#3b3b55] transition-colors cursor-pointer">Close</button>
+          </div>
+        </div>
+      </div>
 
       <!-- Footer -->
       <footer class="pt-8 pb-16 text-center text-xs font-mono text-[#94a3b8] space-y-2 border-t border-[#1e1e2e]">
@@ -1088,6 +1221,12 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
         friendsDesc: "Building community with fellow international and Thai scholars, cooking together and sharing meals.",
         alpineTitle: "Sierra Nevada Slopes",
         alpineDesc: "Exploring California powder snow and outdoor recreation during exchange semester breaks.",
+        transcriptBadge: "Official University Record",
+        transcriptHeading: "UC Berkeley Official Academic Transcript & Record",
+        transcriptDesc: "Direct export from CalCentral (May 23, 2026) and Office of the Registrar confirming 4.000 GPA & 12 units.",
+        transcriptTab1: "CalCentral Summary",
+        transcriptTab2: "Registrar Form SR802F",
+        transcriptEnlarge: "View Official Transcript (Full Resolution)",
         proofHeading: "Official Document & Statement Verification",
         proofIntro: "All data on this page is directly derived from official government, university, and banking records preserved on file:",
         letterBadge: "A Message of Gratitude",
@@ -1192,6 +1331,12 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
         friendsDesc: "สร้างมิตรภาพกับเพื่อนนักศึกษาต่างชาติและเพื่อนคนไทย ร่วมกันทำอาหารและแลกเปลี่ยนมุมมอง",
         alpineTitle: "ลานสกีเทือกเขา Sierra Nevada",
         alpineDesc: "เปิดประสบการณ์เล่นสกีหิมะธรรมชาติในแคลิฟอร์เนียช่วงหยุดพักระหว่างภาคเรียน",
+        transcriptBadge: "เอกสารทางการจากมหาวิทยาลัย",
+        transcriptHeading: "ใบแสดงผลการศึกษาทางการ (Official Transcript) UC Berkeley",
+        transcriptDesc: "เอกสารรับรองทางการจากระบบ CalCentral (23 พ.ค. 2026) และสำนักงานนายทะเบียน UC Berkeley ยืนยันจบ 12 หน่วยกิตด้วยเกรดเฉลี่ย 4.000 เต็ม",
+        transcriptTab1: "สรุปผลการเรียน CalCentral",
+        transcriptTab2: "หนังสือรับรองนายทะเบียน (SR802F)",
+        transcriptEnlarge: "ดูใบแสดงผลการศึกษาฉบับเต็ม (ความละเอียดสูง)",
         proofHeading: "หลักฐานเอกสารและใบเสร็จทางการ",
         proofIntro: "ข้อมูลตัวเลขทั้งหมดบนหน้านี้อ้างอิงจากเอกสารราชการ มหาวิทยาลัย และธนาคารที่บันทึกไว้จริง:",
         letterBadge: "จดหมายจากใจ",
@@ -1296,6 +1441,12 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
         friendsDesc: "与来自各国的留学生共同学习、切磋厨艺、互相激励。",
         alpineTitle: "内华达山脉雪道",
         alpineDesc: "在加州雪山体验天然粉雪滑行与户外运动，丰富交换学期视野。",
+        transcriptBadge: "大学官方学术存档",
+        transcriptHeading: "加州大学伯克利分校官方成绩单与学籍原件",
+        transcriptDesc: "直接导出自UC Berkeley CalCentral教务系统（2026年5月23日）及教务长办公室，证实修满12学分且获得4.000满分绩点。",
+        transcriptTab1: "CalCentral 官方成绩表",
+        transcriptTab2: "教务长官方认证函 (SR802F)",
+        transcriptEnlarge: "查看官方成绩单原件（高清全图）",
         proofHeading: "官方文件与收据凭证核验",
         proofIntro: "本页面所有数据均直接源自官方政府、大学教务及银行存档记录：",
         letterBadge: "感恩家书",
@@ -1752,6 +1903,94 @@ import berkeleyTransactions from '../data/berkeley_transactions.json';
           renderLedger();
         });
       }
+
+      // Transcript Tabs & Lightbox Modal
+      const tabCalcentral = document.getElementById('tab-btn-calcentral');
+      const tabSr802f = document.getElementById('tab-btn-sr802f');
+      const panelCalcentral = document.getElementById('doc-calcentral');
+      const panelSr802f = document.getElementById('doc-sr802f');
+
+      function switchTranscriptTab(target) {
+        if (target === 'doc-calcentral') {
+          tabCalcentral?.classList.add('active', 'bg-[#ffd700]/20', 'text-[#ffd700]', 'border-[#ffd700]/40');
+          tabCalcentral?.classList.remove('text-[#94a3b8]', 'border-transparent');
+          tabSr802f?.classList.remove('active', 'bg-[#ffd700]/20', 'text-[#ffd700]', 'border-[#ffd700]/40');
+          tabSr802f?.classList.add('text-[#94a3b8]', 'border-transparent');
+          panelCalcentral?.classList.remove('hidden');
+          panelSr802f?.classList.add('hidden');
+        } else {
+          tabSr802f?.classList.add('active', 'bg-[#ffd700]/20', 'text-[#ffd700]', 'border-[#ffd700]/40');
+          tabSr802f?.classList.remove('text-[#94a3b8]', 'border-transparent');
+          tabCalcentral?.classList.remove('active', 'bg-[#ffd700]/20', 'text-[#ffd700]', 'border-[#ffd700]/40');
+          tabCalcentral?.classList.add('text-[#94a3b8]', 'border-transparent');
+          panelSr802f?.classList.remove('hidden');
+          panelCalcentral?.classList.add('hidden');
+        }
+      }
+
+      tabCalcentral?.addEventListener('click', () => switchTranscriptTab('doc-calcentral'));
+      tabSr802f?.addEventListener('click', () => switchTranscriptTab('doc-sr802f'));
+
+      const modal = document.getElementById('transcript-modal');
+      const modalImg = document.getElementById('modal-transcript-img');
+      const modalTitle = document.getElementById('modal-title');
+      const btnCloseModal = document.getElementById('btn-close-transcript-modal');
+      const btnFooterClose = document.getElementById('btn-modal-close-footer');
+
+      function openModal(src, title) {
+        if (!modal || !modalImg) return;
+        if (src) modalImg.src = src;
+        if (modalTitle && title) modalTitle.textContent = title;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        if (!modal) return;
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      btnCloseModal?.addEventListener('click', closeModal);
+      btnFooterClose?.addEventListener('click', closeModal);
+      modal?.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      panelCalcentral?.addEventListener('click', () => {
+        const src = panelCalcentral.getAttribute('data-img-src');
+        openModal(src, 'UC Berkeley CalCentral Academic Summary');
+      });
+
+      panelSr802f?.addEventListener('click', () => {
+        const src = panelSr802f.getAttribute('data-img-src');
+        openModal(src, 'UC Berkeley Registrar Verification (Form SR802F)');
+      });
+
+      document.getElementById('btn-enlarge-transcript')?.addEventListener('click', () => {
+        const isSr802fActive = panelCalcentral?.classList.contains('hidden');
+        const activePanel = isSr802fActive ? panelSr802f : panelCalcentral;
+        if (activePanel) {
+          openModal(activePanel.getAttribute('data-img-src'), activePanel.getAttribute('data-img-title'));
+        }
+      });
+
+      document.getElementById('btn-open-transcript-primary')?.addEventListener('click', () => {
+        const isSr802fActive = panelCalcentral?.classList.contains('hidden');
+        const activePanel = isSr802fActive ? panelSr802f : panelCalcentral;
+        if (activePanel) {
+          openModal(activePanel.getAttribute('data-img-src'), activePanel.getAttribute('data-img-title'));
+        }
+      });
+
+      document.getElementById('vault-card-transcript')?.addEventListener('click', () => {
+        switchTranscriptTab('doc-sr802f');
+        const src = panelSr802f?.getAttribute('data-img-src') || panelCalcentral?.getAttribute('data-img-src');
+        openModal(src, 'UC Berkeley Registrar Verification (Form SR802F)');
+      });
 
       // Set initial defaults: Thai language & THB currency
       updateLanguage('th');
