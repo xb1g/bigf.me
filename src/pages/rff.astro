@@ -9,254 +9,374 @@ const total = 13;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#15211A" />
+    <meta name="theme-color" content="#000000" />
     <title>Runs Without You · Bunyasit Fang</title>
-    <meta name="description" content="The back office engine for Thai small businesses. Request for Founders, thesis 4." />
+    <meta name="description" content="An AI back office that does the admin for Southeast Asian small businesses." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <div id="progress" aria-hidden="true"><span></span></div>
+
     <main id="deck">
-      <!-- 1 Title -->
-      <section class="slide dark title">
-        <p class="eyebrow">Request for Founders · Thesis 4</p>
-        <h1>Runs Without You</h1>
-        <p class="sub">The back office engine for Thai small businesses</p>
-        <p class="meta">Bunyasit Fang · October 2026</p>
+      <!-- 1 -->
+      <section class="slide dark hero">
+        <p class="kicker">Request for Founders · Thesis 04</p>
+        <h1>Runs Without You.</h1>
+        <p class="hero-sub">An AI back office that does the admin for Southeast Asian small businesses. Not another dashboard.</p>
+        <p class="byline">Bunyasit Fang</p>
       </section>
 
-      <!-- 2 Owner -->
+      <!-- 2 -->
       <section class="slide">
-        <h2>I am the owner, many times over</h2>
-        <div class="cards three">
-          <div class="card stat"><b>51%</b><p>of Onecha, a matcha import and resale business I run today</p></div>
-          <div class="card stat"><b>1</b><p>cafe founded and operated: JOJO Soba, coffee and soba in Bangkok</p></div>
-          <div class="card stat"><b class="ph">[N]</b><p>businesses in my family's portfolio, where I sit inside operations</p></div>
-        </div>
-        <p class="lead">I do not study the admin problem. I live it, across several businesses, and I build AI systems for a living.</p>
-      </section>
-
-      <!-- 3 Four jobs -->
-      <section class="slide">
-        <h2>Four jobs that only the owner can do today</h2>
-        <div class="cards two">
-          <div class="card"><h3>Buying and selling</h3><p>Orders arrive in LINE and Shopee. Purchase orders, invoices, slips and stock are reconciled by hand every night.</p></div>
-          <div class="card"><h3>Finding and talking to suppliers</h3><p>Sourcing matcha grades from Japan means hours of searching, emailing and negotiating in two languages.</p></div>
-          <div class="card"><h3>Import and legal paperwork</h3><p>Customs declarations, FDA registration and tax invoices are checked by one person who knows where everything is.</p></div>
-          <div class="card"><h3>Hiring freelancers</h3><p>Designers, content and delivery help are found, briefed, chased and paid one chat thread at a time.</p></div>
+        <p class="kicker">The problem</p>
+        <h2>Every owner works a second job. <span class="dim">Unpaid, after closing.</span></h2>
+        <div class="grid g4">
+          <div class="tile"><span class="num">01</span><h3>Buying and selling</h3><p>Orders land in LINE and Shopee. Slips, invoices and stock get reconciled by hand at night.</p></div>
+          <div class="tile"><span class="num">02</span><h3>Suppliers</h3><p>Finding them, comparing them, negotiating in two languages over weeks of email.</p></div>
+          <div class="tile"><span class="num">03</span><h3>Imports and legal</h3><p>Customs, FDA and tax documents checked by the one person who knows where everything is.</p></div>
+          <div class="tile"><span class="num">04</span><h3>Freelancers</h3><p>Found, briefed, chased and paid one chat thread at a time.</p></div>
         </div>
       </section>
 
-      <!-- 4 Dashboard vs engine -->
+      <!-- 3 -->
       <section class="slide">
-        <h2>Owners do not need another dashboard. They need hands</h2>
-        <div class="cards two">
-          <div class="card muted">
-            <h3>Today: a dashboard</h3>
-            <ul><li>Owner types in data</li><li>Software shows it back as a chart</li><li>Owner still does the task</li><li>Adoption dies after week two</li></ul>
-          </div>
-          <div class="card accent">
-            <h3>Ours: an engine</h3>
+        <p class="kicker">Why I see it</p>
+        <h2>I'm not studying this problem. <span class="dim">I own it.</span></h2>
+        <div class="grid g3">
+          <div class="stat"><b>51%</b><p>Owner of Onecha, a matcha import and resale business. Every job on the last slide is my job.</p></div>
+          <div class="stat"><b>JOJO Soba</b><p>Founded and ran a coffee and soba cafe in Bangkok. I did the books after closing.</p></div>
+          <div class="stat"><b>Portfolio</b><p>My family backs friends' businesses. I sit inside their operations and see the same bottlenecks repeat.</p></div>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section class="slide">
+        <p class="kicker">The insight</p>
+        <h2>Owners don't need dashboards. <span class="dim">They need hands.</span></h2>
+        <div class="grid g2 compare">
+          <div class="panel">
+            <p class="label">Software today</p>
             <ul>
-              <li>Reads what already exists: LINE, slips, bank SMS, email, customs portals</li>
-              <li>Completes the task: books the entry, drafts the PO, checks the document, briefs the freelancer</li>
+              <li>Owner types the data in</li>
+              <li>Software draws it as a chart</li>
+              <li>Owner still does the work</li>
+              <li>Abandoned by week two</li>
+            </ul>
+          </div>
+          <div class="panel on">
+            <p class="label">Runs Without You</p>
+            <ul>
+              <li>Reads what already exists: chats, slips, email, bank alerts</li>
+              <li>Does the work: books, orders, checks, briefs</li>
               <li>Owner approves with one tap</li>
-              <li>Admin drops from hours to minutes a day</li>
+              <li>Admin goes from hours to minutes</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <!-- 5 Onecha pilot -->
+      <!-- 5 -->
       <section class="slide">
-        <h2>Onecha is the pilot: one matcha order, end to end</h2>
-        <div class="cards five">
-          <div class="card"><h3>Source</h3><p>Agent shortlists Japanese suppliers by grade and price, drafts the first email in Japanese</p></div>
-          <div class="card"><h3>Buy</h3><p>Negotiation thread summarised, PO drafted, payment scheduled on approval</p></div>
-          <div class="card"><h3>Import</h3><p>Customs and FDA documents cross-checked against the PO before anything ships</p></div>
-          <div class="card"><h3>Sell</h3><p>LINE and Shopee orders turned into invoices and stock movements automatically</p></div>
-          <div class="card"><h3>Staff</h3><p>Freelancers for content and delivery briefed, tracked and paid from one queue</p></div>
-        </div>
-        <p class="lead">I control Onecha, so the engine goes live on day one with no sales cycle, and the hours saved are measured honestly.</p>
+        <p class="kicker">The product, on day one</p>
+        <h2>One matcha order. <span class="dim">End to end, at Onecha.</span></h2>
+        <ol class="flow">
+          <li><span class="mono">Source</span><p>Shortlists Japanese suppliers by grade and price. Drafts the first email in Japanese.</p></li>
+          <li><span class="mono">Buy</span><p>Summarises the negotiation, drafts the PO, schedules payment.</p></li>
+          <li><span class="mono">Import</span><p>Checks customs and FDA documents against the PO before it ships.</p></li>
+          <li><span class="mono">Sell</span><p>Turns LINE and Shopee orders into invoices and stock movements.</p></li>
+          <li><span class="mono">Staff</span><p>Briefs, tracks and pays freelancers from one queue.</p></li>
+        </ol>
+        <p class="note">I control Onecha, so it ships on day one with no sales cycle, and every hour saved is measured on a real business.</p>
       </section>
 
-      <!-- 6 Loops -->
+      <!-- 6 -->
       <section class="slide">
-        <h2>Three loops, and nothing executes without a tap</h2>
-        <div class="cards three">
-          <div class="card"><h3>1 · Ingest</h3><p>Connects LINE, email, bank notifications, Shopee and the POS. Reads Thai, Japanese and English receipts, slips and chats.</p></div>
-          <div class="card"><h3>2 · Decide</h3><p>An agent proposes the next action with the source evidence attached: the slip, the message, the clause it checked.</p></div>
-          <div class="card"><h3>3 · Approve</h3><p>Owner taps yes in LINE. Autonomy widens per task as the approval rate stays high. Trust is earned, not assumed.</p></div>
-        </div>
-      </section>
-
-      <!-- 7 Why now -->
-      <section class="slide">
-        <h2>Why this works in 2026 and did not in 2022</h2>
-        <div class="cards three">
-          <div class="card"><h3>Models read messy records</h3><p>LLMs now handle Thai receipts, Japanese supplier emails and customs forms reliably. The tasks were never hard, the reading was.</p></div>
-          <div class="card"><h3>The records are already digital</h3><p>PromptPay, e-tax invoices and marketplace exports mean the evidence exists. Nobody has to type it in.</p></div>
-          <div class="card"><h3>Owners live in LINE</h3><p>No new app to adopt. The engine speaks where the business already runs, in the owner's chat.</p></div>
-        </div>
-      </section>
-
-      <!-- 8 Why me -->
-      <section class="slide">
-        <h2>Why me: operator, AI builder, shipper</h2>
-        <div class="cards three">
-          <div class="card"><h3>Operator</h3><p>Majority owner of Onecha. Founded and ran JOJO Soba. Sit inside the operations of my family's portfolio of Thai SMBs.</p></div>
-          <div class="card"><h3>AI veteran</h3><p>PassionSeed to 300 users in a month. CareerAc, Hive (Gemini hackathon semi-finalist), NeuralMix. Built RocketMap, an AI hypothesis-testing canvas, and used it to de-risk this idea.</p></div>
-          <div class="card"><h3>Shipper</h3><p>LongKeeb shipped mechanical keyboards to paying customers worldwide. I have run procurement, manufacturing and fulfilment myself.</p></div>
-        </div>
-        <p class="lead small">Chulalongkorn BAScii, Integrated Innovation · Berkeley SCET Startup Semester · 30+ shipped projects</p>
-      </section>
-
-      <!-- 9 Investor's seat -->
-      <section class="slide">
-        <h2>What I see from the investor's seat</h2>
-        <p class="lead">Across the family portfolio, the businesses that survive share habits the ones that fail do not. The engine encodes the survivors' habits so every owner gets them by default.</p>
-        <div class="cards two">
-          <div class="card accent">
-            <h3>Survivors</h3>
-            <ul>
-              <li class="ph">[Habit 1: e.g. reorder before stock-out, not after]</li>
-              <li class="ph">[Habit 2: e.g. every slip reconciled the same day]</li>
-              <li class="ph">[Habit 3: e.g. documents checked before the shipment leaves]</li>
-            </ul>
+        <p class="kicker">How it works</p>
+        <div class="split">
+          <div>
+            <h2>Nothing moves <span class="dim">without a tap.</span></h2>
+            <dl class="steps">
+              <div><dt>Ingest</dt><dd>Reads LINE, email, bank alerts, Shopee and the POS, in Thai, Japanese and English.</dd></div>
+              <div><dt>Decide</dt><dd>Proposes the next action with its evidence attached.</dd></div>
+              <div><dt>Approve</dt><dd>The owner taps yes. Autonomy grows task by task as trust is earned.</dd></div>
+            </dl>
           </div>
-          <div class="card muted">
-            <h3>Failures</h3>
-            <ul>
-              <li class="ph">[Anti-habit 1]</li>
-              <li class="ph">[Anti-habit 2]</li>
-              <li class="ph">[Anti-habit 3]</li>
-            </ul>
+          <div class="phone" aria-label="Example approval message in LINE">
+            <div class="chat-head"><span class="dot"></span>Runs Without You</div>
+            <div class="bubble">
+              <p class="b-title">Reorder ceremonial matcha?</p>
+              <p>Stock runs out in about 9 days at the current sales pace. Best quote is from your Uji supplier, 20 kg, landed in 12 days.</p>
+              <div class="evidence">
+                <span>3 sales exports</span><span>Supplier quote</span><span>Stock count</span>
+              </div>
+              <div class="actions"><button tabindex="-1">Edit</button><button tabindex="-1" class="yes">Approve</button></div>
+            </div>
+            <p class="caption">Illustrative message</p>
           </div>
         </div>
       </section>
 
-      <!-- 10 De-risked -->
+      <!-- 7 -->
       <section class="slide">
-        <h2>De-risked before applying, with theory and AI</h2>
-        <p class="lead">I built RocketMap, an AI business model canvas that turns a venture into ranked hypotheses and tests them against theory and evidence. I ran this idea through it first. The riskiest assumptions, and where each stands:</p>
-        <div class="cards three">
-          <div class="card"><h3>Desirability</h3><p>Owners will hand admin to an agent if every action shows its evidence</p><p class="result ph">Tested at Onecha: [result]</p></div>
-          <div class="card"><h3>Feasibility</h3><p>LLMs read Thai slips, Japanese supplier mail and customs forms accurately enough</p><p class="result ph">Prototype on Onecha records: [accuracy]</p></div>
-          <div class="card"><h3>Viability</h3><p>Owners pay more than a bookkeeper hour a week for hours saved every day</p><p class="result ph">[N] portfolio owners asked: [result]</p></div>
+        <p class="kicker">Why now</p>
+        <h2>The work was never hard. <span class="dim">Reading it was.</span></h2>
+        <div class="grid g3">
+          <div class="tile"><h3>Models can read the mess</h3><p>Thai slips, Japanese supplier mail and customs forms are now readable by machine, reliably.</p></div>
+          <div class="tile"><h3>The records are already digital</h3><p>PromptPay, e-tax invoices and marketplace exports mean nobody has to type anything in.</p></div>
+          <div class="tile"><h3>Owners already live in LINE</h3><p>No new app to adopt. The engine works inside the chat the business already runs on.</p></div>
         </div>
       </section>
 
-      <!-- 11 Business model -->
+      <!-- 8 -->
       <section class="slide">
-        <h2>Business model and market</h2>
-        <div class="cards three">
-          <div class="card stat"><b class="ph">฿[X] / mo</b><p>per business, priced below one bookkeeper hour a week</p></div>
-          <div class="card stat"><b>Take rate</b><p>on payments and supplier orders routed through the engine, later</p></div>
-          <div class="card stat"><b>~3M</b><p>registered Thai SMEs, most with fewer than ten staff</p></div>
+        <p class="kicker">What it encodes</p>
+        <h2>Well-run businesses have the same habits. <span class="dim">Most owners can't keep them up alone.</span></h2>
+        <div class="grid g2 habits">
+          <div class="habit"><span class="check" aria-hidden="true"></span><p><b>Reorder before the stock-out,</b> not after.</p></div>
+          <div class="habit"><span class="check" aria-hidden="true"></span><p><b>Reconcile every slip the same day,</b> not at month end.</p></div>
+          <div class="habit"><span class="check" aria-hidden="true"></span><p><b>Check documents before the shipment leaves,</b> not at customs.</p></div>
+          <div class="habit"><span class="check" aria-hidden="true"></span><p><b>Brief people in writing,</b> not in a voice note at midnight.</p></div>
         </div>
-        <p class="lead"><strong>Wedge.</strong> Import-and-resell traders and small F&amp;B in Bangkok, starting with Onecha and the family portfolio. Expansion follows LINE and QR payment behaviour across Southeast Asia: Vietnam, Indonesia, the Philippines.</p>
+        <p class="note">The engine runs these habits by default, so every owner gets them without the discipline.</p>
       </section>
 
-      <!-- 12 Plan -->
+      <!-- 9 -->
       <section class="slide">
-        <h2>Twelve weeks to a live engine and paying owners</h2>
-        <div class="cards three">
-          <div class="card"><span class="tag">Weeks 1 to 4</span><h3>Onecha live</h3><p>Ingest LINE, email and slips. Supplier sourcing and PO drafting loop running on real Onecha orders.</p></div>
-          <div class="card"><span class="tag">Weeks 5 to 8</span><h3>Portfolio pilots</h3><p>Five businesses from the family portfolio onboarded. Import document check and freelancer queue added.</p></div>
-          <div class="card"><span class="tag">Weeks 9 to 12</span><h3>Prove and convert</h3><p>Measure hours saved and errors caught. Convert pilots to paid. Pitch on December 4 with live customers.</p></div>
+        <p class="kicker">How I de-risk</p>
+        <h2>Theory first, then evidence. <span class="dim">With a tool I built.</span></h2>
+        <p class="lede">RocketMap is my AI business model canvas. It turns a venture into ranked hypotheses and pairs each with the cheapest test that could kill it. These are the three that matter here, and the test for each.</p>
+        <div class="grid g3">
+          <div class="tile"><span class="mono">Desirability</span><h3>Owners will hand admin to an agent if every action shows its evidence.</h3><p class="test">Test: approval rate on real Onecha actions.</p></div>
+          <div class="tile"><span class="mono">Feasibility</span><h3>Models read Thai slips, Japanese mail and customs forms accurately enough.</h3><p class="test">Test: accuracy on Onecha's own records.</p></div>
+          <div class="tile"><span class="mono">Viability</span><h3>Owners pay more than a bookkeeper hour a week to get daily hours back.</h3><p class="test">Test: paid conversion in the portfolio pilots.</p></div>
         </div>
       </section>
 
-      <!-- 13 Ask -->
-      <section class="slide dark title">
-        <p class="eyebrow">The ask</p>
-        <h1>1,000,000 THB</h1>
-        <p class="sub">Twelve months of runway, one engineer, and LINE, bank and customs integration costs.</p>
-        <p class="sub">Milestone: fifty paying businesses, each owner spending under five minutes a day on admin.</p>
-        <p class="meta">bunyasit@passionseed.org · bigf.me · github.com/xb1g</p>
+      <!-- 10 -->
+      <section class="slide">
+        <p class="kicker">Founder</p>
+        <h2>Operator. AI builder. <span class="dim">Shipper.</span></h2>
+        <div class="grid g3">
+          <div class="tile"><h3>Operator</h3><p>Majority owner of Onecha. Founded JOJO Soba. Inside the operations of my family's portfolio.</p></div>
+          <div class="tile"><h3>AI builder</h3><p>PassionSeed reached 300 users in a month. Built RocketMap, CareerAc, NeuralMix, and Hive, a Gemini hackathon semi-finalist.</p></div>
+          <div class="tile"><h3>Shipper</h3><p>LongKeeb sold mechanical keyboards to paying customers worldwide. I ran sourcing, manufacturing and fulfilment myself.</p></div>
+        </div>
+        <p class="note">Chulalongkorn, Integrated Innovation · UC Berkeley SCET Startup Semester · 30+ shipped projects</p>
+      </section>
+
+      <!-- 11 -->
+      <section class="slide">
+        <p class="kicker">Business</p>
+        <h2>Cheaper than a bookkeeper. <span class="dim">Does more than one.</span></h2>
+        <div class="grid g3">
+          <div class="stat"><b>฿1,990</b><p>Target price per business per month. Less than one bookkeeper hour a week.</p></div>
+          <div class="stat"><b>~3M</b><p>Small and medium businesses in Thailand, most with fewer than ten staff.</p></div>
+          <div class="stat"><b>SEA</b><p>Next markets share the same LINE and QR payment habits: Vietnam, Indonesia, the Philippines.</p></div>
+        </div>
+        <p class="note">Wedge: import and resale traders and small food businesses in Bangkok. Later, a take rate on payments and supplier orders that run through the engine.</p>
+      </section>
+
+      <!-- 12 -->
+      <section class="slide">
+        <p class="kicker">The next twelve weeks</p>
+        <h2>From one business <span class="dim">to paying customers.</span></h2>
+        <ol class="timeline">
+          <li><span class="mono">Weeks 1–4</span><h3>Onecha live</h3><p>Ingest LINE, email and slips. Sourcing and purchase orders run on real orders. Feasibility test done.</p></li>
+          <li><span class="mono">Weeks 5–8</span><h3>Portfolio pilots</h3><p>Five businesses from the family portfolio. Import checks and the freelancer queue ship.</p></li>
+          <li><span class="mono">Weeks 9–12</span><h3>Prove it</h3><p>Measure hours saved and errors caught. Convert pilots to paid. Pitch on December 4 with live customers.</p></li>
+        </ol>
+      </section>
+
+      <!-- 13 -->
+      <section class="slide dark hero">
+        <p class="kicker">The ask</p>
+        <h1>฿1,000,000</h1>
+        <p class="hero-sub">Twelve months of runway, one engineer, and the LINE, bank and customs integrations.</p>
+        <p class="hero-sub dimmer">Goal: fifty paying businesses, each owner spending under five minutes a day on admin.</p>
+        <p class="byline"><a href="mailto:bunyasit@passionseed.org">bunyasit@passionseed.org</a> · <a href="https://bigf.me">bigf.me</a> · <a href="https://github.com/xb1g">github.com/xb1g</a></p>
       </section>
     </main>
 
     <nav id="hud" aria-label="Slide navigation">
-      <button id="prev" aria-label="Previous slide">←</button>
-      <span id="count">1 / {total}</span>
-      <button id="next" aria-label="Next slide">→</button>
+      <button id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span id="count">01 / {String(total).padStart(2, '0')}</span>
+      <button id="next" aria-label="Next slide"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M9 18l6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </nav>
 
     <script is:inline define:vars={{ total }}>
       const deck = document.getElementById('deck');
       const slides = [...deck.querySelectorAll('.slide')];
       const count = document.getElementById('count');
+      const bar = document.querySelector('#progress span');
+      const hud = document.getElementById('hud');
+      const pad = (n) => String(n).padStart(2, '0');
       const current = () => Math.round(deck.scrollLeft / deck.clientWidth);
       const go = (i) => {
         const n = Math.max(0, Math.min(total - 1, i));
         deck.scrollTo({ left: n * deck.clientWidth, behavior: 'smooth' });
       };
-      deck.addEventListener('scroll', () => {
+      const update = () => {
         const n = current();
-        count.textContent = `${n + 1} / ${total}`;
+        count.textContent = `${pad(n + 1)} / ${pad(total)}`;
+        bar.style.transform = `scaleX(${(n + 1) / total})`;
+        hud.classList.toggle('on-dark', slides[n].classList.contains('dark'));
+        slides.forEach((s, i) => s.classList.toggle('active', i === n));
         history.replaceState(null, '', `#${n + 1}`);
-      }, { passive: true });
+      };
+      deck.addEventListener('scroll', update, { passive: true });
       document.getElementById('prev').onclick = () => go(current() - 1);
       document.getElementById('next').onclick = () => go(current() + 1);
       addEventListener('keydown', (e) => {
-        if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(current() + 1); }
-        if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(current() - 1); }
+        if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(current() + 1); }
+        if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); go(current() - 1); }
         if (e.key === 'Home') go(0);
         if (e.key === 'End') go(total - 1);
       });
+      addEventListener('resize', () => deck.scrollTo({ left: current() * deck.clientWidth }));
       const start = parseInt(location.hash.slice(1), 10);
       if (start > 1 && start <= slides.length) deck.scrollTo({ left: (start - 1) * deck.clientWidth });
+      requestAnimationFrame(update);
     </script>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --dk: #15211a; --dk2: #3b5c3c; --lt: #eef3ea; --green: #6e9b3e; --gold: #c9a227; --deep: #2e6b4f;
+    --bg: #fbfbfd;
+    --ink: #1d1d1f;
+    --mute: #6e6e73;
+    --faint: #86868b;
+    --line: #e5e5ea;
+    --tile: #ffffff;
+    --accent: #3f7d3a;
+    --accent-soft: #eef5ec;
+    --black: #000;
+    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
   }
-  * { box-sizing: border-box; margin: 0; }
-  html, body { height: 100%; background: var(--dk); font-family: Calibri, 'Segoe UI', system-ui, sans-serif; color: var(--dk); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--black); }
+  body { font-family: var(--sans); color: var(--ink); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
   #deck { display: flex; height: 100dvh; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; }
   #deck::-webkit-scrollbar { display: none; }
+
   .slide {
     flex: 0 0 100vw; height: 100dvh; scroll-snap-align: start; overflow-y: auto;
-    padding: clamp(1.5rem, 5vw, 4.5rem) clamp(1.25rem, 6vw, 5.5rem) 5rem;
-    display: flex; flex-direction: column; justify-content: center; gap: clamp(1rem, 2.5vw, 2rem);
-    background: var(--lt);
+    padding: clamp(2rem, 7vh, 5rem) max(clamp(1.5rem, 7vw, 6rem), calc((100vw - 76rem) / 2)) 6rem;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: clamp(1.25rem, 3.5vh, 2.5rem);
+    background: var(--bg);
   }
-  .slide.dark { background: var(--dk); color: #fff; }
-  h1, h2, h3, b { font-family: Cambria, Georgia, serif; }
-  h2 { font-size: clamp(1.6rem, 4vw, 3rem); line-height: 1.15; color: var(--dk); border-left: 6px solid var(--gold); padding-left: 1rem; }
-  h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); color: var(--deep); margin-bottom: .5rem; }
-  p, li { font-size: clamp(1rem, 1.7vw, 1.3rem); line-height: 1.45; color: #2c3a30; }
-  .lead { font-size: clamp(1.05rem, 1.9vw, 1.5rem); color: var(--dk2); max-width: 60rem; }
-  .lead.small { font-size: clamp(.95rem, 1.5vw, 1.15rem); }
-  .cards { display: grid; gap: clamp(.75rem, 1.5vw, 1.25rem); }
-  .cards.two { grid-template-columns: repeat(2, 1fr); }
-  .cards.three { grid-template-columns: repeat(3, 1fr); }
-  .cards.five { grid-template-columns: repeat(5, 1fr); }
-  .card { background: #fff; border-radius: 12px; border-top: 5px solid var(--green); padding: clamp(1rem, 2vw, 1.6rem); box-shadow: 0 2px 10px rgba(21, 33, 26, .08); }
-  .card.accent { background: var(--deep); border-top-color: var(--gold); }
-  .card.accent h3, .card.accent li, .card.accent p { color: #fff; }
-  .card.muted { background: #dfe7da; border-top-color: #9aa89a; }
-  .card ul { padding-left: 1.2rem; display: grid; gap: .5rem; }
-  .card.stat { text-align: center; }
-  .card.stat b { display: block; font-size: clamp(2rem, 5vw, 3.6rem); color: var(--green); line-height: 1.1; margin-bottom: .5rem; }
-  .card .result { margin-top: .9rem; font-weight: 700; color: var(--dk); }
-  .tag { display: inline-block; font-size: .85rem; font-weight: 700; background: var(--gold); color: var(--dk); padding: .15rem .6rem; border-radius: 999px; margin-bottom: .6rem; }
-  .ph { background: rgba(201, 162, 39, .25); border-radius: 4px; }
-  .card.accent .ph { background: rgba(201, 162, 39, .35); }
-  .title { justify-content: center; }
-  .title h1 { font-size: clamp(2.5rem, 8vw, 6rem); color: var(--green); line-height: 1.05; }
-  .title .sub { font-size: clamp(1.1rem, 2.4vw, 1.8rem); color: #dfe9d8; max-width: 52rem; }
-  .eyebrow { color: var(--gold) !important; text-transform: uppercase; letter-spacing: .15em; font-size: clamp(.8rem, 1.4vw, 1rem) !important; font-weight: 700; }
-  .meta { color: #9fb39a !important; font-size: clamp(.9rem, 1.4vw, 1.1rem) !important; }
-  #hud { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: .75rem; background: rgba(21, 33, 26, .85); color: #fff; padding: .35rem .6rem; border-radius: 999px; z-index: 10; backdrop-filter: blur(6px); }
-  #hud button { background: none; border: 0; color: #fff; font-size: 1.25rem; cursor: pointer; padding: .25rem .6rem; border-radius: 999px; }
-  #hud button:hover { background: var(--deep); }
-  #count { font-size: .95rem; min-width: 4rem; text-align: center; font-variant-numeric: tabular-nums; }
-  @media (max-width: 820px) {
-    .cards.two, .cards.three, .cards.five { grid-template-columns: 1fr; }
-    .slide { justify-content: flex-start; }
+  .slide > * { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .slide.active > * { opacity: 1; transform: none; }
+  .slide.active > *:nth-child(2) { transition-delay: .06s; }
+  .slide.active > *:nth-child(3) { transition-delay: .12s; }
+  .slide.active > *:nth-child(4) { transition-delay: .18s; }
+  @media (prefers-reduced-motion: reduce) { .slide > * { opacity: 1; transform: none; transition: none; } }
+
+  .kicker { font-family: var(--mono); font-size: .8rem; letter-spacing: .04em; color: var(--accent); text-transform: uppercase; }
+  h1 { font-size: clamp(3rem, 10vw, 8rem); font-weight: 700; letter-spacing: -0.045em; line-height: .98; }
+  h2 { font-size: clamp(2rem, 4.6vw, 3.75rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; max-width: 24ch; text-wrap: balance; }
+  h2 .dim { color: var(--faint); }
+  h3 { font-size: clamp(1.05rem, 1.5vw, 1.25rem); font-weight: 600; letter-spacing: -0.015em; line-height: 1.3; }
+  p, li, dd { font-size: clamp(.95rem, 1.25vw, 1.0625rem); line-height: 1.55; color: var(--mute); }
+  .lede { font-size: clamp(1.05rem, 1.6vw, 1.3rem); max-width: 48rem; color: var(--mute); }
+  .note { font-size: clamp(.95rem, 1.3vw, 1.1rem); color: var(--mute); max-width: 52rem; }
+  .mono { font-family: var(--mono); font-size: .75rem; letter-spacing: .03em; text-transform: uppercase; color: var(--faint); }
+
+  /* hero */
+  .dark { background: var(--black); color: #f5f5f7; }
+  .hero { justify-content: center; }
+  .hero h1 { background: linear-gradient(180deg, #fff 0%, #a1a1a6 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero .kicker { color: #8fd18a; }
+  .lede, .note, .hero-sub, p { text-wrap: pretty; }
+  .hero-sub { font-size: clamp(1.15rem, 2.2vw, 1.75rem); line-height: 1.4; color: #a1a1a6; max-width: 40rem; letter-spacing: -0.01em; }
+  .hero-sub.dimmer { color: #6e6e73; }
+  .byline { font-size: .95rem; color: #6e6e73; margin-top: 1rem; }
+  .byline a { color: #a1a1a6; text-decoration: none; border-bottom: 1px solid #3a3a3c; }
+  .byline a:hover { color: #fff; }
+
+  /* grids */
+  .grid { display: grid; gap: clamp(.75rem, 1.4vw, 1.25rem); }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  .tile { background: var(--tile); border: 1px solid var(--line); border-radius: 20px; padding: clamp(1.25rem, 2vw, 1.75rem); display: flex; flex-direction: column; gap: .6rem; }
+  .tile .num { font-family: var(--mono); font-size: .75rem; color: var(--faint); }
+  .tile .test { margin-top: auto; padding-top: .75rem; border-top: 1px solid var(--line); color: var(--ink); font-weight: 500; }
+
+  .stat { padding: .25rem 0; display: flex; flex-direction: column; gap: .5rem; }
+  .stat b { font-size: clamp(2.25rem, 5vw, 4rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--ink); }
+  .stat p { max-width: 22rem; }
+
+  /* compare */
+  .panel { border-radius: 24px; padding: clamp(1.5rem, 2.5vw, 2.25rem); background: #f2f2f5; }
+  .panel.on { background: var(--black); }
+  .panel .label { font-family: var(--mono); font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 1.1rem; color: var(--faint); }
+  .panel.on .label { color: #8fd18a; }
+  .panel ul { list-style: none; display: grid; gap: .85rem; }
+  .panel li { font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--faint); text-decoration: line-through; text-decoration-color: #c7c7cc; }
+  .panel.on li { color: #f5f5f7; text-decoration: none; }
+
+  /* flow */
+  .flow { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--line); }
+  .flow li { padding: 1.25rem 1.25rem 0 0; display: flex; flex-direction: column; gap: .5rem; position: relative; }
+  .flow li::before { content: ''; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+  .flow .mono { color: var(--ink); font-weight: 500; font-size: .8rem; }
+
+  /* how it works */
+  .split { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .split h2 { margin-bottom: 2rem; }
+  .steps { display: grid; gap: 1.25rem; }
+  .steps > div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+  .steps dt { font-weight: 600; color: var(--ink); }
+  .phone { background: #fff; border: 1px solid var(--line); border-radius: 28px; padding: 1.25rem; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .18), 0 2px 6px rgba(0, 0, 0, .04); max-width: 24rem; justify-self: center; width: 100%; }
+  .chat-head { display: flex; align-items: center; gap: .5rem; font-size: .85rem; font-weight: 600; padding-bottom: 1rem; border-bottom: 1px solid var(--line); margin-bottom: 1rem; }
+  .chat-head .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); }
+  .bubble { background: #f2f2f5; border-radius: 18px; padding: 1rem; display: grid; gap: .65rem; }
+  .bubble p { font-size: .9rem; color: #3a3a3c; }
+  .bubble .b-title { font-weight: 600; color: var(--ink); font-size: .95rem; }
+  .evidence { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .evidence span { font-family: var(--mono); font-size: .68rem; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .2rem .55rem; color: var(--mute); }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .25rem; }
+  .actions button { font: inherit; font-size: .85rem; font-weight: 600; border: 0; border-radius: 12px; padding: .6rem; background: #fff; color: var(--ink); }
+  .actions .yes { background: var(--accent); color: #fff; }
+  .caption { font-size: .72rem; text-align: center; margin-top: .75rem; color: var(--faint); }
+
+  /* habits */
+  .habit { display: flex; gap: .9rem; align-items: flex-start; padding: 1.25rem 0; border-top: 1px solid var(--line); }
+  .habit p { font-size: clamp(1rem, 1.5vw, 1.2rem); }
+  .habit b { color: var(--ink); font-weight: 600; }
+  .check { flex: 0 0 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); position: relative; margin-top: .15rem; }
+  .check::after { content: ''; position: absolute; left: 7px; top: 4px; width: 5px; height: 10px; border: solid var(--accent); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+
+  /* timeline */
+  .timeline { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 2rem); }
+  .timeline li { display: flex; flex-direction: column; gap: .5rem; padding-top: 1.25rem; border-top: 2px solid var(--line); }
+  .timeline li:first-child { border-top-color: var(--accent); }
+
+  /* chrome */
+  #progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 20; }
+  #progress span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform .4s ease; }
+  #hud { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: .25rem; padding: .3rem; border-radius: 999px; z-index: 20;
+    background: rgba(255, 255, 255, .72); border: 1px solid rgba(0, 0, 0, .06); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); color: var(--ink); transition: background .3s, color .3s, border-color .3s; }
+  #hud.on-dark { background: rgba(40, 40, 42, .72); border-color: rgba(255, 255, 255, .08); color: #f5f5f7; }
+  #hud button { display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; }
+  #hud button:hover { background: rgba(127, 127, 127, .15); }
+  #count { font-family: var(--mono); font-size: .75rem; min-width: 4.5rem; text-align: center; font-variant-numeric: tabular-nums; opacity: .8; }
+
+  @media (max-width: 900px) {
+    .g4 { grid-template-columns: repeat(2, 1fr); }
+    .g3, .g2, .split, .timeline { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: 1fr; border-top: 0; border-left: 1px solid var(--line); padding-left: 1.25rem; }
+    .flow li { padding: 0 0 1rem 0; }
+    .flow li::before { top: .35rem; left: calc(-1.25rem - 5px); }
+    .slide { justify-content: flex-start; padding-top: 3rem; }
+    .hero { justify-content: center; }
+    .phone { justify-self: start; }
   }
-  @media (min-width: 821px) and (max-width: 1100px) { .cards.five { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .g4 { grid-template-columns: 1fr; } .steps > div { grid-template-columns: 1fr; gap: .25rem; } }
 </style>
