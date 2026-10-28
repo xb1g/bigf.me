@@ -1,588 +1,233 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import {
-  packages,
-  workMeta,
-  sharedProcess,
-  sharedStack,
-  referenceBuild,
-  formatThb,
-} from '../lib/work_plans';
-
-const tierAccent: Record<string, { border: string; glow: string; label: string; bar: string }> = {
-  xs: {
-    border: 'rgba(57, 255, 20, 0.45)',
-    glow: 'rgba(57, 255, 20, 0.12)',
-    label: '#39ff14',
-    bar: 'linear-gradient(90deg, #39ff14, #5cceff)',
-  },
-  small: {
-    border: 'rgba(92, 206, 255, 0.35)',
-    glow: 'rgba(92, 206, 255, 0.08)',
-    label: '#5cceff',
-    bar: 'linear-gradient(90deg, #5cceff, #a78bfa)',
-  },
-  medium: {
-    border: 'rgba(167, 139, 250, 0.35)',
-    glow: 'rgba(167, 139, 250, 0.1)',
-    label: '#a78bfa',
-    bar: 'linear-gradient(90deg, #a78bfa, #ff6b9d)',
-  },
-  large: {
-    border: 'rgba(255, 107, 157, 0.55)',
-    glow: 'rgba(255, 107, 157, 0.15)',
-    label: '#ff6b9d',
-    bar: 'linear-gradient(90deg, #ff6b9d, #ffd700)',
-  },
-};
-
+import { Image } from 'astro:assets';
+import portrait from '../assets/images/profile.jpg';
+import { packages, workMeta, formatThb } from '../lib/work_plans';
+let bookingUrl = workMeta.bookingUrl;
+try {
+  const url = new URL(import.meta.env.PUBLIC_BOOKING_URL || workMeta.bookingUrl);
+  if (url.protocol === 'https:') bookingUrl = url.href;
+} catch { /* Keep the confirmed booking link if an override is invalid. */ }
+const faqs = [
+  ['Can we talk before I commit?', 'Yes. Book a 30-minute project call to discuss the problem, your budget and the right first step. There is no payment required to request a call.'],
+  ['What happens after the call?', 'You receive a written scope, price, timeline and payment milestones. Work starts after we agree the scope and the kickoff payment is made.'],
+  ['What do you need from me?', 'One person who can approve decisions, your existing assets and content, and time to review the demo. Delivery estimates begin once the agreed inputs are ready.'],
+  ['Who owns the finished work?', 'The agreed source code and project documentation are handed over after full payment. Hosting, domains and third-party services are listed separately in your quote.'],
+  ['What happens after launch?', 'Builds include a 14-day window for fixes to defects in the agreed scope. Ongoing maintenance and new features can be scoped separately.'],
+  ['Can we work in Thai?', 'ได้ครับ คุยรายละเอียดและทำงานร่วมกันได้ทั้งภาษาไทยและภาษาอังกฤษ'],
+];
 ---
-
-<Layout title="bigf.me - Work / Build Plans">
-  <div class="work-page min-h-screen bg-[#0a0a0f] text-[#e2e8f0] flex flex-col monitor-warp scanlines pb-24 overflow-x-hidden">
-    <div class="vaporwave-bg"></div>
-    <div class="vaporwave-sunset"></div>
-    <div class="tracking-line"></div>
-    <div class="scanline-moving"></div>
-
-    <header class="work-header relative z-10 max-w-[72rem] mx-auto w-full px-5 md:px-8 pt-8 md:pt-12 pb-6">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-10 md:mb-14">
-        <a href="/" class="work-back font-mono text-sm text-[#ff6b9d] hover:text-[#5cceff] transition-colors flex items-center gap-2">
-          <span aria-hidden="true">←</span> cd ..
-        </a>
-        <p class="font-mono text-[10px] uppercase tracking-[0.35em] text-[#94a3b8]">Fixed scope · THB · Milestones</p>
-      </div>
-
-      <div class="work-hero max-w-2xl">
-        <p class="font-mono text-xs uppercase tracking-[0.28em] text-[#5cceff] mb-4 crt-text">Quote tiers</p>
-        <h1 class="work-title font-display text-[clamp(2.75rem,8vw,4.75rem)] leading-[0.92] font-bold tracking-tight text-[#f1f5f9] mb-6">
-          Software<br />
-          <span class="work-title-accent">build plans</span>
-        </h1>
-        <p class="font-sans text-base md:text-lg text-[#94a3b8] leading-relaxed">{workMeta.subtitle}</p>
-      </div>
-
-      <ul class="work-features-list flex flex-wrap gap-y-2 gap-x-6 mt-8 md:mt-10" role="list">
-        <li class="work-feature-item">Flat THB fee</li>
-        <li class="work-feature-item">Scope locked at kickoff</li>
-        <li class="work-feature-item">3 days – 6 weeks</li>
-      </ul>
+<Layout title={workMeta.title} description={workMeta.description}>
+  <div class="services">
+    <a href="#main" class="skip-link">Skip to services</a>
+    <header class="studio-nav">
+      <a class="wordmark" href="/" aria-label="bigf.me home">bigf<span>.me</span><span class="nav-divider">/</span><span class="nav-label">Independent builder</span></a>
+      <nav aria-label="Services navigation"><a href="#services">Services</a><a href="#selected-work">Work</a><a href={bookingUrl} class="nav-book" target="_blank" rel="noopener noreferrer">Book a call ↗</a></nav>
     </header>
-
-    <main class="flex-1 max-w-[72rem] mx-auto w-full px-5 md:px-8 relative z-10 space-y-20 md:space-y-28">
-      <!-- Tier panels -->
-      <section class="work-tiers space-y-5 md:space-y-6" aria-label="Build tiers">
-        {packages.map((pkg) => {
-          const accent = tierAccent[pkg.id];
-          const isFeatured = pkg.recommended;
-          const isXs = pkg.id === 'xs';
-          return (
-            <article
-              id={`tier-${pkg.id}`}
-              class:list={[
-                'work-tier scroll-mt-28 rounded-[1.35rem] border backdrop-blur-md transition-all duration-500',
-                isFeatured ? 'work-tier--featured' : isXs ? 'work-tier--xs' : 'work-tier--standard',
-              ]}
-              style={`--tier-border: ${accent.border}; --tier-glow: ${accent.glow}; --tier-label: ${accent.label}`}
-            >
-              <div class="work-tier-clip">
-                {pkg.badge && (
-                  <div
-                    class:list={[
-                      'work-tier-ribbon font-mono',
-                      isXs && 'work-tier-ribbon--green',
-                    ]}
-                  >
-                    {pkg.badge}
-                  </div>
-                )}
-
-                <div class="work-tier-inner grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)_auto] gap-8 lg:gap-10 p-6 md:p-8 lg:p-9">
-                  <!-- Price block -->
-                  <div class="work-tier-head lg:pr-4 lg:border-r lg:border-[#2a2a3f]/60">
-                    <div class="flex items-center gap-3 mb-3">
-                      <h2 class="work-tier-id font-display text-4xl md:text-5xl font-bold leading-none" style={`color: ${accent.label}`}>
-                        {pkg.name}
-                      </h2>
-                      <span class="font-mono text-[10px] uppercase tracking-widest text-[#cbd5e1] hidden sm:inline">
-                        {pkg.timeline}
-                      </span>
-                    </div>
-                    <p class="font-sans text-[#cbd5e1] text-base leading-snug mb-6 max-w-sm">{pkg.tagline}</p>
-                    <div class="flex items-end gap-2 mb-1">
-                      <span class="font-display text-4xl md:text-[2.75rem] font-bold text-[#f8fafc] tabular-nums tracking-tight">
-                        {formatThb(pkg.totalThb)}
-                      </span>
-                      <span class="font-mono text-sm text-[#94a3b8] pb-1">THB</span>
-                    </div>
-                    <p class="font-mono text-xs text-[#94a3b8] sm:hidden mb-4">{pkg.timeline} · fixed scope</p>
-
-                    <div class="work-milestones mt-6 space-y-2.5">
-                      <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[#94a3b8]">
-                        Pay {pkg.paymentLabel ?? '40 / 40 / 20'}
-                      </p>
-                      {pkg.milestones.map((m, i) => (
-                        <div class="work-milestone-row">
-                          <div class="flex justify-between gap-3 text-xs font-mono mb-1">
-                            <span class="text-[#94a3b8]">{m.label}</span>
-                            <span class="text-[#f1f5f9] tabular-nums shrink-0">{formatThb(m.amount)}</span>
-                          </div>
-                          <div class="work-milestone-track">
-                            <div
-                              class="work-milestone-fill"
-                              style={`width: ${Math.round((m.amount / pkg.totalThb) * 100)}%; background: ${accent.bar}; animation-delay: ${i * 120}ms`}
-                            ></div>
-                          </div>
-                          <p class="text-xs text-[#cbd5e1] mt-1 leading-snug">{m.trigger}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <!-- Scope -->
-                  <div>
-                    <h3 class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#cbd5e1] mb-4">In scope</h3>
-                    <ul class="space-y-2.5">
-                      {pkg.scope.map((item) => (
-                        <li class="work-scope-item font-sans text-sm text-[#cbd5e1] leading-snug">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <h3 class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#cbd5e1] mt-8 mb-3">Good for</h3>
-                    <ul class="space-y-1.5 mt-3">
-                      {pkg.examples.slice(0, 4).map((ex) => (
-                        <li class="work-example-item font-sans text-xs text-[#94a3b8] flex items-center gap-2">
-                          <span class="w-1.5 h-1.5 rounded-full shrink-0" style={`background-color: ${accent.label}; box-shadow: 0 0 6px ${accent.glow};`}></span>
-                          <span>{ex}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <!-- CTA column -->
-                  <div class="flex flex-col justify-between gap-6 lg:min-w-[11rem] lg:items-stretch">
-                    <div class="hidden lg:block">
-                      <h3 class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#cbd5e1] mb-3">Not included</h3>
-                      <ul class="space-y-2">
-                        {pkg.notIncluded.slice(0, 3).map((item) => (
-                          <li class="text-xs text-[#cbd5e1] leading-snug pl-3 border-l border-[#2a2a3f]">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <a
-                      href={`mailto:${workMeta.contactEmail}?subject=${encodeURIComponent(`Quote request: ${pkg.name} tier`)}`}
-                      class:list={[
-                        'work-cta font-mono text-xs uppercase tracking-[0.15em] text-center py-3.5 px-5 rounded-full transition-all duration-300',
-                        isFeatured && 'work-cta--featured',
-                        isXs && 'work-cta--xs',
-                        !isFeatured && !isXs && 'work-cta--default',
-                      ]}
-                    >
-                      Request quote
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </article>
-          );
-        })}
-      </section>
-
-      <!-- Process + stack bento -->
-      <section class="grid md:grid-cols-2 gap-4 md:gap-5">
-        <div class="work-bento rounded-[1.35rem] border border-[#2a2a3f]/80 bg-[#0c0c14]/50 p-7 md:p-8">
-          <h2 class="font-display text-2xl text-[#f1f5f9] mb-6 tracking-tight">How it runs</h2>
-          <ol class="space-y-5">
-            {sharedProcess.map((item, i) => (
-              <li class="work-step flex gap-4">
-                <span class="work-step-num font-display text-2xl text-[#5cceff]/40 leading-none tabular-nums">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <p class="font-sans text-sm text-[#94a3b8] leading-relaxed pt-0.5">{item}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        <div class="work-bento work-bento--stack rounded-[1.35rem] border border-[#2a2a3f]/80 bg-[#0c0c14]/50 p-7 md:p-8">
-          <h2 class="font-display text-2xl text-[#f1f5f9] mb-6 tracking-tight">Typical stack</h2>
-          <ul class="space-y-4 mb-6">
-            {sharedStack.map((item) => (
-              <li class="font-sans text-sm text-[#94a3b8] leading-relaxed pl-4 border-l-2 border-[#ff6b9d]/40">{item}</li>
-            ))}
-          </ul>
-          <blockquote class="work-note font-mono text-xs text-[#94a3b8] leading-relaxed border-t border-[#2a2a3f] pt-5">
-            {workMeta.scopeNote}
-          </blockquote>
-        </div>
-      </section>
-
-      <!-- Phase 2 matrix -->
-      <section class="work-phase rounded-[1.35rem] border border-[#2a2a3f]/60 bg-[#08080c]/40 p-6 md:p-8">
-        <h2 class="font-mono text-xs uppercase tracking-[0.3em] text-[#94a3b8] mb-6">Usually Phase 2 or change order</h2>
-        <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-8">
-          {packages.map((pkg) => (
-            <div>
-              <h3 class="font-display text-lg mb-3" style={`color: ${tierAccent[pkg.id].label}`}>{pkg.name}</h3>
-              <ul class="space-y-2">
-                {pkg.notIncluded.map((item) => (
-                  <li class="text-xs text-[#cbd5e1] leading-relaxed">{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Enterprise AI Advisory -->
-      <section class="work-enterprise rounded-[1.35rem] border border-[#ff6b9d]/30 bg-[#0f0a14]/60 p-6 md:p-8 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-[#ff6b9d]/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="max-w-3xl relative z-10">
-          <p class="font-mono text-xs uppercase tracking-[0.25em] text-[#ff6b9d] mb-3">Enterprise advisory</p>
-          <h2 class="font-display text-2xl md:text-3xl text-[#f1f5f9] mb-4 tracking-tight">SME & Enterprise AI Adoption</h2>
-          <p class="font-sans text-sm md:text-base text-[#cbd5e1] leading-relaxed mb-6">
-            Advising leadership on practical AI integration, model selection, custom LLM fine-tuning, and workflow automation. From feasibility workshops to secure enterprise deployment pipelines on Cloudflare and Backblaze.
-          </p>
-          <div class="flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-[#cbd5e1]">
-            <span class="flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#ff6b9d] shadow-[0_0_8px_#ff6b9d]"></span>
-              Custom LLM Feasibility
-            </span>
-            <span class="flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#ff6b9d] shadow-[0_0_8px_#ff6b9d]"></span>
-              Security & Privacy Audits
-            </span>
-            <span class="flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#ff6b9d] shadow-[0_0_8px_#ff6b9d]"></span>
-              Workflow Automation
-            </span>
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-inner wrap">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="signal" aria-hidden="true"></span> Work directly with the person building it</p>
+            <h1 id="hero-title">Your next idea.<br />Let’s make it <em>real.</em></h1>
+            <p class="hero-description">I’m Big, a designer and developer. I build websites, apps and business tools that turn “we should” into something you can actually use.</p>
+            <div class="hero-actions"><a href={bookingUrl} class="button primary" target="_blank" rel="noopener noreferrer">Book a 30-minute call ↗</a><a class="text-link" href="#services">Explore the services ↓</a></div>
+            <p class="hero-note">30-minute intro · English / ไทย · No commitment</p>
           </div>
+          <figure class="portrait"><Image src={portrait} alt="Bunyasit Fang, also known as Big" width={640} height={800} fit="cover" loading="eager" fetchpriority="high" /><figcaption><span>Bunyasit Fang</span><span>Design → build → handoff</span></figcaption></figure>
         </div>
+        <div class="hero-foot wrap"><span>Independent by choice. Built with intention.</span><a href="#services">Find your starting point ↓</a></div>
       </section>
-
-      <!-- Reference -->
-      <section class="work-reference max-w-2xl">
-        <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#94a3b8] mb-3">Recent reference</p>
-        <blockquote class="relative pl-6 border-l-2 border-[#ff6b9d]/50">
-          <p class="font-display text-xl md:text-2xl text-[#e2e8f0] leading-snug mb-3">{referenceBuild.title}</p>
-          <p class="font-sans text-sm text-[#94a3b8] leading-relaxed max-w-[70ch]">{referenceBuild.summary}</p>
-        </blockquote>
+      <section id="services" class="wrap section" aria-labelledby="services-title">
+        <div class="section-heading"><div><p class="eyebrow">01 / The offers</p><h2 id="services-title">A clear way<br />to get moving.</h2></div><p>Choose the outcome you need. We’ll agree the details before the first line of code.</p></div>
+        <div class="offers">{packages.map((pkg, index) => <article class:list={['offer', { recommended: pkg.recommended }]} id={`service-${pkg.id}`}>
+          <div class="offer-intro"><p class="eyebrow">{String(index + 1).padStart(2, '0')} / {pkg.label}{pkg.recommended && <span class="recommendation">For growing businesses</span>}</p><h3>{pkg.name}</h3><p>{pkg.tagline}</p><p class="offer-timing">{pkg.timeline} · Agreed scope</p></div>
+          <div class="offer-scope"><ul>{pkg.scope.map(item => <li>{item}</li>)}</ul><p class="boundary">{pkg.boundary}</p></div>
+          <div class="offer-price"><span class="price-caption">Project fee</span><p class="price">฿{formatThb(pkg.totalThb)}</p><p class="payment">{pkg.payment}</p><a class="button secondary" href="#project-inquiry" data-service={pkg.id}>Discuss this project ↗</a></div>
+        </article>)}</div>
+        <div class="custom-offer"><p><strong>Something more specific?</strong> AI workflow automation, an existing product that needs help, or ongoing improvements.</p><a href="#project-inquiry" data-service="custom" class="text-link">Tell me what you need ↗</a></div>
+        <p class="pricing-note">All prices in THB. Third-party fees and any applicable taxes will be itemized in your written quote. Timelines depend on scope and timely feedback.</p>
       </section>
-
-      <!-- CTA -->
-      <section class="work-final-cta text-center py-4 md:py-8">
-        <p class="font-sans text-[#94a3b8] mb-6 max-w-lg mx-auto leading-relaxed">
-          Send a short brief: what you're building, who uses it, must-haves, and deadline. I'll reply with the right tier — or a custom quote between tiers.
-        </p>
-        <a
-          href={`mailto:${workMeta.contactEmail}?subject=${encodeURIComponent('Software build quote request')}`}
-          class="work-cta work-cta--featured inline-block min-w-[14rem]"
-        >
-          Email {workMeta.contactEmail}
-        </a>
-      </section>
+      <section id="selected-work" class="work-section" aria-labelledby="work-title"><div class="wrap section">
+        <div class="section-heading"><div><p class="eyebrow">02 / Inside a build</p><h2 id="work-title">More than<br />a good-looking page.</h2></div><p>A storefront for customers. A working system for the people behind it.</p></div>
+        <div class="project"><a href="/topoftherank" class="project-image" aria-label="Explore the Top of the Rank visual demo"><img src="/topoftherank/og.png" alt="Top of the Rank vehicle storefront design" width="1200" height="630" loading="lazy" /><span>Explore the visual demo <span aria-hidden="true">↗</span></span></a><div class="project-copy"><p class="eyebrow">Automotive / Custom business app</p><h3>Top of the Rank</h3><p>A luxury vehicle showroom backed by inventory, photo management and customer inquiry tools.</p><ul><li>Searchable showroom and individual car pages</li><li>Staff tools to manage vehicles, photos and availability</li><li>Lead management and promotional content</li></ul><p class="project-note">Storefront demo shown. Inventory and staff tools are part of the broader build.</p></div></div>
+      </div></section>
+      <section class="wrap section process" aria-labelledby="process-title"><div class="section-heading"><div><p class="eyebrow">03 / How we work</p><h2 id="process-title">Clear scope.<br />Visible progress.</h2></div><p>You know what’s being built, what comes next and when each payment is due.</p></div><ol class="process-steps"><li><span>01</span><h3>Talk it through</h3><p>We discuss the problem, the people using it and what success should look like.</p></li><li><span>02</span><h3>Agree the plan</h3><p>A written scope, responsibilities, review dates and milestones. Extras get their own quote.</p></li><li><span>03</span><h3>Try the real thing</h3><p>Review a working demo, give consolidated feedback and see the core flow in action.</p></li><li><span>04</span><h3>Launch & hand over</h3><p>Deploy, walk through the product together and receive the agreed code and documentation.</p></li></ol></section>
+      <section class="booking-section" id="book" aria-labelledby="book-title"><div class="wrap section booking-layout">
+        <div class="booking-copy"><p class="eyebrow">04 / Your next step</p><h2 id="book-title">Tell me what<br />you have in mind.</h2><p>A rough idea is enough. Pick a time on my calendar and let’s find the right first step for your project.</p><p class="thai-copy" lang="th">เล่าไอเดียเป็นภาษาไทยได้เลยครับ</p>{bookingUrl && <a class="button primary calendar-link" href={bookingUrl} target="_blank" rel="noopener noreferrer">Choose your time ↗</a>}<a class="email-link" href={`mailto:${workMeta.contactEmail}`}>{workMeta.contactEmail} ↗</a><p class="booking-note">Prefer email? Send your goal, budget and ideal start date directly.</p></div>
+        <div class="booking-options"><div class="appointment"><div class="appointment-top"><span class="eyebrow">Your first conversation</span><span class="appointment-duration">30 min</span></div><h3>Big ideas start<br />with a small hello.</h3><p>Bring your idea, your questions, or the workflow that’s been slowing you down.</p><ul><li>Talk through what you want to build</li><li>Explore a sensible scope and budget</li><li>Leave with a clear next step</li></ul><a class="button primary" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a project call ↗</a><p class="appointment-note">Choose an available time in your timezone on Cal.com.</p></div><details class="brief-details"><summary>Prefer to send a project brief first?<span aria-hidden="true">+</span></summary><form id="project-inquiry" data-email={workMeta.contactEmail}>
+          <div class="form-row"><div class="field"><label for="client-name">Your name <span>(required)</span></label><input id="client-name" name="name" autocomplete="name" required maxlength="100" placeholder="What should I call you?" /></div><div class="field"><label for="client-email">Email <span>(required)</span></label><input id="client-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@company.com" /></div></div>
+          <div class="field"><label for="project-service">What can I help with?</label><select id="project-service" name="service"><option value="unsure">Help me choose</option>{packages.map(pkg => <option value={pkg.id}>{pkg.label} — ฿{formatThb(pkg.totalThb)}</option>)}<option value="custom">Custom project / AI / ongoing support</option></select></div>
+          <div class="field"><label for="project-goal">What would you like to build? <span>(required)</span></label><textarea id="project-goal" name="goal" rows="4" required minlength="10" maxlength="2500" placeholder="Who is it for, and what should it help them do? Existing links are welcome."></textarea></div>
+          <div class="form-row"><div class="field"><label for="project-budget">Project budget</label><select id="project-budget" name="budget"><option>Let’s discuss</option><option>Under ฿50,000</option><option>฿50,000–120,000</option><option>฿120,000–200,000</option><option>฿200,000–300,000</option><option>฿300,000+</option></select></div><div class="field"><label for="project-start">Ideal start</label><select id="project-start" name="start"><option>Flexible / exploring</option><option>Within a month</option><option>In 1–3 months</option><option>Have a fixed deadline</option></select></div></div>
+          <div class="field"><label for="call-times">Preferred call times & timezone <span>(optional)</span></label><input id="call-times" name="times" maxlength="250" placeholder="e.g. Tue or Thu, 2–5 pm, Bangkok time" /></div>
+          <p class="form-note" id="request-explainer">This prepares an email to Big. Send it from your email app to request a call. Your time is confirmed personally by email.</p>
+          <button class="button primary" type="submit" aria-describedby="request-explainer" disabled>Prepare my call request ↗</button>
+          <noscript><p class="form-note">The request builder needs JavaScript. Email <a href={`mailto:${workMeta.contactEmail}`}>{workMeta.contactEmail}</a> with your project details instead.</p></noscript>
+          <div id="request-ready" class="request-ready" hidden aria-labelledby="request-ready-title"><h3 id="request-ready-title" tabindex="-1">Your email draft is ready.</h3><p>Send it to request your call. Nothing has been submitted yet.</p><a id="send-request" class="button primary" href={`mailto:${workMeta.contactEmail}`}>Open email & send ↗</a><label for="request-draft">No email app? Copy this draft and send it to {workMeta.contactEmail}.</label><textarea id="request-draft" rows="8" readonly></textarea><button id="copy-request" type="button" class="text-link">Copy email draft</button><p id="copy-status" role="status" aria-live="polite"></p></div>
+        </form></details></div>
+      </div></section>
+      <section class="wrap section faq" aria-labelledby="faq-title"><div><p class="eyebrow">A few practical things</p><h2 id="faq-title">Before we begin.</h2></div><div>{faqs.map(([question, answer]) => <details><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
     </main>
-
-    <footer class="text-center py-12 px-5 text-[#cbd5e1] font-mono text-xs tracking-wider normal-case relative z-10">
-      <p class="mb-5">Fixed scope · Milestone payments · Web apps & platforms</p>
-      <a href="/" class="inline-block px-5 py-2.5 border border-[#2a2a3f] rounded-full hover:border-[#ff6b9d] hover:text-[#ff6b9d] transition-all text-xs tracking-widest">
-        Return to terminal
-      </a>
-    </footer>
+    <footer class="wrap"><a href="/" class="wordmark">bigf<span>.me</span></a><p>Built with care. Let’s make something useful.</p><a href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a call ↗</a></footer>
   </div>
 </Layout>
-
+<script>
+  const form = document.querySelector<HTMLFormElement>('#project-inquiry');
+  const service = document.querySelector<HTMLSelectElement>('#project-service');
+  const ready = document.querySelector<HTMLElement>('#request-ready');
+  const draft = document.querySelector<HTMLTextAreaElement>('#request-draft');
+  const submit = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  if (submit) submit.disabled = false;
+  document.querySelectorAll<HTMLAnchorElement>('[data-service]').forEach(link => {
+    link.addEventListener('click', () => {
+      const brief = document.querySelector<HTMLDetailsElement>('.brief-details');
+      if (brief) brief.open = true;
+      if (service) service.value = link.dataset.service || 'unsure';
+      if (ready) ready.hidden = true;
+      document.querySelector<HTMLInputElement>('#client-name')?.focus({ preventScroll: true });
+    });
+  });
+  form?.addEventListener('input', event => { if (ready && !(event.target as HTMLElement).closest('#request-ready')) ready.hidden = true; });
+  form?.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!form.reportValidity() || !draft || !ready) return;
+    const data = new FormData(form);
+    const get = (key: string) => String(data.get(key) || '').trim();
+    const body = `Hi Big,\n\nI’d like to discuss a project and arrange a 30-minute call.\n\nName: ${get('name')}\nReply email: ${get('email')}\nService: ${service?.selectedOptions[0]?.textContent}\nBudget: ${get('budget')}\nIdeal start: ${get('start')}\nPreferred call times & timezone: ${get('times') || 'Please suggest a time'}\n\nWhat I’d like to build:\n${get('goal')}\n\nPlease let me know the next step. Thank you!`;
+    draft.value = body;
+    const send = document.querySelector<HTMLAnchorElement>('#send-request');
+    if (send) send.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(`Project call request — ${get('name').replace(/[\r\n]/g, ' ')}`)}&body=${encodeURIComponent(body)}`;
+    const status = document.querySelector<HTMLElement>('#copy-status');
+    if (status) status.textContent = '';
+    ready.hidden = false;
+    document.querySelector<HTMLElement>('#request-ready-title')?.focus();
+  });
+  document.querySelector('#copy-request')?.addEventListener('click', async () => {
+    if (!draft) return;
+    const status = document.querySelector<HTMLElement>('#copy-status');
+    try { await navigator.clipboard.writeText(draft.value); if (status) status.textContent = 'Copied. Paste this into an email to Big.'; }
+    catch { draft.focus(); draft.select(); if (status) status.textContent = 'Select and copy the draft above, then paste it into your email.'; }
+  });
+</script>
 <style>
-  .work-page {
-    font-family: var(--font-sans);
+  :global(html:has(.services)) { scroll-behavior:smooth; scroll-padding-top:100px; overflow-x:clip; }
+  :global(body:has(.services)) { overflow-x:clip; }
+  .services .button.primary { color:#151017; }
+  :global(.services), :global(.services *) { cursor:auto !important; }
+  :global(.services a), :global(.services button), :global(.services summary), :global(.services select) { cursor:pointer !important; }
+  :global(body:has(.services) #cursor-dot) { display:none; }
+  .services { --accent:#ff85ab; --muted:#aaa9b7; --line:#2b2933; color:#f4f1ee; background:#101015; font-family:var(--font-sans); }
+  .services a { text-decoration:none; color:inherit; }
+  .services :is(a,button,input,textarea,select,summary):focus-visible { outline:2px solid var(--accent); outline-offset:5px; }
+  .wrap { width:min(1280px,calc(100% - clamp(40px,7vw,128px))); margin-inline:auto; }
+  .studio-nav { display:flex; align-items:center; justify-content:space-between; padding:20px clamp(20px,3.5vw,64px); min-height:76px; position:sticky; top:0; z-index:20; background:#101015f5; border-bottom:1px solid var(--line); }
+  .wordmark { font-family:var(--font-display); font-size:27px; font-weight:700; letter-spacing:-1px; display:flex; align-items:center; }
+  .wordmark>span:first-child { color:var(--accent); }
+  .nav-divider { color:#55505e; margin:0 23px; font-weight:400; }
+  .nav-label { font-family:var(--font-sans); font-size:13px; font-weight:400; letter-spacing:0; color:var(--muted); }
+  nav { display:flex; align-items:center; gap:30px; font-size:14px; } nav a { transition:color .2s; } nav a:hover { color:var(--accent); } .nav-book { border-bottom:1px solid var(--accent); padding-block:7px; }
+  .hero { position:relative; overflow:hidden; border-bottom:1px solid var(--line); }
+  .hero-inner { min-height:min(650px,calc(100svh - 140px)); display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); align-items:center; gap:clamp(28px,4vw,64px); padding-block:clamp(44px,7vh,80px); }
+  .hero-copy { position:relative; z-index:2; animation:arrive .65s ease-out both; }
+  .eyebrow { font-size:11px; font-family:var(--font-mono); letter-spacing:1.6px; text-transform:uppercase; color:var(--muted); margin:0 0 24px; line-height:1.7; }
+  .signal { display:inline-block; width:6px; height:6px; background:var(--accent); border-radius:50%; margin-right:9px; }
+  h1,h2,h3,p { margin-top:0; } h1,h2,h3 { font-family:var(--font-display); font-weight:500; }
+  h1 { font-size:clamp(42px,6.1vw,92px); line-height:1.04; letter-spacing:-.055em; text-wrap:balance; margin-bottom:28px; } h1 em { font-style:normal; color:var(--accent); }
+  .hero-description { max-width:480px; font-size:19px; line-height:1.65; color:var(--muted); margin-bottom:30px; }
+  .hero-actions { display:flex; flex-wrap:wrap; align-items:center; gap:24px; } .button { min-height:49px; display:inline-flex; align-items:center; justify-content:center; gap:22px; padding:14px 22px; font:500 14px var(--font-sans); border:1px solid transparent; border-radius:4px; transition:background .2s,transform .2s,border-color .2s; }
+  .button:hover { transform:translateY(-2px); } .button.primary { background:var(--accent); color:#151017; } .button.primary:hover { background:#ffa0bd; } .button.secondary { border-color:#504450; background:transparent; color:#f4f1ee; } .button.secondary:hover { border-color:var(--accent); }
+  .text-link { font:500 14px var(--font-sans); border:0; background:none; padding:10px 0; color:inherit; } .text-link:hover { color:var(--accent); }
+  .hero-note { color:var(--muted); font-size:12px; margin:18px 0 0; }
+  .portrait { margin:0; position:relative; animation:arrive .85s .1s ease-out both; } .portrait img { width:100%; height:clamp(340px,35vw,490px); object-fit:cover; object-position:center 40%; filter:grayscale(1); border-radius:45% 45% 4px 4px; } .portrait figcaption { display:flex; justify-content:space-between; gap:12px; font-size:11px; color:var(--muted); margin-top:15px; } .portrait figcaption span:first-child { color:#f4f1ee; }
+  .hero-foot { display:flex; justify-content:space-between; padding-block:23px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); } .hero-foot a { color:var(--accent); }
+  .section { padding-block:clamp(64px,8vw,112px); } .section-heading { display:flex; justify-content:space-between; align-items:end; gap:40px; margin-bottom:52px; } .section-heading>p { max-width:305px; color:var(--muted); line-height:1.7; font-size:16px; margin-bottom:4px; } h2 { font-size:clamp(34px,4.5vw,60px); letter-spacing:-2px; line-height:1.08; margin-bottom:0; }
+  .offer { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1.1fr) minmax(210px,.75fr); gap:36px; padding:38px 0; border-top:1px solid var(--line); scroll-margin-top:100px; } .offer.recommended { border-top-color:var(--accent); } .offer:last-child { border-bottom:1px solid var(--line); } .offer .eyebrow { margin-bottom:14px; } .recommendation { display:block; color:var(--accent); font-size:9px; letter-spacing:.5px; }
+  .offer h3 { font-size:28px; letter-spacing:-.8px; line-height:1.15; margin-bottom:14px; max-width:280px; } .offer-intro>p:not(.eyebrow) { font-size:14px; line-height:1.7; color:var(--muted); } .offer-intro .offer-timing { font-size:12px; margin:20px 0 0; color:#d8d2db; }
+  .offer-scope ul,.project-copy ul { list-style:none; padding:0; margin:0; } .offer-scope li,.project-copy li { position:relative; padding-left:21px; font-size:14px; line-height:1.6; margin-bottom:11px; color:#d0cbd4; } .offer-scope li::before,.project-copy li::before { content:'↗'; position:absolute; left:0; color:var(--accent); font-size:12px; }
+  .boundary { font-size:12px; line-height:1.6; color:var(--muted); margin:20px 0 0; } .price-caption { font-size:11px; color:var(--muted); } .price { font-size:35px; font-family:var(--font-display); letter-spacing:-1px; margin:5px 0 13px; white-space:nowrap; } .payment { font-size:11px; line-height:1.8; color:var(--muted); min-height:40px; } .offer-price .button { font-size:12px; padding:12px 15px; gap:15px; width:100%; }
+  .custom-offer { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-top:32px; } .custom-offer p { color:var(--muted); font-size:14px; line-height:1.7; max-width:650px; margin:0; } .custom-offer strong { color:#f4f1ee; font-weight:500; } .custom-offer a { white-space:nowrap; color:var(--accent); } .pricing-note { font-size:11px; line-height:1.7; color:var(--muted); margin:25px 0 0; }
+  .work-section { background:#17161d; border-block:1px solid var(--line); } .project { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:60px; align-items:center; } .project-image { display:block; background:#090b0d; overflow:hidden; border-radius:4px; } .project-image img { width:100%; height:auto; display:block; transition:transform .45s; } .project-image:hover img { transform:scale(1.035); } .project-image>span { display:flex; justify-content:space-between; font-size:12px; padding:19px 22px; border-top:1px solid var(--line); } .project-copy h3 { font-size:35px; letter-spacing:-1px; margin-bottom:17px; } .project-copy>p:not(.eyebrow) { color:var(--muted); font-size:15px; line-height:1.7; } .project-copy ul { margin-top:23px; } .project-copy .project-note { font-size:11px !important; margin:25px 0 0; }
+  .process-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:32px; list-style:none; padding:0; margin:0; } .process-steps li { border-top:1px solid var(--line); padding-top:22px; } .process-steps span { font:11px var(--font-mono); color:var(--accent); } .process-steps h3 { margin:22px 0 12px; font-size:23px; letter-spacing:-.5px; } .process-steps p { color:var(--muted); font-size:14px; line-height:1.7; margin-bottom:0; }
+  .booking-section { background:#1d1820; border-block:1px solid #39303d; } .booking-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:clamp(40px,7vw,100px); } .booking-copy { position:sticky; top:120px; align-self:start; } .booking-copy>p:not(.eyebrow) { color:var(--muted); font-size:16px; line-height:1.75; margin:26px 0; max-width:350px; } .booking-copy .thai-copy { font-family:var(--font-thai); font-size:14px !important; } .email-link { display:block; font-size:15px; color:var(--accent) !important; overflow-wrap:anywhere; } .booking-copy .booking-note { font-size:12px !important; } .calendar-link { margin-bottom:25px; }
+  .field { display:flex; flex-direction:column; gap:9px; margin-bottom:22px; min-width:0; } .form-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; } label { font-size:13px; color:#f0e9f2; } label span { color:var(--muted); font-size:11px; } input,select,textarea { width:100%; box-sizing:border-box; background:#161219; border:1px solid #4a3e4c; border-radius:4px; color:#f4f1ee; font:16px var(--font-sans); padding:13px 14px; min-height:48px; } textarea { resize:vertical; } input::placeholder,textarea::placeholder { color:#a399a7; } select { color-scheme:dark; } .form-note { font-size:12px; line-height:1.7; color:var(--muted); margin:0 0 20px; } .request-ready { border-top:1px solid #63505d; margin-top:30px; padding-top:25px; } .request-ready[hidden] { display:none; } .request-ready h3 { font-size:24px; margin-bottom:10px; } .request-ready p { color:var(--muted); font-size:13px; line-height:1.7; } .request-ready label { display:block; margin:25px 0 12px; line-height:1.6; } #copy-status { margin-bottom:0; }
+  .faq { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:clamp(40px,7vw,100px); } .faq h2 { font-size:clamp(34px,9vw,48px); } details { border-bottom:1px solid var(--line); } details:first-child { border-top:1px solid var(--line); } summary { list-style:none; padding:22px 0; display:flex; justify-content:space-between; gap:20px; font-size:16px; } summary::-webkit-details-marker { display:none; } summary span { color:var(--accent); transition:transform .2s; } details[open] summary span { transform:rotate(45deg); } details p { color:var(--muted); line-height:1.8; font-size:14px; margin:0 25px 22px 0; }
+  footer { display:flex; align-items:center; justify-content:space-between; gap:24px; border-top:1px solid var(--line); padding-block:30px; } footer p,footer>a:last-child { font-size:12px; color:var(--muted); margin:0; } footer>a:last-child { color:var(--accent); }
+  .skip-link { position:fixed; left:12px; top:-100px; background:var(--accent); color:#151017 !important; padding:15px; z-index:100; } .skip-link:focus { top:12px; }
+  @keyframes arrive { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  @media(min-width:1600px) { .hero-inner { min-height:min(760px,calc(100svh - 160px)); } }
+  @media(max-width:1100px) { .wrap { width:calc(100% - 56px); } .studio-nav { padding-inline:28px; } .nav-label,.nav-divider { display:none; } .hero-inner { gap:28px; min-height:0; } h1 { letter-spacing:-.055em; } .portrait img { height:clamp(300px,40vw,400px); } .hero-description { font-size:17px; } .hero-actions { gap:12px; } .offer { gap:24px; grid-template-columns:1fr 1fr; } .offer-price { grid-column:1; grid-row:2; } .offer-scope { grid-column:2; grid-row:1 / span 2; } .offer-price .button { width:auto; } .payment { min-height:0; } .project { gap:32px; } .booking-layout,.faq { gap:45px; } .process-steps { gap:20px; } }
+  @media(max-width:640px) { .wrap { width:calc(100% - 40px); } .studio-nav { padding:15px 20px; } .wordmark { font-size:24px; } nav { gap:20px; font-size:12px; } nav>a:nth-child(2) { display:none; } .hero-inner { display:flex; flex-direction:column; padding-block:48px 30px; gap:32px; align-items:stretch; } h1 { font-size:clamp(36px,11.8vw,70px); letter-spacing:-.055em; } .hero .eyebrow { font-size:9px; letter-spacing:1px; } .hero-description { font-size:17px; } .hero-actions { gap:18px; } .hero-actions .text-link { font-size:13px; } .hero-note { font-size:11px; } .portrait { width:100%; } .portrait img { height:260px; border-radius:110px 110px 4px 4px; object-position:center 43%; } .hero-foot { font-size:10px; gap:20px; align-items:center; } .hero-foot>span { max-width:150px; } .section { padding-block:60px; } .section-heading { display:block; margin-bottom:32px; } .section-heading>p { margin-top:24px; max-width:none; } h2 { font-size:clamp(34px,9vw,48px); } .eyebrow { margin-bottom:18px; } .offer { display:flex; flex-direction:column; gap:24px; padding-block:30px; } .offer h3 { font-size:29px; max-width:none; } .offer-intro .offer-timing { margin-top:14px; } .offer-intro>p { margin-bottom:0; } .offer .eyebrow { margin-bottom:12px; } .recommendation { display:inline; margin-left:12px; } .offer-price { padding-top:4px; } .offer-price .button { width:100%; } .price { font-size:34px; } .boundary { margin-top:14px; } .custom-offer { align-items:start; flex-direction:column; gap:10px; } .project { display:flex; flex-direction:column; align-items:stretch; gap:30px; } .project-copy h3 { font-size:30px; } .process-steps { grid-template-columns:1fr 1fr; gap:28px 20px; } .process-steps h3 { font-size:21px; } .process-steps p { font-size:13px; } .booking-layout,.faq { display:block; } .booking-copy { position:static; margin-bottom:35px; } .booking-copy>p:not(.eyebrow) { max-width:none; } .form-row { grid-template-columns:1fr; gap:0; } #project-inquiry>.button { width:100%; } .faq>div:first-child { margin-bottom:30px; } footer { flex-wrap:wrap; gap:22px; } footer p { order:3; width:100%; } }
+  @media(prefers-reduced-motion:reduce) { :global(html:has(.services)) { scroll-behavior:auto; } .services *, .services *::before { animation:none !important; transition:none !important; } .button:hover,.project-image:hover img { transform:none; } }
+
+  .services *, .services *::before, .services *::after { box-sizing:border-box; }
+  .services :is(p,li,label,summary,figcaption) { overflow-wrap:anywhere; }
+  .services :is(.offer-intro,.offer-scope,.offer-price,.project-copy,.booking-options) { min-width:0; }
+  .services :is(nav a,.text-link,.hero-foot a,footer>a) { min-height:44px; display:inline-flex; align-items:center; }
+  .hero-foot { align-items:center; padding-block:12px; }
+  .offer { transition:border-color .2s; } .offer:hover { border-top-color:var(--accent); }
+  .appointment { padding:clamp(24px,3.5vw,44px); background:#251d27; border:1px solid #564151; border-radius:8px; }
+  .appointment-top { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:35px; }
+  .appointment-top .eyebrow { margin:0; font-size:10px; }
+  .appointment-duration { font:12px var(--font-mono); color:var(--accent); white-space:nowrap; }
+  .appointment h3 { font-size:clamp(30px,3vw,42px); line-height:1.12; letter-spacing:-1.5px; margin-bottom:20px; }
+  .appointment>p { color:var(--muted); font-size:15px; line-height:1.75; }
+  .appointment ul { list-style:none; padding:22px 0; margin:0; border-top:1px solid #453443; }
+  .appointment li { font-size:14px; line-height:1.6; padding:8px 0 8px 24px; position:relative; }
+  .appointment li::before { content:'↗'; position:absolute; left:0; color:var(--accent); }
+  .appointment .button { width:100%; }
+  .appointment .appointment-note { font-size:11px; margin:16px 0 0; }
+  .brief-details { margin-top:24px; border-top:1px solid #493849; }
+  .brief-details summary { font-size:14px; }
+  .brief-details form { padding-top:12px; padding-bottom:24px; }
+  .calendar-link { min-width:200px; }
+  @media(min-width:641px) and (max-width:900px) {
+    .booking-layout,.faq { grid-template-columns:minmax(0,1fr); gap:40px; }
+    .booking-copy { position:static; }
+    .booking-copy>p:not(.eyebrow) { max-width:540px; }
+    .process-steps { grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px; }
+    .project { gap:28px; }
+    .project-copy h3 { font-size:28px; }
+    .section-heading>p { max-width:250px; }
   }
-
-  .work-title {
-    font-family: var(--font-display);
-    text-shadow: 0 0 40px rgba(92, 206, 255, 0.08);
+  @media(max-width:640px) {
+    .services nav>a:nth-child(2) { display:none; }
+    .studio-nav { min-height:70px; padding-block:10px; }
+    .hero-inner { gap:28px; padding-block:38px 28px; }
+    .hero .eyebrow { font-size:9px; max-width:290px; }
+    .hero-description { font-size:16px; line-height:1.7; margin-bottom:25px; }
+    .hero-actions { gap:8px 20px; }
+    .portrait img { height:clamp(230px,65vw,340px); object-position:center 42%; }
+    .hero-foot { font-size:11px; }
+    .offer h3 { font-size:clamp(26px,7.5vw,34px); }
+    .offer-price { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:0 20px; }
+    .offer-price .price-caption { grid-column:1; }
+    .offer-price .price { grid-column:1; }
+    .offer-price .payment { grid-column:2; grid-row:1 / 3; margin:0; }
+    .offer-price .button { grid-column:1 / -1; margin-top:16px; }
+    .custom-offer a { white-space:normal; }
+    .booking-layout { padding-top:56px; }
+    .booking-copy { margin-bottom:32px; }
+    .booking-copy .calendar-link { display:none; }
+    .appointment-top { margin-bottom:28px; }
+    .appointment h3 { font-size:34px; }
+    .faq h2 { font-size:clamp(34px,9vw,48px); }
+    summary { font-size:15px; line-height:1.5; }
   }
-
-  .work-title-accent {
-    background: linear-gradient(105deg, #ff6b9d 0%, #5cceff 45%, #39ff14 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  @media(max-width:360px) {
+    .studio-nav { padding-inline:16px; } nav { gap:14px; }
+    .wrap { width:calc(100% - 32px); }
+    .hero-actions>.button { width:100%; }
+    .portrait figcaption { font-size:10px; }
+    .process-steps { grid-template-columns:minmax(0,1fr); gap:24px; }
+    .appointment { padding:22px; }
+    .appointment-top { align-items:start; }
+    .appointment-top .eyebrow { max-width:150px; }
   }
-
-  /* CRT overlays ~40% softer on /work */
-  .work-page.monitor-warp::before {
-    background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.36) 100%);
-  }
-
-  .work-page.scanlines::before {
-    opacity: 0.24;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(0, 0, 0, 0.09) 3px,
-      rgba(0, 0, 0, 0.09) 6px
-    );
-  }
-
-  .work-page .scanline-moving {
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.36), transparent);
-    box-shadow: 0 0 9px rgba(0, 255, 255, 0.48), 0 0 2px rgba(255, 107, 157, 0.3);
-    animation: workScanlineMove 8s linear infinite;
-  }
-
-  .work-page .tracking-line {
-    opacity: 0.42;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.012) 20%,
-      rgba(200, 255, 255, 0.03) 50%,
-      rgba(255, 255, 255, 0.012) 80%,
-      rgba(255, 255, 255, 0) 100%
-    );
-  }
-
-  .work-page .vaporwave-sunset {
-    opacity: 0.6;
-  }
-
-  @keyframes workScanlineMove {
-    0% { top: -2%; opacity: 0; transform: scaleY(1); }
-    5% { opacity: 0.24; transform: scaleY(1); }
-    15% { top: 15%; opacity: 0.24; }
-    15.1% { opacity: 0.48; transform: scaleY(3); }
-    15.2% { opacity: 0.12; transform: scaleY(0.5); }
-    15.3% { opacity: 0.24; transform: scaleY(1); }
-    45% { top: 45%; }
-    45.1% { opacity: 0; }
-    45.3% { opacity: 0.36; }
-    45.5% { opacity: 0.24; }
-    85% { opacity: 0.24; transform: scaleY(1); }
-    85.1% { top: 85%; opacity: 0.54; transform: scaleY(4) translateY(-2px); }
-    85.3% { opacity: 0.24; transform: scaleY(1); }
-    95% { opacity: 0.12; }
-    100% { top: 102%; opacity: 0; }
-  }
-
-  .work-features-list {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #94a3b8;
-  }
-
-  .work-feature-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .work-feature-item::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #5cceff;
-    box-shadow: 0 0 8px #5cceff;
-  }
-
-  .work-tier {
-    border-color: var(--tier-border);
-    background: linear-gradient(145deg, rgba(15, 15, 24, 0.92) 0%, rgba(10, 10, 15, 0.88) 100%);
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.02) inset,
-      0 24px 48px -24px var(--tier-glow);
-    position: relative;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  .work-tier-clip {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    clip-path: inset(0 round 1.35rem);
-  }
-
-  .work-tier:hover {
-    transform: translateY(-6px);
-    border-color: var(--tier-label);
-    box-shadow:
-      0 0 0 1px var(--tier-border) inset,
-      0 32px 64px -16px var(--tier-glow),
-      0 0 40px -10px var(--tier-glow);
-  }
-
-  .work-tier::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--tier-label), transparent);
-    opacity: 0.5;
-  }
-
-  .work-tier--featured {
-    box-shadow:
-      0 0 0 1px rgba(255, 107, 157, 0.15) inset,
-      0 32px 64px -20px rgba(255, 107, 157, 0.2),
-      0 0 80px -20px rgba(255, 107, 157, 0.15);
-  }
-
-  .work-tier--featured:hover {
-    box-shadow:
-      0 0 0 1px rgba(255, 107, 157, 0.3) inset,
-      0 32px 64px -12px rgba(255, 107, 157, 0.35),
-      0 0 90px -10px rgba(255, 107, 157, 0.25);
-  }
-
-  .work-tier-ribbon {
-    position: absolute;
-    top: 1.25rem;
-    right: -2.5rem;
-    transform: rotate(32deg);
-    background: #ff6b9d;
-    color: #0a0a0f;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 0.35rem 3rem;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .work-tier-ribbon--green {
-    background: #39ff14;
-  }
-
-  .work-tier-id {
-    font-family: var(--font-display);
-  }
-
-  .work-scope-item {
-    position: relative;
-    padding-left: 1.1rem;
-  }
-
-  .work-scope-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.55em;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--tier-label);
-    box-shadow: 0 0 8px var(--tier-glow);
-  }
-
-
-  .work-milestone-track {
-    height: 3px;
-    border-radius: 9999px;
-    background: #1a1a28;
-    overflow: hidden;
-  }
-
-  .work-milestone-fill {
-    height: 100%;
-    border-radius: 9999px;
-    animation: milestoneIn 0.8s ease-out both;
-  }
-
-  @keyframes milestoneIn {
-    from {
-      width: 0 !important;
-      opacity: 0.4;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  .work-bento {
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-  }
-
-  .work-bento--stack {
-    background: linear-gradient(160deg, rgba(20, 12, 24, 0.5) 0%, rgba(12, 12, 20, 0.6) 100%);
-  }
-
-  .work-step-num {
-    font-family: var(--font-display);
-    min-width: 2rem;
-  }
-
-  .work-cta {
-    font-family: var(--font-mono);
-    text-decoration: none;
-  }
-
-  .work-cta--featured {
-    background: #ff6b9d;
-    color: #0a0a0f;
-    box-shadow: 0 0 24px rgba(255, 107, 157, 0.25);
-  }
-
-  .work-cta--featured:hover {
-    box-shadow: 0 0 32px rgba(255, 107, 157, 0.45);
-    transform: translateY(-1px);
-  }
-
-  .work-cta--xs {
-    border: 1px solid rgba(57, 255, 20, 0.45);
-    color: #39ff14;
-    background: transparent;
-  }
-
-  .work-cta--xs:hover {
-    background: #39ff14;
-    color: #0a0a0f;
-    box-shadow: 0 0 24px rgba(57, 255, 20, 0.2);
-  }
-
-  .work-cta--default {
-    border: 1px solid #2a2a3f;
-    color: #e2e8f0;
-    background: rgba(15, 15, 24, 0.5);
-  }
-
-  .work-cta--default:hover {
-    border-color: rgba(92, 206, 255, 0.5);
-    color: #5cceff;
-  }
-
-  .work-reference blockquote {
-    font-family: var(--font-sans);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .work-milestone-fill {
-      animation: none;
-    }
-    .work-tier:hover,
-    .work-cta--featured:hover,
-    .work-cta--xs:hover {
-      transform: none;
-    }
-    .work-page .scanline-moving {
-      animation: none;
-      display: none;
-    }
-  }
-
-  @media (max-width: 1023px) {
-    .work-tier-ribbon {
-      top: 0.75rem;
-      right: -3rem;
-      font-size: 8px;
-    }
+  @media(min-width:641px) and (max-height:600px) {
+    .hero-inner { min-height:0; padding-block:36px; }
+    .portrait img { height:280px; }
+    h1 { font-size:clamp(40px,5vw,70px); }
+    .studio-nav { min-height:64px; padding-block:10px; }
   }
 </style>

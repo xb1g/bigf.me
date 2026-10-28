@@ -209,6 +209,17 @@ import Dashboard from '../components/Dashboard.astro';
   #mobile-viewport::-webkit-scrollbar {
     display: none;
   }
+
+  @media (max-width: 767px) {
+    #mobile-viewport, .mobile-workspace { height: 100dvh; }
+    #mobile-viewport { touch-action: pan-x pan-y !important; }
+    #mobile-nav { bottom: max(12px, env(safe-area-inset-bottom)); }
+    #mobile-nav > div { gap: 8px; padding: 5px 10px; }
+    #mobile-nav button { min-width: 40px; min-height: 40px; display: grid; place-items: center; }
+  }
+  @media (min-width: 768px) and (max-height: 700px) {
+    .canvas-item > div { height: calc(100dvh - 150px); min-height: 160px; }
+  }
 </style>
 
 <script>
@@ -401,8 +412,12 @@ import Dashboard from '../components/Dashboard.astro';
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleTouchEnd);
     
-    // Resize handler to maintain centering
+    // Keep the same world point centered as the viewport changes size.
+    let lastViewport = { width: window.innerWidth, height: window.innerHeight };
     window.addEventListener('resize', () => {
+      state.x += (window.innerWidth - lastViewport.width) / 2;
+      state.y += (window.innerHeight - lastViewport.height) / 2;
+      lastViewport = { width: window.innerWidth, height: window.innerHeight };
       requestUpdate();
     });
     
@@ -674,6 +689,15 @@ import Dashboard from '../components/Dashboard.astro';
 
     // Initialize active state
     updateMobileNav(0);
+
+    // Preserve the selected workspace across rotation and breakpoint changes.
+    let mobileResizeFrame = 0;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(mobileResizeFrame);
+      mobileResizeFrame = requestAnimationFrame(() => {
+        mobileViewport.scrollTo({ left: mobileNavIndex * mobileViewport.clientWidth, behavior: 'instant' });
+      });
+    });
   }
 </script>
 

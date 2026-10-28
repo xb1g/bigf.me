@@ -270,6 +270,12 @@
   cursor: none !important;
 }
 
+/* Touch devices have no cursor to follow; preserve native input behavior. */
+@media (hover: none), (pointer: coarse) {
+  html, body, body * { cursor: auto !important; }
+  #cursor-dot { display: none; }
+}
+
 #cursor-dot {
   width: 22px;
   height: 22px;
