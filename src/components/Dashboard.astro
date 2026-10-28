@@ -44,7 +44,7 @@ const purposes = [
 
 const companies = [
   { name: 'PassionSeed', tag: 'Edu', color: 'ff6b9d', purpose: 'edu',
-    text: 'AI career discovery for 300+ students' },
+    text: 'SHIFT: 7-day camps where students build real projects' },
   { name: 'LongKeeb', tag: 'Craft', color: '00d4ff', purpose: 'craft',
     text: 'Ergonomic split mechanical keyboards' },
   { name: 'JOJO Soba', tag: 'Connect', color: 'ff9f1c', purpose: 'connect',
@@ -77,8 +77,13 @@ const companies = [
     </div>
   </div>
 
+  <a href="/work" class="group flex items-center justify-between gap-3 rounded-xl border border-[#ff85ab]/30 bg-[#ff85ab]/5 px-3 py-3 mb-3 shrink-0 hover:bg-[#ff85ab]/10 transition-colors" aria-label="Work with Big — explore services and request a project call">
+    <span class="font-sans text-xs text-[#c0bdd3]">Websites, apps &amp; business tools</span>
+    <span class="font-sans text-xs font-semibold text-[#ff85ab] whitespace-nowrap">Work with Big ↗</span>
+  </a>
+
   <!-- Main Grid -->
-  <div class="flex-1 grid grid-cols-5 gap-4 overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar" style="min-height: 0;">
+  <div class="dashboard-main flex-1 grid grid-cols-5 gap-4 overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar" style="min-height: 0;">
 
     <!-- Core Purposes -->
     <div class="col-span-2 flex flex-col gap-2 min-w-0">
@@ -161,6 +166,16 @@ const companies = [
 </div>
 
 <style>
+  #dashboard-root { container-type: inline-size; }
+  @container (max-width: 620px) {
+    .dashboard-main { grid-template-columns: minmax(0, 1fr); gap: 24px; align-content: start; }
+    .dashboard-main > div { grid-column: 1; }
+    .company-item { flex-wrap: wrap; gap: 8px; padding-block: 10px; }
+    .company-item > span:last-child { flex-basis: 100%; font-size: 13px; line-height: 1.6; }
+  }
+  @media (max-width: 767px) {
+    #dashboard-root { border-radius: 0; padding: 20px 16px; padding-bottom: calc(76px + env(safe-area-inset-bottom)); border: 0; }
+  }
   .company-item:hover .company-text {
     color: #ebdcc6;
   }

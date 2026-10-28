@@ -574,7 +574,7 @@ const { class: className } = Astro.props;
 
     // Handle highlights command - show curated best projects (optimized for Eigen)
     if (command === 'highlights') {
-      const highlightProjects = ['passionseed', 'fync', 'longkeeb', 'hive', 'careerac'];
+      const highlightProjects = ['shift', 'seedstack', 'rv8', 'company-brain', 'longkeeb', 'hive'];
       const carousel = renderProjectCards(highlightProjects);
       if (carousel) {
         addOutputToTerminal('', false, carousel);
@@ -583,11 +583,12 @@ const { class: className } = Astro.props;
 
 These are the projects I'm most proud of:
 
-• PassionSeed - AI career discovery for students (300 hackathon users)
-• Fync - Friendship graph API (early exploration in relationship modeling)
+• SHIFT - 7-day camps where Thai students build and test real projects (PassionSeed)
+• SeedStack - AI coding toolkit that coaches students instead of doing the work
+• RV8 - 8-bit CPU from 74HC chips, with a hands-on circuit lab
+• Company Brain - Running a company from Markdown that people and AI agents share
 • LongKeeb/Portex - Hardware keyboards I designed and sold
 • Hive - AI democracy tool (Gemini hackathon semi-finalist)
-• CareerAc - Career planning AI (Berkeley Challenge Lab)
 
 Click any card to explore, or use 'cd [project]' to navigate deeper.
 

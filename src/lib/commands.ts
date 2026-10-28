@@ -14,28 +14,43 @@ export interface Project {
 }
 
 export const categories: Record<string, string[]> = {
-  education: ['passionseed', 'passionseed-app', 'datasciblock', 'coderdojo', 'quizdom'],
-  hardware: ['longkeeb', 'portex', 'fermentabot'],
-  ai: ['careerac', 'rocketmap', 'neuralmix', 'hive'],
+  education: ['shift', 'passionseed', 'seedstack', 'passionseed-app', 'datasciblock', 'coderdojo', 'quizdom'],
+  hardware: ['rv8', 'voicekey', 'longkeeb', 'portex', 'fermentabot'],
+  ai: ['company-brain', 'rocketmap', 'careerac', 'neuralmix', 'hive'],
+  client: ['topoftherank'],
   sustainability: ['onetrace', 'chatasci', 'coffee-trace'],
-  community: ['jojo-soba', 'fync', 'hamsterhub'],
+  community: ['welist', 'jojo-soba', 'fync', 'hamsterhub'],
   experiments: ['trojang', 'govern', 'susu', 'prova'],
 };
 
 export const projects: Record<string, Project> = {
+  shift: {
+    name: 'SHIFT',
+    category: 'education',
+    tech: ['Next.js', 'Supabase', 'Discord', 'LINE OA', 'Expo'],
+    year: '2026',
+    description: 'PassionSeed\'s main program: a 7-day camp where Thai high schoolers (solo or teams of 1-3) build a real project and test it with real users. We don\'t hand out ideas or over-teach, so students own the work. Built the whole stack around it: apply + PromptPay flow, staff tracker, attendance and day plans, certificates, feedback forms, Discord roles and reminders, and AfterSHIFT, an alumni board with goal cards, standups, help-when-stuck and a progress feed. Four rounds run so far (beta, 0, 1, 2), SHIFT[3] launching, first school SHIFT agreed.',
+  },
   passionseed: {
     name: 'PassionSeed',
     category: 'education',
-    tech: ['Next.js', 'Supabase', 'AI SDK', 'Expo'],
-    year: '2024-2025',
-    description: 'AI career discovery platform for Thai students. Full-stack web + mobile ecosystem with PathLab (30-min daily career exploration tasks), hackathon platform (300+ users), learning maps, expert interviews, direction finder, classrooms, teams, and epic sprints. Embeddings-powered recommendations, real-time collaboration, and TCAS university planning.',
+    tech: ['Next.js', 'Supabase', 'AI SDK', 'Expo', 'Deno'],
+    year: '2025-now',
+    description: 'Ed-tech company helping Thai students find purpose through hands-on camps. Started with Seed Camp/TechSeed (nearly 800 students), then pivoted to SHIFT with a clearer goal: grow autonomy, competence and relatedness (Self-Determination Theory). The web platform covers PathLab career exploration, learning maps, multiplayer whiteboards with history and a calendar widget, an admin ops console with live queues and a Cmd+K palette, a LINE OA inbox, an Instagram/Meta DM funnel, SEO/AEO infrastructure and a full security pass on RLS and API routes.',
+  },
+  seedstack: {
+    name: 'SeedStack',
+    category: 'education',
+    tech: ['OpenCode', 'Claude Code', 'Codex', 'Shell'],
+    year: '2026',
+    description: 'AI coding toolkit for SHIFT students that refuses to do the thinking for them. One-line install on Mac/Windows, then commands that lock scope with questions, coach research with real people, sort feedback into did / story / opinion, and guide a build one step at a time in a second session. Works in OpenCode, Claude Code and Codex.',
   },
   'passionseed-app': {
     name: 'PassionSeed Mobile',
     category: 'education',
     tech: ['Expo', 'React Native', 'Supabase', 'Skia'],
-    year: '2025',
-    description: 'Native mobile companion for PassionSeed. PathLab seed exploration with daily tasks (quiz/video/activities), reflections, hackathon program with inbox/comments/webtoon/comic features, push notifications, Skia GPU animations, TCAS planner, university comparison, and portfolio fit scoring. Deployed via EAS to iOS and Android.',
+    year: '2025-now',
+    description: 'Native companion app, now rebuilt SHIFT-first (v1.4, TestFlight): home, 9-step SHIFT rounds, day plans, push notifications and a keycap-inspired depth design system. Earlier versions shipped PathLab daily tasks, reflections, a hackathon program with inbox/comments/webtoon, a career radar, iOS widgets and a TCAS planner via EAS to iOS and Android.',
   },
   careerac: {
     name: 'CareerAc',
@@ -47,9 +62,44 @@ export const projects: Record<string, Project> = {
   rocketmap: {
     name: 'RocketMap',
     category: 'ai',
-    tech: ['Next.js', 'Claude API', 'React'],
-    year: '2025',
-    description: 'AI-powered business model canvas.',
+    tech: ['Next.js', 'Claude API', 'Appwrite'],
+    year: '2025-2026',
+    description: 'AI-powered business model canvas. Deep-dives on each block, an investment-case module that forces one real demand test, encrypted bring-your-own model keys, and an AI verdict tuned to avoid venture-scale bias.',
+  },
+  'company-brain': {
+    name: 'Company Brain',
+    category: 'ai',
+    tech: ['Markdown', 'Agent Skills', 'GitHub Actions'],
+    year: '2026',
+    description: 'PassionSeed\'s single source of truth as plain Markdown that people and AI agents both read and edit through pull requests. Sourced numbers with as-of dates, a decision log, business model canvases, SDT research, and an agent skill that checks work against the brain before finishing. Product changes sync in automatically from the web repo.',
+  },
+  rv8: {
+    name: 'RV8',
+    category: 'hardware',
+    tech: ['74HC Logic', 'KiCad', 'Verilog', 'Python', 'MCP'],
+    year: '2026',
+    description: 'A family of 8-bit RISC-V-style CPUs built from 74HC chips that run BASIC and games. Wrote a circuit runtime so all 23 student lab circuits pass automated tests, a CLI trace viewer, an MCP server so AI can drive the board, and a hands-on web lab where beginners wire, predict and test circuits from an empty board.',
+  },
+  voicekey: {
+    name: 'VoiceKey',
+    category: 'hardware',
+    tech: ['ESP32-S3', 'BLE', 'macOS', 'PCB Design'],
+    year: '2026',
+    description: 'Mic-first input device for the AI era: speak to type, pick the target device, rewrite text by voice, press Enter. Ran a blind design shootout between independent AI designers and judges, then specced the winner (a pocket BLE fob) down to the parts list, protocol and Mac prototype.',
+  },
+  topoftherank: {
+    name: 'Top of the Rank',
+    category: 'client',
+    tech: ['Astro', 'TypeScript', 'Responsive Web'],
+    year: '2026',
+    description: 'Client build: luxury vehicle showroom with a drag-to-spin 360 viewer, backed by inventory, photo management and customer inquiry tools. See the demo at bigf.me/topoftherank.',
+  },
+  welist: {
+    name: 'welist',
+    category: 'community',
+    tech: ['Next.js', 'Drizzle', 'libSQL', 'LINE Login'],
+    year: '2026',
+    description: 'Craigslist for Thailand: post in one minute, contact sellers on LINE, browse by province and district, with scam reports and an admin review queue built in.',
   },
   portex: {
     name: 'Portex',
@@ -198,12 +248,14 @@ I'm passionate about technology solutions that actually work and have a human so
 - **COVID (2020-2024):** Founded LongKeeb/Portex. Designed split ergonomic mechanical keyboards (Cantor42, Charybdis) and shipped them globally.
 - **University:** Chulalongkorn University, BAScii (Integrated Innovation). Tech + Business + Design.
 - **30+ Projects:** Spanning hardware, education, AI, and sustainability.
-- **Berkeley SCET:** Currently on Startup Semester exchange in SF/Berkeley (Spring 2026). 🐻
+- **Berkeley SCET:** Startup Semester exchange in SF/Berkeley (Spring 2026). 🐻
+- **Back in Bangkok:** Running PassionSeed full time.
 
 ## Currently
-- Building the intersection of **AI and Education** — PassionSeed web platform + native mobile app serving 300+ Thai students with career discovery, hackathon programs, and daily PathLab exploration.
-- Exploring **Direct Democracy** systems (Hive).
-- Mastering **Coffee Roasting** and fermentation.
+- Running **SHIFT** at PassionSeed — 7-day camps where Thai students build a real project and test it with real users. I build the platform, the app and the ops tools behind it.
+- Building **SeedStack**, an AI coding toolkit that coaches students instead of doing the work for them.
+- Teaching how computers work with **RV8**, an 8-bit CPU built from logic chips.
+- Taking on selected client builds — see [/work](/work).
 
 ## Music
 Oasis, Nirvana, Radiohead`,
@@ -268,8 +320,8 @@ Most tech projects fail because they're missing one leg:
 
 ## What I Build
 Tools that help people:
-- Learn better (PassionSeed, DataSciBlock)
-- Work better (CareerAc, RocketMap)
+- Learn better (SHIFT, SeedStack, RV8, DataSciBlock)
+- Work better (Company Brain, RocketMap, CareerAc)
 - Connect better (Fync, HamsterHub)
 - Understand systems (Coffee traceability, Direct democracy)`,
 
@@ -277,23 +329,26 @@ Tools that help people:
 
 # What I'm Working On Now
 
-## April 2026
-- **PassionSeed Web** - AI career discovery platform for Thai students. Running hackathon programs with 300+ users, building PathLab daily career exploration, embeddings-powered recommendations, team direction matching, and expert interview systems.
-- **PassionSeed Mobile** - Shipping the native Expo/React Native app. Hackathon program with inbox, comments, webtoon/comic features, push notifications, Skia GPU animations, TCAS planner, and EAS deployment to iOS + Android.
-- **bigf.me** - This terminal portfolio you're looking at right now.
+## October 2026
+- **SHIFT** - PassionSeed's 7-day build camp. Four rounds done, SHIFT[3] (Halloween edition) launching, and the first school SHIFT agreed with a school.
+- **AfterSHIFT** - Alumni community: goal cards, daily standups, help when stuck, a progress feed, and shared whiteboards with a community calendar.
+- **SeedStack** - AI coding toolkit for students that asks questions instead of giving answers.
+- **Company Brain** - Running the company from plain Markdown that both people and AI agents read and edit.
+- **RV8** - 8-bit CPU from 74HC chips, plus a hands-on circuit lab for beginners.
 
 ## Recent Highlights
-- **Berkeley SCET Startup Semester** - Immersed in the SF/Berkeley startup ecosystem.
-- Shipped PassionSeed hackathon to 300+ Thai students with real-time collaboration
-- Built and deployed PassionSeed mobile app (iOS + Android) with Skia animations and push notifications
-- Hive project: Direct democracy condo management (Gemini hackathon semi-finalist)
-- NeuralMix: LLM for mixing (Technology Entrepreneurship class)
+- Pivoted PassionSeed from Seed Camp/TechSeed (nearly 800 students) to SHIFT
+- Shipped multiplayer whiteboards, an admin ops console and a LINE OA inbox in PassionSeed web
+- Rebuilt the mobile app SHIFT-first (v1.4 on TestFlight)
+- RV8 student labs: 23/23 circuits pass automated tests
+- VoiceKey: ran a blind AI design shootout for a mic-first keyboard
+- **Berkeley SCET Startup Semester** (Spring 2026)
 
 ## Learning
-- Embeddings and vector search for career recommendations
-- Mobile app deployment pipelines (EAS Build + Hosting)
-- Supply chain traceability (OneTrace/Flowit)
-- Coffee roasting and fermentation
+- Self-Determination Theory: autonomy, competence, relatedness
+- Running a company with AI agents and written context
+- Distribution: Instagram comment funnels, Camphub, school partnerships
+- Digital logic and CPU design for teaching
 
 ## Reading
 - The Body Keeps the Score (trauma/healing)
@@ -309,7 +364,7 @@ Type 'gallery' or [Click Here to View the Life Postcards Gallery](/life)
 
 ## Places That Shaped Me
 - **Bangkok, Thailand** - Where I learned to build. The chaos, the energy, the endless problems to solve.
-- **San Francisco / Berkeley** - Where I'm currently learning to think bigger. Startup Semester is changing my perspective on what's possible.
+- **San Francisco / Berkeley** - Where I learned to think bigger. Startup Semester (Spring 2026) changed my sense of what's possible.
 
 
 ## Music I'm Listening To
@@ -334,19 +389,20 @@ Type 'gallery' or [Click Here to View the Life Postcards Gallery](/life)
 
   work: `bigseed@bigf.me:~$ cat work.md
 
-# 🛠 Software Build Plans
+# 🛠 Work with Big
 
-Fixed-scope quote tiers for web apps, marketplaces, tools, and SaaS.
+Websites, custom apps and business tools. Work directly with the builder.
 
-Type 'work' or [View tiers on /work](/work)
+Type 'work' or [Explore services & request a project call](/work)
 
 ## Tiers (THB)
-- **XS** — 49,000 · 3–5 days · consult + starter surface (credit toward Small)
-- **Small** — 120,000 · 2 weeks · MVP / landing / single flow
-- **Medium** — 195,000 · 3 weeks · production app + admin + 1 integration
-- **Large** — 265,000 · 4–6 weeks · full platform, monetization, multi-role
+- **Discovery sprint** — 49,000 · 3–5 working days · plan + clickable prototype
+- **Launch build** — 120,000 · around 2 weeks · one focused customer journey
+- **Business app** — 195,000 · around 3 weeks · workflow + staff admin + one integration
+- **Platform build** — 265,000 · around 4–6 weeks · a scoped first version
 
-Milestone payments: XS 50/50 · Small–Large 40% deposit → 40% demo → 20% launch.`,
+Milestone payments: Discovery 50/50 · builds 40% kickoff → 40% demo → 20% launch.
+Request a 30-minute intro in English or Thai. Scope and dates agreed before work starts.`,
 };
 
 function getAllProjects(): string[] {
@@ -388,7 +444,7 @@ export function executeCommand(input: string, currentPath: string): CommandResul
   highlights - ✨ Show my best curated projects
   life       - 🎨 Personal side: places, art, music, reflections
   berkeley   - 🐻 UC Berkeley exchange financial & academic report
-  work       - 🛠 Software build quote tiers (XS / Small / Medium / Large)
+  work       - 🛠 Services, pricing & project call requests
   cat        - Display content pages (about, books, philosophy, now, work)
   cd         - Navigate to project directory
   ai         - 🤖 Chat with MiniMax M2.7 AI (e.g. ai what is bigf.me?)
@@ -409,15 +465,15 @@ Pro tips:
         output: `# Bunyasit Fang
 
 **role**     :: Builder & Integrated Innovation Student
-**status**   :: Currently at UC Berkeley (SCET) for Startup Semester 🐻
-**focus**    :: AI + Education + Sustainability
+**status**   :: Bangkok, building PassionSeed · Berkeley SCET alum 🐻
+**focus**    :: AI + Education + Hardware
 **mission**  :: Fixing education in Thailand
 **github**   :: [xb1g](https://github.com/xb1g)
 **email**    :: bunyasit@passionseed.org
 
 > "I build things I care deeply about. One day I'll retire to do art, but first, I must build the world I want to see."
 
-I'm an Integrated Innovation student at Chulalongkorn University, currently exploring the intersection of technology, business, and philosophy in the Bay Area. I've built 30+ projects ranging from ergonomic hardware to AI-powered education platforms. Currently shipping PassionSeed — an AI career discovery platform with web + mobile apps serving 300+ Thai students.`,
+I'm an Integrated Innovation student at Chulalongkorn University working at the intersection of technology, business, and philosophy. I've built 30+ projects ranging from ergonomic hardware to AI-powered education platforms. Right now I run SHIFT at PassionSeed — 7-day camps where Thai students build real projects and test them with real users — and build every tool behind it.`,
       };
 
     case 'ls': {
@@ -430,7 +486,7 @@ I'm an Integrated Innovation student at Chulalongkorn University, currently expl
 drwxr-xr-x  pages/
 
 Use 'ls [category]' to see projects:
-  hardware, education, ai, sustainability, community, experiments`,
+  education, hardware, ai, client, sustainability, community, experiments`,
         };
       }
       
@@ -600,7 +656,7 @@ ${project.description}
     case 'highlights':
       return {
         output: `__HIGHLIGHTS__`,
-        highlightProjects: ['passionseed', 'passionseed-app', 'fync', 'longkeeb', 'hive', 'careerac'],
+        highlightProjects: ['shift', 'seedstack', 'rv8', 'company-brain', 'longkeeb', 'hive'],
       };
 
     case 'gallery':
