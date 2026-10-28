@@ -1,0 +1,7 @@
+/* Settings view styles (owned by the settings view). Prefix classes with .settings- */
+.settings-preview { width: 100%; border-collapse: collapse; }
+.settings-preview th, .settings-preview td { padding: var(--space-1) var(--space-2); border-bottom: 1px solid var(--line); text-align: right; }
+.settings-preview th:first-child { text-align: left; font-weight: 400; }
+.settings-preview thead th { font-weight: inherit; }
+.settings-how { list-style: none; margin: 0; padding: 0; }
+.btn.settings-jump { margin-left: -14px; }

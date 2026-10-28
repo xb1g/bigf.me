@@ -1,0 +1,4 @@
+/* Talks view styles (owned by the talks view). Prefix classes with .talks- */
+.talks-item blockquote { margin: 0; padding-left: var(--space-3); border-left: 2px solid var(--accent); font-style: italic; }
+.talks-guide ol { padding-left: 1.25em; }
+.talks-week .row { gap: var(--space-4); }

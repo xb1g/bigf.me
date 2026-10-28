@@ -1,0 +1,15 @@
+/* Bets view styles (owned by the bets view). Prefix classes with .bets- */
+.card.bets-item { cursor: pointer; gap: var(--space-2); }
+.card.bets-item--compact { padding: var(--space-2) var(--space-4) var(--space-3); }
+.bets-item--compact .card__title { font-size: var(--fs-md); }
+.bets-item__head { align-items: center; }
+.bets-item__head .card__title { min-width: 0; }
+.bets-item__link { color: inherit; text-decoration: none; display: flex; align-items: center; min-height: var(--tap); }
+.bets-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.btn.bets-review-btn { --btn-bg: var(--warn-soft); --btn-fg: var(--warn); --btn-border: color-mix(in srgb, var(--warn) 45%, transparent); }
+.bets-back { align-self: flex-start; margin-left: calc(var(--space-3) * -1); }
+.bets-dl dd { overflow-wrap: anywhere; }
+.stack-sm.bets-field { gap: var(--space-1); }
+.card.bets-compact-card { gap: var(--space-2); padding: var(--space-3) var(--space-4); }
+.bets-wrap-text { overflow-wrap: anywhere; }
+.bets-room-legend { margin-bottom: var(--space-2); }

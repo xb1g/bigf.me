@@ -1,0 +1,25 @@
+---
+import AnchorLayout from '../../layouts/AnchorLayout.astro';
+import '../../anchor/styles/anchor.css';
+
+export const prerender = true;
+---
+
+<AnchorLayout title="Anchor">
+  <div id="anchor-root" aria-busy="true">
+    <div class="boot" role="status">
+      <div>
+        <img src="/anchor/icon.svg" alt="" width="64" height="64" />
+        <p>Anchor</p>
+      </div>
+    </div>
+  </div>
+  <noscript>
+    <p style="padding: 24px; color: #ece9e4; font-family: system-ui, sans-serif;">
+      Anchor needs JavaScript to run. Turn it on for this site, then reload.
+    </p>
+  </noscript>
+  <script>
+    import '../../anchor/app.ts';
+  </script>
+</AnchorLayout>

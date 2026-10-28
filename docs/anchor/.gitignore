@@ -1,0 +1,4 @@
+# Private. The spec holds personal notes and the screenshots show personal data, and this repo is public.
+# Keep the originals outside git; commit a redacted copy only if a spec doc is needed.
+SPEC.md
+screenshots/

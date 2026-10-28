@@ -1,0 +1,45 @@
+.today-timer-clock { font-family: var(--font-mono); font-size: var(--fs-2xl); line-height: 1.1; }
+.today-stat-link { color: inherit; text-decoration: none; border-radius: var(--radius-sm); }
+.today-stat-link .stat__label { text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+
+/* First-run card: three plain lines. */
+.today-intro .today-intro__list { list-style: none; }
+
+/* Check-in: one tight row of chips per question. Chips share the row evenly (each still ≥ 44px). */
+.today-checkin__rows { display: flex; flex-direction: column; gap: var(--space-2); }
+.today-checkin .chips.today-checkin__chips { flex-wrap: nowrap; gap: 6px; }
+.today-checkin .chips--sm .chip { flex: 1 1 0; padding-inline: 0; }
+.today-checkin .choice .field__label { font-size: var(--fs-sm); color: var(--muted); }
+/* Morning: one compact row of three pills; tapping one shows that question's chips under it. */
+.today-checkin--compact { gap: var(--space-2); }
+.today-checkin__pills { display: flex; gap: var(--space-2); }
+.today-checkin .chip.today-checkin__pill { flex: 1 1 0; min-width: 0; padding-inline: var(--space-2); font-family: inherit; white-space: nowrap; color: var(--muted); }
+.today-checkin .chip.today-checkin__pill.is-answered { color: var(--text); }
+.today-checkin .chip.today-checkin__pill[aria-expanded='true'] { border-color: var(--data); color: var(--data); }
+
+/* Actions: "Toward the anchor" toggle on the add form, and the mark on linked rows. */
+.chip.today-for-anchor { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; color: var(--muted); }
+.chip.today-for-anchor[aria-pressed='true'] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.today-step-mark { display: inline-flex; align-items: center; gap: 4px; }
+
+/* Gentle nudges inside the anchor card (low energy, still open). */
+.today-nudge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+.today-lesson { padding-left: var(--space-3); border-left: 2px solid var(--line-strong); }
+
+/* "That's three. Swap one out?" */
+.today-swap {
+  padding: var(--space-3);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+}
+.today-swap .btn.today-swap__choice { justify-content: flex-start; text-align: left; overflow-wrap: anywhere; }
+
+.today-carry__row { gap: var(--space-3); min-height: var(--tap); }
+
+.disclosure.today-shutdown-more { background: transparent; }

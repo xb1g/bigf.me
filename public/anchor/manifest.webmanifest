@@ -1,0 +1,19 @@
+{
+  "name": "Anchor",
+  "short_name": "Anchor",
+  "description": "Today's one thing, bets, talks and the funnel — a private anchor for busy days.",
+  "id": "/anchor/",
+  "start_url": "/anchor/",
+  "scope": "/anchor/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12",
+  "lang": "en",
+  "icons": [
+    { "src": "/anchor/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/anchor/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/anchor/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/anchor/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,4 @@
+/* Review view styles (owned by the review view). Prefix classes with .review- */
+.review-journal { list-style: none; }
+.review-journal > li + li { padding-top: var(--space-2); border-top: 1px solid var(--line); }
+.disclosure.review-later { background: transparent; }

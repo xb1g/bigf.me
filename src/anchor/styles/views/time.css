@@ -1,0 +1,2 @@
+/* Time view styles (owned by the time view). Prefix classes with .time- */
+.time-clock .elapsed__clock { font-size: var(--fs-2xl); font-weight: 600; }

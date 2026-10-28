@@ -1,0 +1,3 @@
+/* Funnel view styles (owned by the funnel view). Prefix classes with .funnel- */
+.funnel-step[data-tone='warn'] { background: var(--warn-soft); border-radius: var(--radius-sm); margin: 2px 0; padding-right: var(--space-2); }
+.funnel-stage + .funnel-stage { border-top: 1px dashed var(--line); }
