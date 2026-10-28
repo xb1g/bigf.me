@@ -42,12 +42,15 @@ async function countTry(client: Client, scope: string, rule: TryRule, now: numbe
   return waitAfterTry(Number(row.tries), Number(row.window_start), rule, now)
 }
 
-/** Count one PIN try from this IP. Returns milliseconds to wait; 0 means go ahead and check the PIN. */
+/**
+ * Count one PIN try from this IP. Returns milliseconds to wait; 0 means go ahead and check the PIN.
+ * An IP over its own limit stops here, so one IP can't use up everyone's tries and lock the owner out.
+ */
 export async function countShadowTry(client: Client, ip: string, now = Date.now()): Promise<number> {
   await ensureTable(client)
   const ipWait = await countTry(client, `ip:${ip}`, IP_RULE, now)
-  const globalWait = await countTry(client, 'global', GLOBAL_RULE, now)
-  return Math.max(ipWait, globalWait)
+  if (ipWait > 0) return ipWait
+  return countTry(client, 'global', GLOBAL_RULE, now)
 }
 
 /** After a correct PIN, this IP starts fresh. */

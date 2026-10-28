@@ -46,3 +46,9 @@ test('parallel tries from one IP are all counted', async () => {
   const waits = await Promise.all(Array.from({ length: 20 }, () => countShadowTry(client, '3.3.3.3', T0)))
   assert.equal(waits.filter((w) => w === 0).length, IP_RULE.maxTries)
 })
+
+test('one IP hammering the PIN does not use up everyone\'s tries', async () => {
+  for (let i = 0; i < 200; i++) await countShadowTry(client, '6.6.6.6', T0)
+  // Only its 5 allowed tries reached the global count, so the owner's IP still gets in.
+  assert.equal(await countShadowTry(client, '7.7.7.7', T0 + 1), 0)
+})
