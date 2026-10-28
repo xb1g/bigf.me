@@ -1,15 +1,18 @@
 import type { APIRoute } from 'astro'
+import { requireShadowSession } from '../../../lib/shadow-session'
 import { db } from '../../../lib/db'
 
 // GET: Fetch all shadows
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ cookies }) => {
+  const unauthorized = requireShadowSession(cookies)
+  if (unauthorized) return unauthorized
   try {
     const res = await db.execute({
       sql: `SELECT * FROM shadows ORDER BY created_at DESC`,
       args: [],
     })
     return new Response(JSON.stringify(res.rows), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
     })
   } catch (e) {
     return new Response(JSON.stringify({ error: 'Failed to fetch shadows' }), {
@@ -20,7 +23,9 @@ export const GET: APIRoute = async () => {
 }
 
 // POST: Log a new shadow
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const unauthorized = requireShadowSession(cookies)
+  if (unauthorized) return unauthorized
   const { behavior, trigger, duration_min } = await request.json()
 
   if (!behavior?.trim()) {
@@ -42,7 +47,9 @@ export const POST: APIRoute = async ({ request }) => {
 }
 
 // PUT: Update an existing shadow
-export const PUT: APIRoute = async ({ request }) => {
+export const PUT: APIRoute = async ({ request, cookies }) => {
+  const unauthorized = requireShadowSession(cookies)
+  if (unauthorized) return unauthorized
   try {
     const { id, behavior, trigger, duration_min } = await request.json()
     if (!id || !behavior?.trim()) {
@@ -67,7 +74,9 @@ export const PUT: APIRoute = async ({ request }) => {
 }
 
 // DELETE: Remove an existing shadow
-export const DELETE: APIRoute = async ({ request }) => {
+export const DELETE: APIRoute = async ({ request, cookies }) => {
+  const unauthorized = requireShadowSession(cookies)
+  if (unauthorized) return unauthorized
   try {
     const { id } = await request.json()
     if (!id) {

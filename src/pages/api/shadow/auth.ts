@@ -1,17 +1,38 @@
 import type { APIRoute } from 'astro'
+import {
+  createShadowSession,
+  requireShadowSession,
+  shadowCookieName,
+  shadowCookieOptions,
+  shadowSessionMaxAge,
+  verifyShadowPin,
+} from '../../../lib/shadow-session'
 
-export const POST: APIRoute = async ({ request }) => {
-  const { pin } = await request.json()
-  const expected = import.meta.env.SHADOW_PIN
+const headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
 
-  if (!expected || pin !== expected) {
+export const GET: APIRoute = async ({ cookies }) => {
+  return requireShadowSession(cookies) || new Response(JSON.stringify({ ok: true }), { headers })
+}
+
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const body = await request.json().catch(() => null)
+
+  if (!verifyShadowPin(body?.pin)) {
+    await new Promise(resolve => setTimeout(resolve, 400))
     return new Response(JSON.stringify({ ok: false }), {
       status: 401,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
     })
   }
 
-  return new Response(JSON.stringify({ ok: true }), {
-    headers: { 'Content-Type': 'application/json' },
+  cookies.set(shadowCookieName, createShadowSession(), {
+    ...shadowCookieOptions,
+    maxAge: shadowSessionMaxAge,
   })
+  return new Response(JSON.stringify({ ok: true }), { headers })
+}
+
+export const DELETE: APIRoute = async ({ cookies }) => {
+  cookies.delete(shadowCookieName, shadowCookieOptions)
+  return new Response(JSON.stringify({ ok: true }), { headers })
 }

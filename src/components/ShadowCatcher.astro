@@ -290,12 +290,29 @@
   const pinError = document.getElementById('shadow-pin-error')!
   const saveStatus = document.getElementById('shadow-save-status')!
 
-  // Auth check
-  if (sessionStorage.getItem('shadow_authed') === '1') {
-    unlock()
-  } else {
-    // Auto-focus input box for instant typing / entry
+  let unlocked = false
+  pinInput.focus()
+
+  function lock() {
+    unlocked = false
+    pinGate.classList.remove('hidden')
+    app.classList.add('hidden')
+    app.classList.remove('flex')
+    pinInput.value = ''
+    historyList.replaceChildren()
+    historyEditBox.classList.add('hidden')
+    historyEditShadowBox.classList.add('hidden')
+    editNoteId.value = ''
+    editNoteTextarea.value = ''
+    editShadowId.value = ''
+    editShadowTrigger.value = ''
     pinInput.focus()
+  }
+
+  async function shadowFetch(url: string, options?: RequestInit) {
+    const res = await fetch(url, options)
+    if (res.status === 401) lock()
+    return res
   }
 
   // Listen for canvas navigation to auto-focus PIN input
@@ -334,13 +351,12 @@
   pinSubmit.addEventListener('click', async () => {
     const pin = pinInput.value.trim()
     if (!pin) return
-    const res = await fetch('/api/shadow/auth', {
+    const res = await shadowFetch('/api/shadow/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pin }),
     })
     if (res.ok) {
-      sessionStorage.setItem('shadow_authed', '1')
       unlock()
     } else {
       pinError.classList.remove('hidden')
@@ -350,9 +366,11 @@
   })
 
   function unlock() {
+    unlocked = true
     pinGate.classList.add('hidden')
     app.classList.remove('hidden')
     app.classList.add('flex')
+    if (!document.getElementById('tab-history')?.classList.contains('hidden')) fetchHistory()
   }
 
   // Tab switching
@@ -382,7 +400,7 @@
     thinkSaveBtn.disabled = true
     thinkSaveBtn.textContent = 'Saving...'
     try {
-      const res = await fetch('/api/shadow/thought', {
+      const res = await shadowFetch('/api/shadow/thought', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content }),
@@ -433,7 +451,7 @@
     shadowLogBtn.disabled = true
     shadowLogBtn.textContent = 'Logging...'
     try {
-      const res = await fetch('/api/shadow/log', {
+      const res = await shadowFetch('/api/shadow/log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -492,7 +510,7 @@
       const fd = new FormData()
       fd.append('file', capturedFile)
       fd.append('type', photoType.value)
-      const res = await fetch('/api/shadow/photo', { method: 'POST', body: fd })
+      const res = await shadowFetch('/api/shadow/photo', { method: 'POST', body: fd })
       if (res.ok) {
         photoConfirm.classList.remove('hidden')
         setSaveStatus('photo saved')
@@ -570,18 +588,23 @@
   })
 
   const fetchHistory = async () => {
-    if (!historyList) return
+    if (!unlocked) return
+    historyLoading.textContent = 'Loading history...'
     historyLoading.classList.remove('hidden')
-    historyList.innerHTML = ''
+    historyList.replaceChildren()
     try {
       const endpoint = currentHistoryTab === 'thoughts' ? '/api/shadow/thought' : '/api/shadow/log'
-      const res = await fetch(endpoint)
-      if (res.ok) {
+      const res = await shadowFetch(endpoint)
+      if (res.ok && unlocked) {
         const items = await res.json()
+        if (!unlocked) return
         historyLoading.classList.add('hidden')
         if (items.length === 0) {
           const emptyText = currentHistoryTab === 'thoughts' ? 'No thoughts logged yet.' : 'No shadows logged yet.'
-          historyList.innerHTML = `<div class="text-xs font-mono text-[#4a4a60] text-center py-4">${emptyText}</div>`
+          const empty = document.createElement('div')
+          empty.className = 'text-xs font-mono text-[#4a4a60] text-center py-4'
+          empty.textContent = emptyText
+          historyList.appendChild(empty)
           return
         }
         
@@ -596,17 +619,25 @@
             minute: '2-digit'
           })
 
+          const header = document.createElement('div')
+          header.className = 'flex justify-between items-center border-b border-[#1e1e2e] pb-1.5 mb-1 text-[10px] font-mono text-[#beb9cc]'
+          const timestamp = document.createElement('span')
+          timestamp.textContent = date
+          const editButton = document.createElement('button')
+          editButton.textContent = 'Edit'
+          editButton.dataset.id = itemData.id
+          header.append(timestamp, editButton)
+          item.appendChild(header)
+
           if (currentHistoryTab === 'thoughts') {
-            item.innerHTML = `
-              <div class="flex justify-between items-center border-b border-[#1e1e2e] pb-1.5 mb-1 text-[10px] font-mono text-[#beb9cc]">
-                <span>${date}</span>
-                <button class="edit-btn text-[#6c63d5] hover:text-[#ff6b9d] transition-colors uppercase tracking-widest font-semibold cursor-pointer select-none" data-id="${itemData.id}">Edit</button>
-              </div>
-              <p class="text-xs font-mono text-[#c8c6c1] leading-relaxed break-words whitespace-pre-wrap">${itemData.content}</p>
-            `
+            editButton.className = 'edit-btn text-[#6c63d5] hover:text-[#ff6b9d] transition-colors uppercase tracking-widest font-semibold cursor-pointer select-none'
+            const content = document.createElement('p')
+            content.className = 'text-xs font-mono text-[#c8c6c1] leading-relaxed break-words whitespace-pre-wrap'
+            content.textContent = itemData.content
+            item.appendChild(content)
             
             // Click to Edit binding
-            item.querySelector('.edit-btn')?.addEventListener('click', () => {
+            editButton.addEventListener('click', () => {
               historyEditShadowBox.classList.add('hidden')
               editNoteId.value = itemData.id
               editNoteTextarea.value = itemData.content
@@ -616,19 +647,23 @@
           } else {
             // Shadows
             const emoji = getBehaviorEmoji(itemData.behavior)
-            item.innerHTML = `
-              <div class="flex justify-between items-center border-b border-[#1e1e2e] pb-1.5 mb-1 text-[10px] font-mono text-[#beb9cc]">
-                <span>${date}</span>
-                <button class="edit-shadow-btn text-[#6c63d5] hover:text-[#a78bfa] transition-colors uppercase tracking-widest font-semibold cursor-pointer select-none" data-id="${itemData.id}">Edit</button>
-              </div>
-              <div class="flex flex-col gap-1 font-mono">
-                <div class="text-xs text-[#a78bfa] font-semibold">${emoji} ${itemData.behavior}</div>
-                ${itemData.trigger ? `<div class="text-[11px] text-[#8a8899] italic leading-relaxed break-words">Triggered by: "${itemData.trigger}"</div>` : ''}
-              </div>
-            `
+            editButton.className = 'edit-shadow-btn text-[#6c63d5] hover:text-[#a78bfa] transition-colors uppercase tracking-widest font-semibold cursor-pointer select-none'
+            const details = document.createElement('div')
+            details.className = 'flex flex-col gap-1 font-mono'
+            const behavior = document.createElement('div')
+            behavior.className = 'text-xs text-[#a78bfa] font-semibold'
+            behavior.textContent = `${emoji} ${itemData.behavior}`
+            details.appendChild(behavior)
+            if (itemData.trigger) {
+              const trigger = document.createElement('div')
+              trigger.className = 'text-[11px] text-[#8a8899] italic leading-relaxed break-words'
+              trigger.textContent = `Triggered by: "${itemData.trigger}"`
+              details.appendChild(trigger)
+            }
+            item.appendChild(details)
             
             // Click to Edit Shadow binding
-            item.querySelector('.edit-shadow-btn')?.addEventListener('click', () => {
+            editButton.addEventListener('click', () => {
               historyEditBox.classList.add('hidden')
               editShadowId.value = itemData.id
               editShadowBehavior.value = itemData.behavior
@@ -689,7 +724,7 @@
     editSaveBtn.textContent = 'Saving...'
 
     try {
-      const res = await fetch('/api/shadow/thought', {
+      const res = await shadowFetch('/api/shadow/thought', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, content })
@@ -722,7 +757,7 @@
     editDeleteBtn.textContent = '...'
 
     try {
-      const res = await fetch('/api/shadow/thought', {
+      const res = await shadowFetch('/api/shadow/thought', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
@@ -763,7 +798,7 @@
     editShadowSaveBtn.textContent = 'Saving...'
 
     try {
-      const res = await fetch('/api/shadow/log', {
+      const res = await shadowFetch('/api/shadow/log', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, behavior, trigger })
@@ -796,7 +831,7 @@
     editShadowDeleteBtn.textContent = '...'
 
     try {
-      const res = await fetch('/api/shadow/log', {
+      const res = await shadowFetch('/api/shadow/log', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
@@ -818,4 +853,9 @@
     editShadowDeleteBtn.removeAttribute('disabled')
     editShadowDeleteBtn.textContent = 'Delete'
   })
+
+  // Restore a server-verified session before loading any private data.
+  shadowFetch('/api/shadow/auth').then(res => {
+    if (res.ok) unlock()
+  }).catch(() => {})
 </script>
