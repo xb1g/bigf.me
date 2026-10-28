@@ -230,6 +230,30 @@ test('the first-run card goes away for good after Got it', async ({ page }) => {
   expect(await page.evaluate(() => localStorage.getItem('anchor:today:intro-dismissed'))).toBeTruthy();
 });
 
+test('the anchor form says when it reads like a to-do, and the saved anchor offers Fix it', async ({ page }) => {
+  await openApp(page);
+  const coach = page.locator('[data-key="today-anchor-coach"]');
+  await expect(coach).toHaveText(/Test: when it’s done, is that number higher/);
+
+  await page.getByLabel('What', { exact: true }).fill('Send the tea and pack some testers');
+  await page.getByLabel(/^Which number/).fill('Onecha ARR');
+  await expect(coach).toContainText('Looks like two things.');
+  await expect(coach).toContainText('Onecha ARR won’t move today.');
+
+  // Never blocks saving; the saved card keeps one note with a way to fix it.
+  await page.getByRole('button', { name: 'Set anchor' }).click();
+  await expect(page.getByRole('checkbox', { name: /Send the tea/ })).toBeVisible();
+  await expect(page.getByText('Looks like two things.', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Fix it' }).click();
+  await expect(page.getByLabel('What', { exact: true })).toBeFocused();
+
+  await page.getByLabel('What', { exact: true }).fill('Send tester packs to 5 named buyers');
+  await page.getByLabel(/^Which number/).fill('testers sent');
+  await expect(coach).toHaveText(/Test: when it’s done/);
+  await page.getByRole('button', { name: 'Save anchor' }).click();
+  await expect(page.getByRole('button', { name: 'Fix it' })).toHaveCount(0);
+});
+
 test('set the anchor and add actions (three is the limit, a 4th asks to swap)', async ({ page }) => {
   await openApp(page);
   await setAnchor(page, 'Send the offer to 5 alumni');

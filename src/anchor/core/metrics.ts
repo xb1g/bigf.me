@@ -402,7 +402,7 @@ export interface EscapeInput {
   betId?: ID | 'none' | '';
 }
 
-export type EscapeParkReason = 'no-number' | 'no-bet' | 'bet-not-active' | 'no-date' | 'past-date' | 'too-far';
+export type EscapeParkReason = 'no-number' | 'vague-number' | 'no-bet' | 'bet-not-active' | 'no-date' | 'past-date' | 'too-far';
 
 /** Which escape-check answer a reason points at (so the view can flag that answer / step). */
 export type EscapeReasonField = 'numberMoves' | 'betId' | 'byWhen';
@@ -416,6 +416,7 @@ export interface EscapeReason {
 
 export const ESCAPE_REASON_COPY: Record<EscapeParkReason, string> = {
   'no-number': 'No number moves yet.',
+  'vague-number': 'That number is hard to count. Name a count you can check.',
   'no-bet': 'It doesn’t serve an active bet.',
   'bet-not-active': 'The bet it serves isn’t active.',
   'no-date': 'There’s no date yet for when you’d see it move.',
@@ -425,12 +426,27 @@ export const ESCAPE_REASON_COPY: Record<EscapeParkReason, string> = {
 
 const REASON_FIELD: Record<EscapeParkReason, EscapeReasonField> = {
   'no-number': 'numberMoves',
+  'vague-number': 'numberMoves',
   'no-bet': 'betId',
   'bet-not-active': 'betId',
   'no-date': 'byWhen',
   'past-date': 'byWhen',
   'too-far': 'byWhen',
 };
+
+/** Results that show up months later. Fine for a bet; a day's anchor can't move them. */
+const SLOW_NUMBER = /\b(arr|mrr|run[- ]?rate|valuation|ltv|churn|retention|nps|market share)\b/i;
+/** Words that sound like a number but can't be counted. */
+const VAGUE_NUMBER = /\b(engagement|awareness|growth|traction|momentum|feedback|learnings?|quality|brand|buzz|hype|vibes?|progress|exposure|interest|visibility|impact|insights?)\b/i;
+
+/** 'slow' = moves over months (ARR, retention); 'vague' = no count in it (engagement). Null when fine or empty. */
+export function numberIssue(metric: string | undefined): 'slow' | 'vague' | null {
+  const m = (metric ?? '').trim();
+  if (!m) return null;
+  if (SLOW_NUMBER.test(m)) return 'slow';
+  if (!/\d/.test(m) && VAGUE_NUMBER.test(m)) return 'vague';
+  return null;
+}
 
 /** The by-when problem alone (null when the date is fine): none, in the past, or more than 30 days away. */
 export function escapeDateReason(byWhen: string | undefined, today: ISODate): 'no-date' | 'past-date' | 'too-far' | null {
@@ -443,11 +459,12 @@ export function escapeDateReason(byWhen: string | undefined, today: ISODate): 'n
 
 /**
  * Why the escape check recommends parking (empty array → Go). Order: number, bet, date.
- * Park when: no number · no bet / bet not active · no by-when date · by-when already past · by-when > 30 days.
+ * Park when: no number or a vague one · no bet / bet not active · no by-when date · by-when already past · by-when > 30 days.
  */
 export function escapeParkReasons(input: EscapeInput, bets: Bet[], today: ISODate): EscapeParkReason[] {
   const reasons: EscapeParkReason[] = [];
   if (!input.numberMoves || !input.numberMoves.trim()) reasons.push('no-number');
+  else if (numberIssue(input.numberMoves) === 'vague') reasons.push('vague-number');
   const betId = input.betId;
   if (!betId || betId === 'none') {
     reasons.push('no-bet');

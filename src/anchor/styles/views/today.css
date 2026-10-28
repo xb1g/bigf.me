@@ -30,6 +30,9 @@
   padding-top: var(--space-3);
   border-top: 1px solid var(--line);
 }
+/* Live notes under the anchor form: two things? a number you can count today? */
+.today-coach { display: flex; flex-direction: column; gap: var(--space-1); }
+.today-coach p { margin: 0; }
 .today-lesson { padding-left: var(--space-3); border-left: 2px solid var(--line-strong); }
 
 /* "That's three. Swap one out?" */

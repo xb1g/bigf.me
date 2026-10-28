@@ -7,7 +7,7 @@ import {
 } from '../core/dates.ts';
 import { EVENING_HOUR, MAX_ACTIONS, SHUTDOWN_GRACE_HOUR } from '../core/constants.ts';
 import {
-  buildSellRatio, escapesThisWeek, hoursByCategory, nextBetReviewDue, talksThisWeek,
+  buildSellRatio, escapesThisWeek, hoursByCategory, nextBetReviewDue, numberIssue, talksThisWeek,
 } from '../core/metrics.ts';
 import type { BuildSell } from '../core/metrics.ts';
 import { NO_NEXT_STEP_COPY } from './heavy.logic.ts';
@@ -28,6 +28,10 @@ export const LOW_ENERGY_COPY = 'Low energy today. Make the anchor smaller? Half 
 export const LOW_ENERGY_EMPTY_HINT = 'Low energy today. Pick a small one. It still counts.';
 export const ANCHOR_OPEN_COPY = 'Anchor’s still open. Do 15 min of it, or move it to tomorrow?';
 export const ANCHOR_MOVED_COPY = 'Moved to tomorrow. It’ll be waiting.';
+/** Shown under the anchor form when nothing looks off. */
+export const ANCHOR_TEST_COPY = 'Test: when it’s done, is that number higher than this morning?';
+export const TWO_THINGS_COPY = 'Looks like two things. Keep the one that moves the number. Put the other in Actions.';
+export const NO_NUMBER_COPY = 'Which number goes up when it’s done? Make it a count: testers sent, parents asked.';
 /** Hint under the shutdown's "Tomorrow's anchor" when it was filled in from today's open anchor. */
 export const SHUTDOWN_CARRY_HINT = 'Today’s anchor is still open. Keep it for tomorrow, or change it.';
 /** Same words as on the Heavy item card (one source). */
@@ -161,6 +165,39 @@ function checkinAnswer(c: DayEntry['checkin'], q: CheckinQuestion): { name: stri
     case 'energy': return { name: 'Energy', raw: c?.energy };
     default: return { name: 'Mood', raw: c?.mood };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Anchor coach: is it an anchor or a to-do?
+// ---------------------------------------------------------------------------
+
+const JOINER = /\s+(?:and|then|also|plus|&|\+)\s+|\s*[;,]\s+/i;
+/** A part that starts like this is more of the same thing ("3 parents and 2 students"), not a second job. */
+const NOT_A_TASK_START = /^(?:\d|the\b|a\b|an\b|my\b|some\b|all\b|their\b|our\b|his\b|her\b)/i;
+
+/** True when the anchor reads like two jobs ("Send the tea and pack some testers"). */
+export function looksLikeTwoThings(text: string): boolean {
+  const parts = text.trim().split(JOINER).map((p) => p.trim()).filter(Boolean);
+  return parts.slice(1).some((p) => p.split(/\s+/).length >= 2 && !NOT_A_TASK_START.test(p));
+}
+
+/**
+ * Soft notes on an anchor, most useful first. Never blocks saving.
+ * Catches the usual slips: two jobs in one, no number, a number that moves over months (ARR), or one you can't count.
+ */
+export function anchorCoach(text: string, metric: string | undefined): string[] {
+  const notes: string[] = [];
+  if (looksLikeTwoThings(text)) notes.push(TWO_THINGS_COPY);
+  const m = (metric ?? '').trim();
+  const issue = numberIssue(m);
+  if (!m) {
+    if (text.trim()) notes.push(NO_NUMBER_COPY);
+  } else if (issue === 'slow') {
+    notes.push(`${m} won’t move today. Count what you can finish today: testers sent, buyers asked, orders taken.`);
+  } else if (issue === 'vague') {
+    notes.push(`“${m}” is hard to count. Try a count, like “5 parents asked”.`);
+  }
+  return notes;
 }
 
 /**

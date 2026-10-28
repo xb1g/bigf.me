@@ -11,13 +11,13 @@ import {
 } from '../core/ui.ts';
 import {
   ANCHOR_LAST_STEP_COPY, ANCHOR_MOVED_COPY, ANCHOR_NUDGE_MIN, ANCHOR_OPEN_COPY, ANCHOR_PROMPT, ANCHOR_REQUIRED_COPY,
-  ANCHOR_SET_COPY, ANCHOR_UPDATED_COPY, CARRY_DISMISSED_KEY, CHECKIN_QUESTIONS, CHECKIN_SUBTITLE, INTRO_DISMISSED_KEY,
+  ANCHOR_SET_COPY, ANCHOR_TEST_COPY, ANCHOR_UPDATED_COPY, CARRY_DISMISSED_KEY, CHECKIN_QUESTIONS, CHECKIN_SUBTITLE, INTRO_DISMISSED_KEY,
   INTRO_LINES, LIMIT_COPY, LOW_ENERGY_COPY, LOW_ENERGY_EMPTY_HINT, SCALE_LEGEND, SHUTDOWN_CARRY_HINT, SLEEP_OPTIONS,
-  actionsFull, actionsLeft, anchorBetOptions, anchorInputFrom, anchorMeta, anchorMovedToTomorrow, anchorStatus,
+  actionsFull, actionsLeft, anchorBetOptions, anchorCoach, anchorInputFrom, anchorMeta, anchorMovedToTomorrow, anchorStatus,
   anchorStepsText, anchorStillOpen, anchorTimerNote, applyShutdown, buildAnchor, carriesAnchorStep, carryAction,
   carryOverCandidates,
   checkNewAction, checkinComplete, checkinPill, checkinSummary, chipToSleep, dayPhase, finishesAnchorSteps, hasShutdown,
-  heavyNudge, heavyNudgeAsksStep, heavyNudgeMeta, lastNightLesson,
+  NO_NUMBER_COPY, heavyNudge, heavyNudgeAsksStep, heavyNudgeMeta, lastNightLesson,
   lowEnergy, moveAnchorToTomorrow, openAnchorForTomorrow, msUntilAnchorDeadline, parseScale, pinnedWriteDate, primaryAction, scaleOptions,
   scaleToChip, showCarryOver, showShutdown, shutdownDay, shutdownDefaults, sleepToChip, swapAction, swapChoices,
   todaySections, tomorrowAnchorConflict, weekAnchorSuggestion, weekStrip,
@@ -290,6 +290,19 @@ function anchorCard(ctx: ViewContext, d: AnchorDraft, day: DayEntry, editing: bo
     const open = anchorStillOpen(day, ctx.today, ctx.now);
     const moved = status === 'set' && anchorMovedToTomorrow(state, date);
     const steps = anchorStepsText(day);
+    // The empty-number case already has its own hint under the anchor.
+    const coach = anchorCoach(a.text, a.metric).filter((n) => n !== NO_NUMBER_COPY)[0];
+    const editNudge = (text: string, label: string, key: string) => h('div', { class: 'today-nudge' },
+      h('p', { class: 'small' }, text),
+      h('div', null, button(label, { variant: 'ghost', size: 'sm', icon: 'edit', key, onClick: () => startEdit(true) })));
+    const anchorFooter = (): HTMLElement | null => {
+      if (moved) return h('p', { class: 'small muted' }, ANCHOR_MOVED_COPY);
+      if (status !== 'set') return null;
+      if (open) return anchorOpenNudge(ctx, a.text, date);
+      if (coach) return editNudge(coach, 'Fix it', 'today-anchor-fix');
+      if (lowEnergy(day)) return editNudge(LOW_ENERGY_COPY, 'Make it smaller', 'today-anchor-smaller');
+      return null;
+    };
     return card({
       title: 'Today’s anchor', titleLevel: 2, tone: status === 'done' ? 'good' : 'accent', variant: 'raised',
       action: h('div', { class: 'row' },
@@ -306,17 +319,7 @@ function anchorCard(ctx: ViewContext, d: AnchorDraft, day: DayEntry, editing: bo
       },
     }),
     steps ? h('p', { class: 'small muted today-step-mark', key: 'today-anchor-steps' }, icon('anchor', { size: 14 }), steps) : null,
-    moved
-      ? h('p', { class: 'small muted' }, ANCHOR_MOVED_COPY)
-      : status === 'set' && open
-        ? anchorOpenNudge(ctx, a.text, date)
-        : status === 'set' && lowEnergy(day)
-          ? h('div', { class: 'today-nudge' },
-              h('p', { class: 'small' }, LOW_ENERGY_COPY),
-              h('div', null, button('Make it smaller', {
-                variant: 'ghost', size: 'sm', icon: 'edit', key: 'today-anchor-smaller', onClick: () => startEdit(true),
-              })))
-          : null,
+    anchorFooter(),
     lessonLine,
     );
   }
@@ -328,6 +331,13 @@ function anchorCard(ctx: ViewContext, d: AnchorDraft, day: DayEntry, editing: bo
     : lowEnergy(day) ? LOW_ENERGY_EMPTY_HINT
     : 'Small is fine. Just one.';
   const dirty = () => { d.dirty = true; };
+  const coachEl = h('div', { class: 'today-coach small', 'aria-live': 'polite', key: 'today-anchor-coach' });
+  const paintCoach = () => {
+    const notes = anchorCoach(d.text, d.metric);
+    if (notes.length) coachEl.replaceChildren(...notes.map((n) => h('p', { class: 'text-warn' }, n)));
+    else coachEl.replaceChildren(h('p', { class: 'muted' }, ANCHOR_TEST_COPY));
+  };
+  paintCoach();
   return card({
     title: 'Today’s anchor', titleLevel: 2, tone: 'accent', variant: 'raised',
     subtitle: ANCHOR_PROMPT,
@@ -354,11 +364,11 @@ function anchorCard(ctx: ViewContext, d: AnchorDraft, day: DayEntry, editing: bo
     textField({
       id: 'today-anchor-text', label: 'What', value: d.text, maxLength: 200,
       placeholder: 'e.g. Send the offer to 5 alumni', error: d.error || null, hint,
-      onInput: (v) => { d.text = v; d.suggested = false; dirty(); },
+      onInput: (v) => { d.text = v; d.suggested = false; dirty(); paintCoach(); },
     }),
     textField({
       id: 'today-anchor-metric', label: 'Which number', optional: true, value: d.metric, maxLength: 120,
-      placeholder: 'e.g. paid seats', onInput: (v) => { d.metric = v; dirty(); },
+      placeholder: 'e.g. paid seats', onInput: (v) => { d.metric = v; dirty(); paintCoach(); },
     }),
     h('div', { class: 'grid-2' },
       textField({
@@ -370,6 +380,7 @@ function anchorCard(ctx: ViewContext, d: AnchorDraft, day: DayEntry, editing: bo
         options: betOptions, onChange: (v) => { d.betId = v; dirty(); },
       }),
     ),
+    coachEl,
     h('div', { class: 'row-end' },
       // A form kept from an earlier day can always be let go of, even when that day had no anchor.
       hasAnchor || forOtherDay

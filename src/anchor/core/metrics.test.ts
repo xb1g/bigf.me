@@ -4,6 +4,7 @@ import type { AnchorState, Bet, EscapeCheck, FunnelRow, Talk, TimeEntry } from '
 import {
   activeBetCount, anchorsInWeek, buildSellRatio, canActivateBet, cashBand, cashPerFounderHour, coveredMs, entryMinutes,
   escapeDateReason, escapeParkReasons, escapeReasons, escapeSessionHours, escapesThisWeek, escapeVerdict, formatPercent,
+  numberIssue,
   formatThb, funnelBottleneck, funnelConversions, hoursByCategory, isReviewOverdue, latestFunnelRow, msUntilTimebox,
   nextBetReviewDue, referralShare, runningTimerMs, sortFunnelRows, talksThisWeek, timerCapMs, timerElapsedMs,
   timerOverCap, timerOverrunMin, timerPastTimebox, totalHours, verifiedTestRate, weekSnapshot, wipStatus,
@@ -355,4 +356,29 @@ test('number formatting', () => {
   assert.equal(formatPercent(null), '—');
   assert.equal(formatThb(9000), '฿9,000');
   assert.equal(formatThb(undefined), '—');
+});
+
+// ------------------------------------------------------------ number quality
+
+test('numberIssue: slow numbers, vague words, and countable ones', () => {
+  assert.equal(numberIssue('Onecha ARR'), 'slow');
+  assert.equal(numberIssue('MRR'), 'slow');
+  assert.equal(numberIssue('retention'), 'slow');
+  assert.equal(numberIssue('engagement'), 'vague');
+  assert.equal(numberIssue('user feedback'), 'vague');
+  assert.equal(numberIssue('feedback from 5 parents'), null);
+  assert.equal(numberIssue('paid seats'), null);
+  assert.equal(numberIssue('testers sent'), null);
+  assert.equal(numberIssue('revenue'), null);
+  assert.equal(numberIssue(''), null);
+  assert.equal(numberIssue(undefined), null);
+});
+
+test('escape check parks a vague number and points at the number step', () => {
+  const bets = [bet('active1', 'active')];
+  const ok = { numberMoves: 'Paid seats', byWhen: '2026-11-15', betId: 'active1' };
+  assert.deepEqual(escapeParkReasons({ ...ok, numberMoves: 'engagement' }, bets, TODAY), ['vague-number']);
+  assert.equal(escapeVerdict({ ...ok, numberMoves: 'engagement' }, bets, TODAY), 'park');
+  assert.equal(escapeVerdict({ ...ok, numberMoves: '20 more replies' }, bets, TODAY), 'go');
+  assert.deepEqual(escapeReasons({ ...ok, numberMoves: 'traction' }, bets, TODAY).map((r) => r.field), ['numberMoves']);
 });

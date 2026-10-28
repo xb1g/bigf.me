@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import type { AnchorState, Bet, HeavyItem } from '../core/types.ts';
 import { emptyState } from '../core/seed.ts';
 import {
-  ANCHOR_DEFAULT_DEADLINE, LIMIT_COPY, NO_NEXT_STEP_COPY, actionsFull, actionsLeft, anchorBetOptions, anchorDeadline,
+  ANCHOR_DEFAULT_DEADLINE, LIMIT_COPY, NO_NEXT_STEP_COPY, NO_NUMBER_COPY, TWO_THINGS_COPY, actionsFull, actionsLeft,
+  anchorBetOptions, anchorCoach, anchorDeadline, looksLikeTwoThings,
   anchorMeta, anchorMovedToTomorrow, anchorStatus, anchorStillOpen, anchorTimerNote, applyShutdown, buildAnchor,
   carryAction, carryOverCandidates, checkNewAction, checkinComplete, checkinSummary, chipToSleep, dayPhase, escapeText,
   hasShutdown, heavyNudge, heavyNudgeMeta, inShutdownGrace, isEvening, isTime, lastNightLesson, lowEnergy,
@@ -561,4 +562,28 @@ test('compact check-in pills: a dash until answered, then the value', () => {
   assert.deepEqual(checkinPill({ sleepHours: 6 }, 'sleep'), { label: 'Sleep 6h', ariaLabel: 'Sleep: 6 hours', answered: true });
   assert.equal(checkinPill({ sleepHours: 3 }, 'sleep').label, 'Sleep ≤4h');
   assert.equal(checkinPill({ sleepHours: 10 }, 'sleep').label, 'Sleep 9+h');
+});
+
+// ------------------------------------------------------------ anchor coach
+
+test('looksLikeTwoThings: two jobs vs. one job with a list', () => {
+  assert.equal(looksLikeTwoThings('Send the tea and pack some testers'), true);
+  assert.equal(looksLikeTwoThings('Send the offer to 5 alumni, then follow up twice'), true);
+  assert.equal(looksLikeTwoThings('Send the offer to 5 alumni'), false);
+  assert.equal(looksLikeTwoThings('Interview parents and students'), false);
+  assert.equal(looksLikeTwoThings('Interview 3 parents and 2 students'), false);
+  assert.equal(looksLikeTwoThings('Call Mom, Dad'), false);
+  assert.equal(looksLikeTwoThings(''), false);
+});
+
+test('anchorCoach: the real "send tea" anchor gets both notes; a good one gets none', () => {
+  const notes = anchorCoach('Send the tea and pack some testers', 'Onecha ARR');
+  assert.equal(notes.length, 2);
+  assert.equal(notes[0], TWO_THINGS_COPY);
+  assert.match(notes[1], /^Onecha ARR won’t move today/);
+
+  assert.deepEqual(anchorCoach('Send tester packs to 5 named buyers', 'testers sent'), []);
+  assert.deepEqual(anchorCoach('Send tester packs to 5 named buyers', ''), [NO_NUMBER_COPY]);
+  assert.deepEqual(anchorCoach('', ''), []);
+  assert.match(anchorCoach('Post the reel', 'engagement')[0], /hard to count/);
 });
