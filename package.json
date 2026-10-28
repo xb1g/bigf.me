@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test:anchor": "node --test \"src/anchor/**/*.test.ts\""
+    "test:anchor": "node --test \"src/anchor/**/*.test.ts\"",
+    "test:shadow": "node --test \"src/lib/**/*.test.ts\""
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",

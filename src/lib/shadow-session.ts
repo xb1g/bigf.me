@@ -10,11 +10,17 @@ export const shadowCookieOptions = {
   path: '/api/shadow',
 }
 
+// Sessions are signed with their own long random secret, never with anything derived from the PIN.
+const MIN_SECRET_LENGTH = 32
+
 function sessionKey() {
   const secret = import.meta.env.SHADOW_SESSION_SECRET
-  if (secret) return secret
-  const pin = import.meta.env.SHADOW_PIN
-  return pin ? createHash('sha256').update(`bigf.me/shadow-session/v1\0${pin}`).digest() : null
+  return secret && secret.length >= MIN_SECRET_LENGTH ? secret : null
+}
+
+/** Login works only when both the PIN and a long session secret are set. */
+export function shadowAuthConfigured() {
+  return !!sessionKey() && !!import.meta.env.SHADOW_PIN
 }
 
 export function verifyShadowPin(pin: unknown) {

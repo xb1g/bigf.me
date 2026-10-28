@@ -359,11 +359,22 @@
     if (res.ok) {
       unlock()
     } else {
+      pinError.textContent = await pinErrorText(res)
       pinError.classList.remove('hidden')
       pinInput.value = ''
       pinInput.focus()
     }
   })
+
+  async function pinErrorText(res: Response) {
+    if (res.status === 429) {
+      const data = await res.json().catch(() => null)
+      const minutes = Math.max(1, Math.ceil((Number(data?.retryAfter) || 60) / 60))
+      return `too many tries. wait ${minutes} min`
+    }
+    if (res.status === 503) return 'login unavailable'
+    return 'wrong pin'
+  }
 
   function unlock() {
     unlocked = true
