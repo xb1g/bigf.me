@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  BadEnvelopeError, base64ToBytes, bytesToBase64, decryptJSON, encryptJSON, hashPin, isEnvelope, isValidPin,
-  randomSaltB64, verifyPin, WrongPassphraseError,
+  BadEnvelopeError, PBKDF2_ITERATIONS, PIN_PBKDF2_ITERATIONS, base64ToBytes, bytesToBase64, decryptJSON,
+  encryptJSON, hashPin, isEnvelope, isValidPin, pinIterations, randomSaltB64, verifyPin, WrongPassphraseError,
 } from './crypto.ts';
 
 const SAMPLE = { schemaVersion: 1, talks: [{ who: 'ครูเอ', did: 'Paid ฿500', quote: 'emoji ok 🙂' }], n: 3 };
@@ -57,17 +57,29 @@ test('encryptJSON requires a passphrase', async () => {
   await assert.rejects(() => encryptJSON(SAMPLE, ''));
 });
 
-test('hashPin is deterministic per salt; verifyPin checks it', async () => {
+test('hashPin is deterministic per salt; verifyPin checks it at the given iteration count', async () => {
   const salt = randomSaltB64();
   assert.equal(base64ToBytes(salt).length, 16);
-  const h1 = await hashPin('2580', salt);
-  const h2 = await hashPin('2580', salt);
+  // A small count here. The default (PIN_PBKDF2_ITERATIONS) is covered once below.
+  const h1 = await hashPin('2580', salt, 1_000);
+  const h2 = await hashPin('2580', salt, 1_000);
   assert.equal(h1, h2);
   assert.equal(base64ToBytes(h1).length, 32);
-  assert.notEqual(await hashPin('2580', randomSaltB64()), h1);
-  assert.equal(await verifyPin('2580', salt, h1), true);
-  assert.equal(await verifyPin('0000', salt, h1), false);
-  assert.equal(await verifyPin('2580', salt, 'short'), false);
+  assert.notEqual(await hashPin('2580', randomSaltB64(), 1_000), h1);
+  assert.equal(await verifyPin('2580', salt, h1, 1_000), true);
+  assert.equal(await verifyPin('0000', salt, h1, 1_000), false);
+  assert.equal(await verifyPin('2580', salt, h1, 1_001), false, 'a different count must not match');
+  assert.equal(await verifyPin('2580', salt, 'short', 1_000), false);
+  assert.equal(pinIterations(undefined), PBKDF2_ITERATIONS);
+  assert.equal(pinIterations(PIN_PBKDF2_ITERATIONS), PIN_PBKDF2_ITERATIONS);
+  assert.ok(PIN_PBKDF2_ITERATIONS > PBKDF2_ITERATIONS);
+});
+
+test('a new PIN hash uses the stronger default iteration count', async () => {
+  const salt = randomSaltB64();
+  const hash = await hashPin('2580', salt);
+  assert.equal(await verifyPin('2580', salt, hash), true);
+  assert.equal(await verifyPin('2580', salt, hash, PBKDF2_ITERATIONS), false);
 });
 
 test('isValidPin: 4–8 digits', () => {

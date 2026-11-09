@@ -9,6 +9,7 @@ import type {
 import { addDays, isDateTime, isISODate, toISODate } from './dates.ts';
 import { newId } from './id.ts';
 import { createSeedState, DEFAULT_LOCK_AFTER_MIN, DEFAULT_PROFILE, emptyState } from './seed.ts';
+import { HOURLY_RATE_MAX } from './rates.ts';
 import {
   BET_STATUSES, COLLECTION_LIMITS, DATASET_GEN_KEY, ERASE_EVENT_KEY, HEAVY_KINDS, HEAVY_STATUSES, MAX_ACTIONS,
   MAX_BET_DECISIONS, MAX_DAYS, MAX_REVIEW_DECISIONS, MAX_STATE_BYTES, MIN_TIME_ENTRY_MS, STORAGE_KEY, TALK_ROLES,
@@ -111,15 +112,24 @@ const idOf = (v: unknown): ID => (typeof v === 'string' && v.trim() ? v : newId(
 
 const CATEGORY_VALUES = TIME_CATEGORIES.map((c) => c.value);
 
+/** A user-set baht-per-hour rate. Missing, negative, or absurd values are dropped (not replaced with a default). */
+function optRate(v: unknown): number | undefined {
+  const n = num(v);
+  if (n === undefined || n < 0 || n > HOURLY_RATE_MAX) return undefined;
+  return Math.round(n * 100) / 100;
+}
+
 function migrateProfile(v: unknown): Profile {
   const p = isObj(v) ? v : {};
   const target = numIn(p.buildSellTarget, 0, 1);
-  return {
+  return compact({
     name: typeof p.name === 'string' ? p.name : DEFAULT_PROFILE.name,
     weeklyTalkTarget: intIn(p.weeklyTalkTarget, 1, 200, DEFAULT_PROFILE.weeklyTalkTarget),
     buildSellTarget: target ?? DEFAULT_PROFILE.buildSellTarget,
     maxActiveBets: intIn(p.maxActiveBets, 1, 20, DEFAULT_PROFILE.maxActiveBets),
-  };
+    hourlyFloorThb: optRate(p.hourlyFloorThb),
+    hourlyTargetThb: optRate(p.hourlyTargetThb),
+  });
 }
 
 function migrateDay(date: string, v: unknown): DayEntry | null {
@@ -353,6 +363,7 @@ function migrateUnsafe(raw: unknown, now: Date, strict: boolean): AnchorState {
   }
   const lockRaw = isObj(raw.lock) ? raw.lock : {};
   const pinHash = optStr(lockRaw.pinHash), pinSalt = optStr(lockRaw.pinSalt);
+  const pinIters = intIn(lockRaw.pinIters, 1, 20_000_000, 0);
   const syncRaw = isObj(raw.sync) ? raw.sync : {};
   return compact({
     schemaVersion: 1 as const,
@@ -373,6 +384,7 @@ function migrateUnsafe(raw: unknown, now: Date, strict: boolean): AnchorState {
     lock: compact({
       pinHash: pinHash && pinSalt ? pinHash : undefined,
       pinSalt: pinHash && pinSalt ? pinSalt : undefined,
+      pinIters: pinHash && pinSalt && pinIters > 0 ? pinIters : undefined,
       lockAfterMin: numIn(lockRaw.lockAfterMin, 0, 1440) ?? DEFAULT_LOCK_AFTER_MIN,
     }),
     sync: compact({

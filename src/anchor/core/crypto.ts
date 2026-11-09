@@ -1,8 +1,24 @@
 // WebCrypto only (browsers + Node 25). Pure module: no window/document access.
 // Envelope: { v: 1, salt, iv, ct } — base64 strings.
-// Key: PBKDF2-SHA256 (310,000 iterations, 16-byte salt) → AES-GCM 256, 12-byte random IV per encryption.
+// Passphrase key: PBKDF2-SHA256 (310,000 iterations, 16-byte salt) → AES-GCM 256, 12-byte random IV.
+// PIN hash: PBKDF2-SHA256 at PIN_PBKDF2_ITERATIONS. Older hashes omit a stored count and were made
+// at PBKDF2_ITERATIONS; verifyPin must be given that count or they will not match.
 
 export const PBKDF2_ITERATIONS = 310_000;
+/**
+ * PIN hashes created from now on. Higher than the passphrase KDF because a 4–8 digit PIN has a
+ * small keyspace. WebCrypto has no memory-hard function, so this only raises the cost of each guess.
+ */
+export const PIN_PBKDF2_ITERATIONS = 1_000_000;
+
+/**
+ * Iterations to use when checking a stored PIN hash.
+ * Missing (or unusable) means a hash written before the count was stored: PBKDF2_ITERATIONS.
+ */
+export function pinIterations(stored: number | undefined): number {
+  if (typeof stored === 'number' && Number.isInteger(stored) && stored > 0) return stored;
+  return PBKDF2_ITERATIONS;
+}
 const SALT_BYTES = 16;
 const IV_BYTES = 12;
 
@@ -72,9 +88,9 @@ export function randomSaltB64(bytes = SALT_BYTES): string {
   return bytesToBase64(randomBytes(bytes));
 }
 
-async function pbkdf2Bits(secret: string, salt: Uint8Array<ArrayBuffer>, bits = 256): Promise<ArrayBuffer> {
+async function pbkdf2Bits(secret: string, salt: Uint8Array<ArrayBuffer>, iterations: number, bits = 256): Promise<ArrayBuffer> {
   const base = await subtle().importKey('raw', new TextEncoder().encode(secret), 'PBKDF2', false, ['deriveBits', 'deriveKey']);
-  return subtle().deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: PBKDF2_ITERATIONS }, base, bits);
+  return subtle().deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations }, base, bits);
 }
 
 async function deriveAesKey(passphrase: string, salt: Uint8Array<ArrayBuffer>): Promise<CryptoKey> {
@@ -130,14 +146,17 @@ export async function decryptJSON<T = unknown>(envelope: Envelope | string, pass
   }
 }
 
-/** PBKDF2-SHA256(pin, salt) → base64. `salt` is base64 (use randomSaltB64()). */
-export async function hashPin(pin: string, salt: string): Promise<string> {
-  return bytesToBase64(new Uint8Array(await pbkdf2Bits(pin, base64ToBytes(salt))));
+/** PBKDF2-SHA256(pin, salt, iterations) → base64. `salt` is base64 (use randomSaltB64()). */
+export async function hashPin(pin: string, salt: string, iterations = PIN_PBKDF2_ITERATIONS): Promise<string> {
+  if (!Number.isInteger(iterations) || iterations < 1) throw new Error('Bad PIN iterations');
+  return bytesToBase64(new Uint8Array(await pbkdf2Bits(pin, base64ToBytes(salt), iterations)));
 }
 
-/** Constant-time check of a PIN against a stored hash + salt. */
-export async function verifyPin(pin: string, salt: string, expectedHash: string): Promise<boolean> {
-  const got = await hashPin(pin, salt);
+/** Constant-time check of a PIN against a stored hash + salt at the given iteration count. */
+export async function verifyPin(
+  pin: string, salt: string, expectedHash: string, iterations = PIN_PBKDF2_ITERATIONS,
+): Promise<boolean> {
+  const got = await hashPin(pin, salt, iterations);
   if (got.length !== expectedHash.length) return false;
   let diff = 0;
   for (let i = 0; i < got.length; i++) diff |= got.charCodeAt(i) ^ expectedHash.charCodeAt(i);

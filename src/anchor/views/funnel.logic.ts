@@ -2,12 +2,12 @@
 
 import type { FunnelRow, ISODate } from '../core/types.ts';
 import {
-  FUNNEL_MONEY, FUNNEL_STAGES, cashBand, cashPerFounderHour, formatPercent, formatThb,
+  FUNNEL_MONEY, FUNNEL_STAGES, cashPerFounderHour, compareCash, formatPercent, formatThb,
   funnelBottleneck, funnelConversions, referralShare, sortFunnelRows, stageLabel, verifiedTestRate,
 } from '../core/metrics.ts';
 import type { CashBand, Conversion, FunnelMoneyKey, FunnelStageKey } from '../core/metrics.ts';
+import type { HourlyRates } from '../core/rates.ts';
 import { formatDate, isISODate } from '../core/dates.ts';
-import { MENTOR_FLOOR_THB_PER_HOUR, TARGET_THB_PER_HOUR } from '../core/constants.ts';
 
 export type FunnelNumberKey = FunnelStageKey | FunnelMoneyKey;
 
@@ -23,10 +23,18 @@ export const REFERRAL_GOAL = 0.2;
 export const VERIFIED_TEST_KILL = 0.3;
 export const REFERRAL_KILL = 0.1;
 
-/** Fixed cash scale (฿0 → ฿400/h) so the floor and target ticks never move or overlap. */
-export const CASH_SCALE_MAX = 400;
-
 const known = (v: number | undefined | null): v is number => typeof v === 'number' && Number.isFinite(v);
+
+/**
+ * Scale top for the cash bar: a bit above the highest of the value, the floor and the target,
+ * so both ticks fit. No rates and no positive value → 1.
+ */
+export function cashScaleMax(perHour: number | null, rates: HourlyRates = {}): number {
+  const marks = [rates.floor, rates.target, perHour != null && perHour > 0 ? perHour : undefined]
+    .filter((n): n is number => typeof n === 'number' && Number.isFinite(n) && n > 0);
+  if (!marks.length) return 1;
+  return Math.max(...marks) * 1.25;
+}
 
 /** 1200 → '1,200'; 12.5 → '12.5'. */
 export function formatCount(v: number): string {
@@ -196,10 +204,14 @@ export interface CashView {
   tone: 'warn' | 'data' | 'good' | 'muted';
   value: string;
   copy: string;
-  /** 0..1 positions on the fixed ฿0–400 scale. */
+  /** 0..1 position of the value on `scaleMax`. */
   fill: number;
-  floorAt: number;
-  targetAt: number;
+  scaleMax: number;
+  /** Null when that rate is not set. */
+  floorAt: number | null;
+  targetAt: number | null;
+  floorLabel: string | null;
+  targetLabel: string | null;
   ariaLabel: string;
 }
 
@@ -214,30 +226,43 @@ export function cashMissing(row: FunnelRow): string[] {
   return out;
 }
 
-export function cashView(row: FunnelRow): CashView {
+function markAt(value: number | undefined, scaleMax: number): number | null {
+  if (typeof value !== 'number' || !Number.isFinite(value) || scaleMax <= 0) return null;
+  return value / scaleMax;
+}
+
+export function cashView(row: FunnelRow, rates: HourlyRates = {}): CashView {
   const perHour = cashPerFounderHour(row);
-  const band = cashBand(perHour);
-  const floorAt = MENTOR_FLOOR_THB_PER_HOUR / CASH_SCALE_MAX;
-  const targetAt = TARGET_THB_PER_HOUR / CASH_SCALE_MAX;
-  const floor = formatThb(MENTOR_FLOOR_THB_PER_HOUR), target = formatThb(TARGET_THB_PER_HOUR);
-  if (perHour === null || band === null) {
+  const scaleMax = cashScaleMax(perHour, rates);
+  const floorAt = markAt(rates.floor, scaleMax);
+  const targetAt = markAt(rates.target, scaleMax);
+  const floorLabel = rates.floor !== undefined ? `${formatThb(rates.floor)} floor` : null;
+  const targetLabel = rates.target !== undefined ? `${formatThb(rates.target)} target` : null;
+  const cmp = compareCash(perHour, rates);
+  const base = { scaleMax, floorAt, targetAt, floorLabel, targetLabel };
+
+  if (perHour === null) {
     const miss = cashMissing(row);
     const copy = miss.length
       ? `Add ${joinList(miss)} to see this.`
       : 'Founder hours is 0, so there’s nothing to divide by.';
-    return { perHour: null, band: null, tone: 'muted', value: '—', copy, fill: 0, floorAt, targetAt, ariaLabel: `Cash per founder hour unknown. Floor ${floor}, target ${target}.` };
+    const ratesText = [floorLabel, targetLabel].filter(Boolean).join(', ');
+    const aria = ratesText
+      ? `Cash per founder hour unknown. ${ratesText}.`
+      : 'Cash per founder hour unknown.';
+    return { perHour: null, band: null, tone: 'muted', value: '—', copy, fill: 0, ...base, ariaLabel: aria };
   }
+
   const value = `${formatThb(perHour)}/h`;
-  const copy = band === 'below-floor'
-    ? `Below the ${floor}/h mentor floor.`
-    : band === 'above-floor'
-      ? `Above the ${floor} floor. Target is ${target}/h.`
-      : `At or above the ${target}/h target.`;
-  const tone = band === 'below-floor' ? 'warn' : band === 'above-floor' ? 'data' : 'good';
+  const copy = cmp.note ?? 'Set a floor and target in Settings to compare.';
+  const tone = cmp.band === 'below-floor' ? 'warn'
+    : cmp.band === 'above-floor' ? 'data'
+      : cmp.band === 'on-target' ? 'good'
+        : cmp.note ? 'muted' : 'data';
   return {
-    perHour, band, tone, value, copy,
-    fill: clamp01(perHour / CASH_SCALE_MAX), floorAt, targetAt,
-    ariaLabel: `Cash per founder hour ${formatThb(perHour)}. Floor ${floor}, target ${target}.`,
+    perHour, band: cmp.band, tone, value, copy, ...base,
+    fill: clamp01(perHour / scaleMax),
+    ariaLabel: `Cash per founder hour ${formatThb(perHour)}. ${copy}`,
   };
 }
 
@@ -327,10 +352,10 @@ export function rowsNewestFirst(rows: FunnelRow[]): FunnelRow[] {
 }
 
 /** Short live summary for the form preview. */
-export function previewLine(row: FunnelRowInput): string {
+export function previewLine(row: FunnelRowInput, rates: HourlyRates = {}): string {
   const r = { id: '', ...row } as FunnelRow;
   const parts = [bottleneckLine(r)];
-  const cash = cashView(r);
+  const cash = cashView(r, rates);
   if (cash.perHour !== null) parts.push(`Cash per founder hour: ${cash.value}.`);
   return parts.join(' ');
 }

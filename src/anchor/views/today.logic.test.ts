@@ -350,6 +350,9 @@ test('Today order: anchor before check-in; evening puts the shutdown on top and 
   assert.equal(evening.at(-1), 'checkin');
   assert.equal(evening.includes('carry'), false, 'no carry-over prompt in the evening');
   assert.equal(todaySections('evening', { intro: true, carry: false })[0], 'intro');
+  const withRates = todaySections('morning', { intro: true, carry: false, rates: true });
+  assert.deepEqual(withRates.slice(0, 4), ['intro', 'rates', 'anchor', 'checkin']);
+  assert.equal(todaySections('evening', { intro: false, carry: false, rates: true })[0], 'rates');
 });
 
 test('pinned drafts: unsaved typing keeps its day, a plain tap goes to today', () => {

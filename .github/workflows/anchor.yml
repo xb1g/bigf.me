@@ -1,0 +1,22 @@
+name: Anchor
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:anchor
+      - run: npx astro build
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Anchor end-to-end
+        run: npx playwright test -c playwright.anchor.config.ts

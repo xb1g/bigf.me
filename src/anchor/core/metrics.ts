@@ -8,8 +8,9 @@ import {
   daysBetween, isDateTime, isISODate, weekDates, weekKey, weekKeyOf,
 } from './dates.ts';
 import {
-  ESCAPE_MAX_DAYS, MAX_BLOCK_HOURS, MENTOR_FLOOR_THB_PER_HOUR, TARGET_THB_PER_HOUR, TIME_CATEGORIES, TIMER_GRACE_MIN,
+  ESCAPE_MAX_DAYS, MAX_BLOCK_HOURS, TIME_CATEGORIES, TIMER_GRACE_MIN,
 } from './constants.ts';
+import type { HourlyRates } from './rates.ts';
 
 // ---------------------------------------------------------------------------
 // Time
@@ -305,12 +306,46 @@ export function cashPerFounderHour(row: Pick<FunnelRow, 'revenueThb' | 'costThb'
 
 export type CashBand = 'below-floor' | 'above-floor' | 'on-target';
 
-/** below-floor: < ฿130/h · above-floor: ฿130–299/h · on-target: ≥ ฿300/h. */
-export function cashBand(perHour: number | null): CashBand | null {
-  if (perHour === null || !Number.isFinite(perHour)) return null;
-  if (perHour < MENTOR_FLOOR_THB_PER_HOUR) return 'below-floor';
-  if (perHour < TARGET_THB_PER_HOUR) return 'above-floor';
-  return 'on-target';
+export interface CashCompare {
+  band: CashBand | null;
+  /** A calm sentence, or null when there is nothing useful to say. */
+  note: string | null;
+}
+
+const finiteRate = (v: number | undefined): number | undefined =>
+  (typeof v === 'number' && Number.isFinite(v) ? v : undefined);
+
+/**
+ * Compare cash per hour with the user's own floor and target.
+ * No rates → no band (the number can still be shown). A floor that is not below the target
+ * is not a range, so there is no band either.
+ */
+export function compareCash(perHour: number | null, rates: HourlyRates = {}): CashCompare {
+  if (perHour === null || !Number.isFinite(perHour)) return { band: null, note: null };
+  const floor = finiteRate(rates.floor);
+  const target = finiteRate(rates.target);
+  if (floor === undefined && target === undefined) return { band: null, note: null };
+  if (floor !== undefined && target !== undefined && !(floor < target)) {
+    return { band: null, note: 'Set a target above the floor to compare.' };
+  }
+  const floorText = floor !== undefined ? formatThb(floor) : '';
+  const targetText = target !== undefined ? formatThb(target) : '';
+  if (target !== undefined && perHour >= target) {
+    return { band: 'on-target', note: `At or above the ${targetText}/h target.` };
+  }
+  if (floor !== undefined && perHour < floor) {
+    return { band: 'below-floor', note: `Below the ${floorText}/h floor.` };
+  }
+  if (floor !== undefined && target !== undefined) {
+    return { band: 'above-floor', note: `Above the ${floorText} floor. Target is ${targetText}/h.` };
+  }
+  if (floor !== undefined) return { band: 'above-floor', note: `At or above the ${floorText}/h floor.` };
+  return { band: 'above-floor', note: `Under the ${targetText}/h target.` };
+}
+
+/** Band only. Pass the user's rates; without them this is always null. */
+export function cashBand(perHour: number | null, rates: HourlyRates = {}): CashBand | null {
+  return compareCash(perHour, rates).band;
 }
 
 /** Verified tests ÷ students who finished (falls back to paid). Null when unknown. */
@@ -522,6 +557,9 @@ export function weekSnapshot(state: AnchorState, wk: string, now: Date = new Dat
   snap.bottleneckRate = bottleneck && bottleneck.rate !== null ? Math.round(bottleneck.rate * 1000) / 1000 : null;
   const cph = row ? cashPerFounderHour(row) : null;
   snap.cashPerHour = cph === null ? null : Math.round(cph);
+  // Stored with the review so a later change of the rates does not rewrite an old week.
+  snap.hourlyFloor = state.profile.hourlyFloorThb ?? null;
+  snap.hourlyTarget = state.profile.hourlyTargetThb ?? null;
   return snap;
 }
 

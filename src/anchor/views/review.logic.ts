@@ -4,7 +4,7 @@ import type { AnchorState, Bet, DayEntry, ID, ISODate, Verdict, WeeklyReview } f
 import {
   addDays, addWeeks, formatHours, formatShortDate, isISODate, isoWeekday, weekDates, weekKey, weekRange,
 } from '../core/dates.ts';
-import { cashBand, formatPercent, formatThb, weekSnapshot } from '../core/metrics.ts';
+import { compareCash, formatPercent, formatThb, weekSnapshot } from '../core/metrics.ts';
 import type { CashBand } from '../core/metrics.ts';
 import { REVIEW_PUSH_DAYS, TIME_CATEGORIES } from '../core/constants.ts';
 import { PARK_LOOK_AGAIN_DAYS } from './bets.logic.ts';
@@ -417,12 +417,16 @@ export function snapshotView(snap: Snap): SnapshotView {
   const bottleneckText = bottleneck ? (rate === null ? bottleneck : `${bottleneck} · ${formatPercent(rate)}`) : 'Not enough funnel data yet';
 
   const cash = n(snap.cashPerHour);
-  const band = cashBand(cash);
-  const cashTone: SnapTone = band ? CASH_BAND_TONE[band] : 'muted';
-  const cashNote = band === 'below-floor' ? 'Below the ฿130/h floor.'
-    : band === 'above-floor' ? 'Above the floor, under the ฿300/h target.'
-    : band === 'on-target' ? 'At or above the ฿300/h target.'
-    : null;
+  const floor = n(snap.hourlyFloor);
+  const hourlyTarget = n(snap.hourlyTarget);
+  const cmp = compareCash(cash, {
+    floor: floor === null ? undefined : floor,
+    target: hourlyTarget === null ? undefined : hourlyTarget,
+  });
+  const cashTone: SnapTone = cmp.band
+    ? CASH_BAND_TONE[cmp.band]
+    : cash === null || cmp.note ? 'muted' : 'data';
+  const cashNote = cash === null ? null : cmp.note;
 
   return {
     hours, totalHours, build, sell, buildShare, buildSellTarget: target, buildSellText,

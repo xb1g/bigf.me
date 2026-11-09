@@ -135,6 +135,25 @@ test('migrate drops unknown fields and invalid enum values, coerces numbers', ()
   assert.deepEqual(s.lock, { lockAfterMin: 5 }, 'half a PIN is no PIN');
 });
 
+test('migrate keeps user hourly rates and pin iterations, and drops junk ones', () => {
+  const s = migrate({
+    profile: { name: 'Big', hourlyFloorThb: 80, hourlyTargetThb: 150.5 },
+    lock: { pinHash: 'aGFzaA==', pinSalt: 'c2FsdA==', pinIters: 1_000_000, lockAfterMin: 5 },
+  }, NOW);
+  assert.equal(s.profile.hourlyFloorThb, 80);
+  assert.equal(s.profile.hourlyTargetThb, 150.5);
+  assert.equal(s.profile.name, 'Big');
+  assert.equal(s.lock.pinIters, 1_000_000);
+  const dropped = migrate({
+    profile: { hourlyFloorThb: -1, hourlyTargetThb: 'nope' },
+    lock: { pinHash: 'aGFzaA==', pinSalt: 'c2FsdA==', pinIters: 0, lockAfterMin: 5 },
+  }, NOW);
+  assert.equal(dropped.profile.hourlyFloorThb, undefined);
+  assert.equal(dropped.profile.hourlyTargetThb, undefined);
+  assert.equal(dropped.lock.pinIters, undefined);
+  assert.equal(dropped.lock.pinHash, 'aGFzaA==');
+});
+
 test('migrate makes duplicate ids unique across a collection', () => {
   const s = migrate({ talks: [{ id: 'same', did: 'a' }, { id: 'same', did: 'b' }] }, NOW);
   assert.equal(s.talks.length, 2);

@@ -10,7 +10,7 @@ import { h, isTextEntry } from './core/dom.ts';
 import { currentRoute, href, navigate, normalizeHash, onRouteChange, ROUTE_META } from './core/router.ts';
 import type { RouteMeta } from './core/router.ts';
 import { bangkokHour, formatDate, formatDateTime, todayISO } from './core/dates.ts';
-import { verifyPin } from './core/crypto.ts';
+import { pinIterations, verifyPin } from './core/crypto.ts';
 import { EVENING_HOUR, labelOf, SHUTDOWN_GRACE_HOUR, TIMEBOX_SNOOZE_MIN, TIME_CATEGORIES } from './core/constants.ts';
 import { msUntilTimebox, timerCapMs, timerElapsedMs, timerOverCap, timerPastTimebox } from './core/metrics.ts';
 import { button, clearToasts, confirmDialog, emptyState, form, icon, liveElapsed, textField, toast } from './core/ui.ts';
@@ -409,14 +409,18 @@ function lockScreen(): HTMLElement {
     ariaLabel: 'Unlock Anchor',
     onSubmit: async () => {
       if (busy || !pin) return;
-      const { pinHash, pinSalt } = getState().lock;
+      const { pinHash, pinSalt, pinIters } = getState().lock;
       if (!pinHash || !pinSalt) { unlock(); return; }
       busy = true;
       submit.disabled = true;
       msg.textContent = 'Checking…';
-      const ok = await verifyPin(pin, pinSalt, pinHash).catch(() => false);
+      const ok = await verifyPin(pin, pinSalt, pinHash, pinIterations(pinIters)).catch(() => false);
+      if (ok) {
+        await settingsView.upgradeStoredPin(pin).catch(() => undefined);
+        unlock();
+        return;
+      }
       busy = false;
-      if (ok) { unlock(); return; }
       attempts++;
       pin = '';
       input.value = '';
@@ -528,6 +532,7 @@ function boot(): void {
   onPersistError(() => {
     toast('Anchor can’t save on this device right now. Download a backup from Settings to keep your changes.', { tone: 'danger', durationMs: 0 });
   });
+  settingsView.scrubStoredPassphrase();
   const { recovered } = initStore();
   onExternalChange(({ dropped }) => {
     // Edits made here are re-applied on top of the other tab's copy; this only speaks when one couldn't be.

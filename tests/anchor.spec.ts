@@ -18,9 +18,6 @@ function bkk(local: string): Date {
 }
 
 async function prepPage(page: Page): Promise<void> {
-  // Keep the run independent of the network: Google Fonts gets an empty stylesheet.
-  await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, (route) =>
-    route.fulfill({ status: 200, contentType: 'text/css', body: '' }));
   // The Astro dev toolbar (dev server only) floats over the tab bar; hide it.
   await page.addInitScript(() => {
     document.addEventListener('DOMContentLoaded', () => {
@@ -43,6 +40,13 @@ const test = base.extend<{ errors: string[]; startAt: string }>({
     const errors: string[] = [];
     page.on('console', (msg) => { if (msg.type() === 'error') errors.push(`console: ${msg.text()}`); });
     page.on('pageerror', (err) => errors.push(`pageerror: ${err.message}`));
+    page.on('request', (req) => {
+      let host = '';
+      try { host = new URL(req.url()).hostname; } catch { return; }
+      if (host === 'fonts.googleapis.com' || host === 'fonts.gstatic.com') {
+        errors.push(`third-party font request: ${req.url()}`);
+      }
+    });
     await use(errors);
     expect(errors, 'no console errors or page errors').toEqual([]);
   }, { auto: true }],

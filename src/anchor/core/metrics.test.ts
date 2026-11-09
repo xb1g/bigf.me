@@ -218,16 +218,19 @@ test('funnelBottleneck picks the first of equal lowest rates', () => {
   assert.equal(b?.from, 'reach');
 });
 
-test('cashPerFounderHour and cash bands', () => {
+test('cashPerFounderHour and cash bands follow the user rates', () => {
   const v = cashPerFounderHour(SHIFT2);
   assert.ok(v !== null);
   assert.ok(Math.abs(v - 9000 / 60) < 1e-9);
   assert.equal(Math.round(v), 150);
-  assert.equal(cashBand(v), 'above-floor');
-  assert.equal(cashBand(129.99), 'below-floor');
-  assert.equal(cashBand(130), 'above-floor');
-  assert.equal(cashBand(300), 'on-target');
-  assert.equal(cashBand(null), null);
+  const rates = { floor: 100, target: 200 };
+  assert.equal(cashBand(v, rates), 'above-floor');
+  assert.equal(cashBand(99.99, rates), 'below-floor');
+  assert.equal(cashBand(100, rates), 'above-floor');
+  assert.equal(cashBand(200, rates), 'on-target');
+  assert.equal(cashBand(v), null, 'no rates → no band');
+  assert.equal(cashBand(null, rates), null);
+  assert.equal(cashBand(150, { floor: 200, target: 100 }), null, 'a floor above the target is not a range');
   assert.equal(cashPerFounderHour({ revenueThb: 100, founderHours: 2 }), null, 'unknown costs → unknown');
   assert.equal(cashPerFounderHour({ revenueThb: 100, costThb: 0, founderHours: 0 }), null);
   assert.equal(cashPerFounderHour({ revenueThb: 100, costThb: 300, founderHours: 2 }), -100);
@@ -347,6 +350,13 @@ test('weekSnapshot summarises the week', () => {
   assert.equal(snap.funnelRow, 'SHIFT[2]');
   assert.equal(snap.bottleneck, 'Paid → Verified real-user test');
   assert.equal(snap.cashPerHour, 150);
+  assert.equal(snap.hourlyFloor, null, 'unset rates are stored as null, not a built-in number');
+  assert.equal(snap.hourlyTarget, null);
+  s.profile.hourlyFloorThb = 80;
+  s.profile.hourlyTargetThb = 220;
+  const withRates = weekSnapshot(s, WK, new Date('2026-10-28T03:00:00Z'));
+  assert.equal(withRates.hourlyFloor, 80);
+  assert.equal(withRates.hourlyTarget, 220);
   for (const v of Object.values(snap)) assert.ok(v === null || typeof v === 'number' || typeof v === 'string');
 });
 

@@ -3,14 +3,14 @@
      Only a 200 text/html response may replace the cached shell (never an icon, a 404 or a redirect).
    - Static files under /anchor/: cache-first.
    - Built assets /_astro/*: stale-while-revalidate (precached from the shell HTML on install).
-   - Google Fonts: stale-while-revalidate.
+     Stylesheets are scanned so the font files they reference are precached for offline use.
    - /api/ and non-GET requests: never touched, never cached.
+   Fonts are self-hosted on this origin. Nothing is fetched from a third party.
    Bump VERSION to drop old caches. */
-const VERSION = 'v2'; // v2: v1 could cache a static file as the shell; dropping it on activate
+const VERSION = 'v3'; // v3: self-hosted fonts; drop the old Google Fonts cache
 const SHELL_CACHE = `anchor-shell-${VERSION}`;
 const ASSET_CACHE = `anchor-assets-${VERSION}`;
-const FONT_CACHE = `anchor-fonts-${VERSION}`;
-const KEEP = [SHELL_CACHE, ASSET_CACHE, FONT_CACHE];
+const KEEP = [SHELL_CACHE, ASSET_CACHE];
 
 const SHELL_URL = '/anchor/';
 const STATIC_URLS = [
@@ -41,6 +41,21 @@ function astroAssetsIn(html) {
   return [...found];
 }
 
+/** Cache one built asset. If it is CSS, also cache the /_astro files it points at (fonts). */
+async function precacheAsset(cache, url) {
+  if (await cache.match(url)) return;
+  let res;
+  try { res = await fetch(url, { cache: 'no-cache' }); } catch { return; }
+  if (!res || !res.ok) return;
+  await cache.put(url, res.clone());
+  const path = new URL(url, self.location.origin).pathname;
+  const type = (res.headers.get('content-type') || '').toLowerCase();
+  if (type.includes('text/css') || path.endsWith('.css')) {
+    const css = await res.text();
+    await Promise.all(astroAssetsIn(css).map((u) => precacheAsset(cache, u)));
+  }
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const shell = await caches.open(SHELL_CACHE);
@@ -49,7 +64,7 @@ self.addEventListener('install', (event) => {
       await shell.put(SHELL_URL, res.clone());
       const assets = await caches.open(ASSET_CACHE);
       const html = await res.text();
-      await Promise.all(astroAssetsIn(html).map((u) => assets.add(u).catch(() => undefined)));
+      await Promise.all(astroAssetsIn(html).map((u) => precacheAsset(assets, u)));
     }
     await shell.addAll(STATIC_URLS).catch(() => undefined);
     await self.skipWaiting();
@@ -71,9 +86,7 @@ async function storeResponse(cache, cacheKey, res) {
     // Keep the built assets the fresh shell needs, so the next offline launch works.
     const assets = await caches.open(ASSET_CACHE);
     const html = await res.text();
-    await Promise.all(astroAssetsIn(html).map(async (u) => {
-      if (!(await assets.match(u))) await assets.add(u).catch(() => undefined);
-    }));
+    await Promise.all(astroAssetsIn(html).map((u) => precacheAsset(assets, u)));
   }
 }
 
@@ -95,10 +108,6 @@ async function staleWhileRevalidate(event, cacheName, cacheKey) {
   }
   const res = await network;
   if (res) return res;
-  // Offline and never cached: fonts fall back to system fonts quietly.
-  if (new URL(event.request.url).hostname === 'fonts.googleapis.com') {
-    return new Response('', { headers: { 'Content-Type': 'text/css' } });
-  }
   return new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } });
 }
 
@@ -131,10 +140,5 @@ self.addEventListener('fetch', (event) => {
     if (url.pathname.startsWith('/anchor/') && url.pathname !== '/anchor/sw.js') {
       event.respondWith(cacheFirst(req, SHELL_CACHE));
     }
-    return;
-  }
-
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
-    event.respondWith(staleWhileRevalidate(event, FONT_CACHE, req));
   }
 });

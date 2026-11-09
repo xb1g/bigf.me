@@ -1,7 +1,8 @@
 // Settings — profile, backup (export/import), end-to-end encrypted sync, app lock PIN,
 // erase, and the "Privacy, in plain words" notes.
-// Secrets: the sync passphrase lives in module memory for the session; it is written to this
-// device only when the user turns on "Remember passphrase". The PIN is stored as a PBKDF2 hash.
+// Secrets: the sync passphrase lives in module memory. "Remember for this session" keeps it in
+// sessionStorage only (gone when the tab closes). It is never written to localStorage.
+// The PIN is stored as a PBKDF2 hash; the iteration count is stored beside it.
 
 import type { AnchorState, ViewContext } from '../core/types.ts';
 import { h } from '../core/dom.ts';
@@ -11,7 +12,8 @@ import {
   textField, toast,
 } from '../core/ui.ts';
 import { datasetGeneration, eraseAll, getState, prepareImport, replaceState, update } from '../core/store.ts';
-import { decryptJSON, encryptJSON, hashPin, randomSaltB64, verifyPin } from '../core/crypto.ts';
+import { PIN_PBKDF2_ITERATIONS, decryptJSON, encryptJSON, hashPin, pinIterations, randomSaltB64, verifyPin } from '../core/crypto.ts';
+import { applyHourlyRate, hourlyRateIssue, hourlyRateText } from '../core/rates.ts';
 import { APP_VERSION } from '../core/constants.ts';
 import { activeBetCount } from '../core/metrics.ts';
 import { nowIso, todayISO } from '../core/dates.ts';
@@ -43,11 +45,33 @@ function lsSet(key: string, value: string): void {
 function lsRemove(key: string): void {
   try { globalThis.localStorage?.removeItem(key); } catch { /* ignore */ }
 }
+function ssGet(key: string): string | null {
+  try { return globalThis.sessionStorage?.getItem(key) ?? null; } catch { return null; }
+}
+function ssSet(key: string, value: string): void {
+  try { globalThis.sessionStorage?.setItem(key, value); } catch { /* keep it in memory for this page */ }
+}
+function ssRemove(key: string): void {
+  try { globalThis.sessionStorage?.removeItem(key); } catch { /* ignore */ }
+}
+
+/** Delete a passphrase that an older version stored in localStorage, next to the sync token. */
+export function scrubStoredPassphrase(): void {
+  lsRemove(PASS_KEY);
+}
 
 function loadSession(): void {
   if (session.loaded) return;
-  const remembered = lsGet(PASS_KEY);
+  scrubStoredPassphrase();
+  const remembered = ssGet(PASS_KEY);
   session = { loaded: true, token: lsGet(TOKEN_KEY) ?? '', pass: remembered ?? '', remember: remembered !== null };
+}
+
+function rememberPassphrase(on: boolean): void {
+  session.remember = on;
+  scrubStoredPassphrase();
+  if (on && session.pass) ssSet(PASS_KEY, session.pass);
+  else ssRemove(PASS_KEY);
 }
 
 /**
@@ -56,6 +80,8 @@ function loadSession(): void {
  */
 export function clearSyncSession(): void {
   session = { loaded: false, token: '', pass: '', remember: false };
+  ssRemove(PASS_KEY);
+  scrubStoredPassphrase();
   syncAbort?.abort();
   syncAbort = null;
 }
@@ -172,7 +198,36 @@ function profileCard(ctx: ViewContext): HTMLElement {
         }),
         h('p', { class: betNote ? 'small text-warn' : 'small muted' }, betNote ?? 'Fewer fronts, more finishing. Three is a good limit.'),
       ),
+      hourlyRatesFields(ctx),
     ),
+  );
+}
+
+function hourlyRatesFields(ctx: ViewContext): HTMLElement {
+  const p = ctx.state.profile;
+  const ui = ctx.draft<{ floorError: string; targetError: string }>('rates', () => ({ floorError: '', targetError: '' }));
+  const issue = hourlyRateIssue(p.hourlyFloorThb, p.hourlyTargetThb);
+  const commit = (key: 'hourlyFloorThb' | 'hourlyTargetThb', which: 'floorError' | 'targetError', raw: string) => {
+    const message = applyHourlyRate({ ...p }, key, raw);
+    if (message) { ui[which] = message; ctx.rerender(); return; }
+    ui[which] = '';
+    ctx.update((d) => { applyHourlyRate(d.profile, key, raw); });
+  };
+  return h('div', { class: 'stack-sm' },
+    textField({
+      id: 'settings-hourly-floor', label: 'Hourly floor (฿)', inputmode: 'decimal',
+      value: hourlyRateText(p.hourlyFloorThb), placeholder: 'Not set', autocomplete: 'off', maxLength: 12,
+      error: ui.floorError,
+      onChange: (v) => commit('hourlyFloorThb', 'floorError', v),
+    }),
+    textField({
+      id: 'settings-hourly-target', label: 'Hourly target (฿)', inputmode: 'decimal',
+      value: hourlyRateText(p.hourlyTargetThb), placeholder: 'Not set', autocomplete: 'off', maxLength: 12,
+      error: ui.targetError,
+      onChange: (v) => commit('hourlyTargetThb', 'targetError', v),
+    }),
+    h('p', { class: issue ? 'small text-warn' : 'small muted' },
+      issue ?? 'Cash per hour on Funnel and in the weekly review compares with these. Saved on this device, and in the encrypted vault if you sync. Leave both blank and Anchor won’t score the number.'),
   );
 }
 
@@ -478,6 +533,7 @@ async function doPush(ctx: ViewContext, ui: SyncUi, ifRevOverride?: number): Pro
     // Replaced/erased while the request was out: never mark the new dataset as synced at this revision.
     if (datasetGeneration() !== gen) throw new SyncFail(out.kind === 'ok' ? 'replaced_after_push' : 'replaced');
     if (out.kind === 'conflict') {
+      serverSync = 'ready';
       conflictRev = out.rev;
     } else if (out.kind === 'error') {
       throw new SyncFail(out.code);
@@ -490,10 +546,11 @@ async function doPush(ctx: ViewContext, ui: SyncUi, ifRevOverride?: number): Pro
         d.sync.lastSyncedAt = nowIso();
         d.sync.syncedUpdatedAt = sentUpdatedAt;
       }, { force: true, touch: false });
+      serverSync = 'ready';
       toast(pushedMessage(put.rev), { tone: 'good' });
     }
   } catch (err) {
-    ui.error = syncErrorCopy(failCode(err, gen));
+    noteSyncFailure(ui, failCode(err, gen));
   } finally {
     setBusy(ctx, ui, '');
   }
@@ -515,6 +572,7 @@ async function doPull(ctx: ViewContext, ui: SyncUi, opts: { skipConfirm?: boolea
     if (out.kind !== 'ok') throw new SyncFail(out.kind === 'error' ? out.code : 'server');
     const got = parseGetBody(json);
     if (!got) throw new SyncFail('server');
+    serverSync = 'ready';
     if (got.blob === null) {
       toast('Nothing on the server yet. Push from this device first.');
     } else {
@@ -526,7 +584,7 @@ async function doPull(ctx: ViewContext, ui: SyncUi, opts: { skipConfirm?: boolea
       incoming = { state: prep.state, rev: got.rev };
     }
   } catch (err) {
-    ui.error = syncErrorCopy(failCode(err, gen));
+    noteSyncFailure(ui, failCode(err, gen));
   } finally {
     setBusy(ctx, ui, '');
   }
@@ -592,8 +650,38 @@ function openConflict(ctx: ViewContext, ui: SyncUi, serverRev: number): void {
   });
 }
 
+type ServerSync = 'unknown' | 'ready' | 'not_configured';
+let serverSync: ServerSync = 'unknown';
+let probeStarted = false;
+
+function noteSyncFailure(ui: SyncUi, code: SyncErrorCode): void {
+  if (code === 'not_configured') {
+    serverSync = 'not_configured';
+    ui.error = '';
+    return;
+  }
+  if (code === 'unauthorized' || code === 'rate_limited' || code === 'too_large') serverSync = 'ready';
+  ui.error = syncErrorCopy(code);
+}
+
+/** One unauthenticated read, so Settings can say "sync not configured" before a push is attempted. */
+function ensureSyncProbe(ctx: ViewContext): void {
+  if (probeStarted || typeof fetch !== 'function') return;
+  probeStarted = true;
+  fetch(VAULT_URL, { method: 'GET', headers: { Accept: 'application/json' }, cache: 'no-store' })
+    .then(async (res) => {
+      let body: unknown = null;
+      try { body = await res.json(); } catch { body = null; }
+      const out = classifyHttp(res.status, body);
+      serverSync = out.kind === 'error' && out.code === 'not_configured' ? 'not_configured' : 'ready';
+      ctx.rerender();
+    })
+    .catch(() => { /* offline or blocked: leave the state unknown */ });
+}
+
 function syncCard(ctx: ViewContext): HTMLElement {
   const ui = ctx.draft<SyncUi>('sync', () => ({ busy: '', error: '', showPass: false }));
+  const notConfigured = serverSync === 'not_configured';
   const sync = ctx.state.sync;
   const busy = ui.busy !== '';
   const clearError = () => {
@@ -614,12 +702,13 @@ function syncCard(ctx: ViewContext): HTMLElement {
   const passField = textField({
     id: 'sync-pass', label: 'Passphrase', type: ui.showPass ? 'text' : 'password', value: session.pass, autocomplete: 'off',
     hint: session.remember
-      ? 'Remembered on this device.'
+      ? 'Kept in this tab until you close it. Not saved on the device.'
       : 'Kept in memory until you close Anchor. Never sent to the server.',
     attrs: { autocapitalize: 'off', spellcheck: false },
     onInput: (v) => {
       session.pass = v;
-      if (session.remember) { if (v) lsSet(PASS_KEY, v); else lsRemove(PASS_KEY); }
+      scrubStoredPassphrase();
+      if (session.remember) { if (v) ssSet(PASS_KEY, v); else ssRemove(PASS_KEY); }
       clearError();
     },
   });
@@ -641,7 +730,10 @@ function syncCard(ctx: ViewContext): HTMLElement {
 
   return card({
     title: 'Sync', titleLevel: 2, subtitle: 'Optional. End-to-end encrypted.',
-    action: badge(sync.lastSyncedAt ? `Rev ${sync.rev}` : 'Not set up', sync.lastSyncedAt ? 'data' : 'muted'),
+    action: badge(
+      notConfigured ? 'Sync not configured' : sync.lastSyncedAt ? `Rev ${sync.rev}` : 'Not set up',
+      notConfigured ? 'warn' : sync.lastSyncedAt ? 'data' : 'muted',
+    ),
     attrs: { 'aria-busy': busy ? 'true' : undefined },
   },
   h('div', { class: 'stack' },
@@ -652,23 +744,29 @@ function syncCard(ctx: ViewContext): HTMLElement {
     tokenField,
     passField,
     checkboxRow({
-      id: 'sync-remember', label: 'Remember passphrase on this device', checked: session.remember,
-      hint: 'It’s saved unencrypted in this browser, where any page on bigf.me can reach it — not just Anchor. Leave it off unless this device is only yours and you don’t open other bigf.me pages in this browser.',
+      id: 'sync-remember', label: 'Remember passphrase for this session', checked: session.remember,
+      hint: 'Kept in this tab until you close Anchor. It is not written to saved storage, so the next time you open Anchor you’ll type it again.',
       onChange: (on) => {
-        session.remember = on;
-        if (on && session.pass) lsSet(PASS_KEY, session.pass);
-        if (!on) lsRemove(PASS_KEY);
+        rememberPassphrase(on);
         ctx.rerender();
       },
     }),
+    notConfigured ? h('div', { class: 'stack-sm', id: 'sync-not-configured', role: 'status' },
+      h('p', { class: 'strong' }, 'Sync not configured'),
+      h('p', { class: 'small muted' }, 'This server has no sync token, so Push and Pull stay off. Your data stays on this device, and backups still work.'),
+      button('Check again', {
+        variant: 'ghost', size: 'sm', key: 'sync-recheck',
+        onClick: () => { probeStarted = false; serverSync = 'unknown'; ensureSyncProbe(ctx); ctx.rerender(); },
+      }),
+    ) : null,
     ui.error ? h('p', { class: 'field__error', role: 'alert' }, ui.error) : null,
     busy ? h('p', { class: 'small muted', role: 'status' }, BUSY_TEXT[ui.busy as Exclude<Busy, ''>]) : null,
     h('div', { class: 'grid-2' },
       button(ui.busy === 'push' ? 'Pushing…' : 'Push', {
-        icon: 'upload', key: 'sync-push', disabled: busy, onClick: () => { void doPush(ctx, ui); },
+        icon: 'upload', key: 'sync-push', disabled: busy || notConfigured, onClick: () => { void doPush(ctx, ui); },
       }),
       button(ui.busy === 'pull' ? 'Pulling…' : 'Pull', {
-        icon: 'download', key: 'sync-pull', disabled: busy, onClick: () => { void doPull(ctx, ui); },
+        icon: 'download', key: 'sync-pull', disabled: busy || notConfigured, onClick: () => { void doPull(ctx, ui); },
       }),
     ),
     h('p', { class: 'small muted' }, 'Push sends this device’s data. Pull replaces this device with the server copy.'),
@@ -762,15 +860,39 @@ function secretSheet(o: {
 const NOT_CURRENT_PIN = 'That’s not your current PIN.';
 
 async function checkCurrentPin(pin: string): Promise<boolean> {
-  const { pinHash, pinSalt } = getState().lock;
+  const { pinHash, pinSalt, pinIters } = getState().lock;
   if (!pinHash || !pinSalt) return true;
-  return verifyPin(pin, pinSalt, pinHash).catch(() => false);
+  return verifyPin(pin, pinSalt, pinHash, pinIterations(pinIters)).catch(() => false);
 }
 
 async function savePin(pin: string): Promise<void> {
   const salt = randomSaltB64();
-  const hash = await hashPin(pin, salt);
-  update((d) => { d.lock.pinHash = hash; d.lock.pinSalt = salt; }, { force: true });
+  const hash = await hashPin(pin, salt, PIN_PBKDF2_ITERATIONS);
+  update((d) => {
+    d.lock.pinHash = hash;
+    d.lock.pinSalt = salt;
+    d.lock.pinIters = PIN_PBKDF2_ITERATIONS;
+  }, { force: true });
+}
+
+/**
+ * After a correct PIN, rewrite a hash that was made with fewer iterations.
+ * No-op when the hash is already at the current count, so an old PIN keeps unlocking.
+ */
+export async function upgradeStoredPin(pin: string): Promise<void> {
+  const before = getState().lock;
+  if (!before.pinHash || !before.pinSalt) return;
+  if ((before.pinIters ?? 0) >= PIN_PBKDF2_ITERATIONS) return;
+  const salt = randomSaltB64();
+  const hash = await hashPin(pin, salt, PIN_PBKDF2_ITERATIONS);
+  const still = getState().lock;
+  if (still.pinHash !== before.pinHash || still.pinSalt !== before.pinSalt) return;
+  update((d) => {
+    if (d.lock.pinHash !== before.pinHash) return;
+    d.lock.pinHash = hash;
+    d.lock.pinSalt = salt;
+    d.lock.pinIters = PIN_PBKDF2_ITERATIONS;
+  }, { touch: false });
 }
 
 function setPinFlow(): void {
@@ -825,7 +947,7 @@ function removePinFlow(): void {
     submit: async ([current]) => {
       if (!current) return 'Enter your current PIN.';
       if (!(await checkCurrentPin(current))) return NOT_CURRENT_PIN;
-      update((d) => { delete d.lock.pinHash; delete d.lock.pinSalt; }, { force: true });
+      update((d) => { delete d.lock.pinHash; delete d.lock.pinSalt; delete d.lock.pinIters; }, { force: true });
       toast('PIN removed.');
       return null;
     },

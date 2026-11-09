@@ -66,14 +66,20 @@ export function dayPhase(now: Date): DayPhase {
 }
 
 export type TodaySection =
-  | 'intro' | 'anchor' | 'checkin' | 'carry' | 'actions' | 'timer' | 'escape' | 'week' | 'heavy' | 'shutdown';
+  | 'intro' | 'rates' | 'anchor' | 'checkin' | 'carry' | 'actions' | 'timer' | 'escape' | 'week' | 'heavy' | 'shutdown';
+
+/** Device-local key (prefix 'anchor:' so eraseAll removes it). Set when the hourly-rate prompt is dismissed. */
+export const RATES_PROMPT_KEY = 'anchor:today:rates-dismissed';
 
 /**
  * Order of Today's cards. The anchor always comes before the check-in. In the evening the shutdown moves
  * to the top and the check-in to the bottom; the carry-over prompt is a daytime thing.
+ * The hourly-rate prompt sits with the intro (setup, above the day's cards) until it is set or dismissed.
  */
-export function todaySections(phase: DayPhase, opts: { intro: boolean; carry: boolean }): TodaySection[] {
-  const head: TodaySection[] = opts.intro ? ['intro'] : [];
+export function todaySections(phase: DayPhase, opts: { intro: boolean; carry: boolean; rates?: boolean }): TodaySection[] {
+  const head: TodaySection[] = [];
+  if (opts.intro) head.push('intro');
+  if (opts.rates) head.push('rates');
   if (phase === 'evening') {
     return [...head, 'shutdown', 'anchor', 'actions', 'timer', 'escape', 'week', 'heavy', 'checkin'];
   }

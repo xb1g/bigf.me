@@ -291,6 +291,8 @@ test('snapshotView formats a real weekSnapshot', () => {
     { id: 't2', category: 'sell', start: '2026-10-27T06:00:00.000Z', end: '2026-10-27T07:00:00.000Z' },
   ];
   // Made-up numbers: real cohort figures stay out of this public repo.
+  s.profile.hourlyFloorThb = 100;
+  s.profile.hourlyTargetThb = 250;
   s.funnel = [{ id: 'f', label: 'SHIFT[2]', period: 'cohort', paid: 20, verifiedTest: 1, revenueThb: 12000, costThb: 3000, founderHours: 60 }];
   s.talks = [{ id: 'x', date: TODAY, role: 'parent', channel: 'call', did: '', story: '', opinion: '' }];
   const v = snapshotView(weekSnapshot(s, '2026-W44', NOW));
@@ -304,6 +306,7 @@ test('snapshotView formats a real weekSnapshot', () => {
   assert.equal(v.bottleneckText, 'Paid → Verified real-user test · 5%');
   assert.equal(v.cashText, '฿150/h');
   assert.equal(v.cashTone, 'data');
+  assert.equal(v.cashNote, 'Above the ฿100 floor. Target is ฿250/h.');
   assert.equal(v.totalHours, 4);
 });
 
@@ -316,13 +319,15 @@ test('snapshotView tolerates empty or old snapshots', () => {
   assert.equal(v.cashTone, 'muted');
   assert.equal(v.cashNote, null);
   assert.equal(v.talksText, '0');
-  const low = snapshotView({ cashPerHour: 120, escapesGo: 1, escapesPark: 2, anchorsSet: 4, anchorsDone: 2, bottleneck: 'A → B', bottleneckRate: null });
+  const low = snapshotView({ cashPerHour: 120, hourlyFloor: 200, hourlyTarget: 400, escapesGo: 1, escapesPark: 2, anchorsSet: 4, anchorsDone: 2, bottleneck: 'A → B', bottleneckRate: null });
   assert.equal(low.cashTone, 'warn');
-  assert.equal(low.cashNote, 'Below the ฿130/h floor.');
+  assert.equal(low.cashNote, 'Below the ฿200/h floor.');
   assert.equal(low.escapesText, '1 go · 2 parked');
   assert.equal(low.anchorsText, '2 of 4 done');
   assert.equal(low.bottleneckText, 'A → B');
-  assert.equal(snapshotView({ cashPerHour: 300 }).cashTone, 'good');
+  assert.equal(snapshotView({ cashPerHour: 300, hourlyFloor: 100, hourlyTarget: 250 }).cashTone, 'good');
+  assert.equal(snapshotView({ cashPerHour: 300 }).cashTone, 'data', 'a number with no rates is not scored');
+  assert.equal(snapshotView({ cashPerHour: 300 }).cashNote, null);
 });
 
 test('snapshotLines lists hours and only known funnel lines', () => {
