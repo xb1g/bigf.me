@@ -11,6 +11,11 @@ export default defineConfig({
   integrations: [mdx()],
 
   vite: {
+    resolve: {
+      // Vite 8's built-in resolver rejects a missing tsconfigPaths flag. Tailwind's
+      // CSS resolver hits that path during `astro build` with the locked Vite 8.
+      tsconfigPaths: false,
+    },
     plugins: [tailwindcss()],
   },
 

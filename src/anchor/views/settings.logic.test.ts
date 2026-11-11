@@ -162,6 +162,8 @@ test('classifyHttp maps vault responses', () => {
   assert.deepEqual(classifyHttp(401, { error: 'unauthorized' }), { kind: 'error', code: 'unauthorized' });
   assert.deepEqual(classifyHttp(403, null), { kind: 'error', code: 'unauthorized' });
   assert.deepEqual(classifyHttp(503, { error: 'sync_not_configured' }), { kind: 'error', code: 'not_configured' });
+  assert.deepEqual(classifyHttp(429, { error: 'rate_limited' }), { kind: 'error', code: 'rate_limited' });
+  assert.match(syncErrorCopy('not_configured'), /Sync not configured/);
   assert.deepEqual(classifyHttp(503, null), { kind: 'error', code: 'server' });
   assert.deepEqual(classifyHttp(400, { error: 'too_large' }), { kind: 'error', code: 'too_large' });
   assert.deepEqual(classifyHttp(413, null), { kind: 'error', code: 'too_large' });

@@ -8,8 +8,9 @@ import {
 } from '../core/ui.ts';
 import type { SheetHandle } from '../core/ui.ts';
 import { datasetGeneration, findById, getState, newId, removeById } from '../core/store.ts';
-import { FUNNEL_MONEY, FUNNEL_STAGES, formatPercent, formatThb } from '../core/metrics.ts';
-import { MENTOR_FLOOR_THB_PER_HOUR, TARGET_THB_PER_HOUR } from '../core/constants.ts';
+import { FUNNEL_MONEY, FUNNEL_STAGES, formatPercent } from '../core/metrics.ts';
+import { ratesFromProfile } from '../core/rates.ts';
+import type { HourlyRates } from '../core/rates.ts';
 import {
   REFERRAL_GOAL, REFERRAL_KILL, VERIFIED_TEST_GOAL, VERIFIED_TEST_KILL, bottleneckLine, cashView, firstErrorField,
   formatCount, isIntegerKey, missingStages, moneyFacts, parseFunnelForm, previewLine, referralNotice, rowSubtitle,
@@ -71,7 +72,7 @@ function rowCard(ctx: ViewContext, row: FunnelRow, refYear: number): HTMLElement
   },
   stagesBlock(row),
   h('hr', { class: 'divider' }),
-  cashBlock(row),
+  cashBlock(row, ratesFromProfile(ctx.state.profile)),
   row.note ? h('p', { class: 'small muted prewrap' }, row.note) : null,
   );
 }
@@ -123,8 +124,8 @@ function stageLi(item: StageItem): HTMLLIElement {
   );
 }
 
-function cashBlock(row: FunnelRow): HTMLElement {
-  const c = cashView(row);
+function cashBlock(row: FunnelRow, rates: HourlyRates): HTMLElement {
+  const c = cashView(row, rates);
   return h('div', { class: 'stack funnel-cash' },
     h('dl', { class: 'grid-3' },
       moneyFacts(row).map((f) => h('div', { class: 'stack-sm', style: { gap: '2px', minWidth: '0' } },
@@ -142,16 +143,19 @@ function cashScale(c: CashView): HTMLElement {
     class: 'tiny muted tnum',
     style: { position: 'absolute', left: pct(at), transform: 'translateX(-50%)', whiteSpace: 'nowrap' },
   }, text);
+  const ticks = [
+    c.floorAt != null && c.floorLabel ? { at: c.floorAt, text: c.floorLabel } : null,
+    c.targetAt != null && c.targetLabel ? { at: c.targetAt, text: c.targetLabel } : null,
+  ].filter((t): t is { at: number; text: string } => t !== null);
   return h('div', { class: 'funnel-cash-scale', role: 'img', 'aria-label': c.ariaLabel, style: { paddingTop: '4px' } },
     h('div', { class: 'progress__track', 'data-tone': c.tone === 'muted' ? undefined : c.tone, 'aria-hidden': 'true' },
       c.perHour !== null ? h('span', { class: 'progress__fill', style: { width: pct(c.fill) } }) : null,
-      h('span', { class: 'progress__marker', style: { left: pct(c.floorAt) } }),
-      h('span', { class: 'progress__marker', style: { left: pct(c.targetAt) } }),
+      ...ticks.map((t) => h('span', { class: 'progress__marker', style: { left: pct(t.at) } })),
     ),
-    h('div', { 'aria-hidden': 'true', style: { position: 'relative', height: '1.25rem', marginTop: '8px' } },
-      tick(c.floorAt, `${formatThb(MENTOR_FLOOR_THB_PER_HOUR)} floor`),
-      tick(c.targetAt, `${formatThb(TARGET_THB_PER_HOUR)} target`),
-    ),
+    ticks.length
+      ? h('div', { 'aria-hidden': 'true', style: { position: 'relative', height: '1.25rem', marginTop: '8px' } },
+          ticks.map((t) => tick(t.at, t.text)))
+      : null,
   );
 }
 

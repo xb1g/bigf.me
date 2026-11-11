@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { FunnelRow } from '../core/types.ts';
 import {
-  CASH_SCALE_MAX, FUNNEL_NUMBER_KEYS, bottleneckLine, cashMissing, cashView, emptyNums, firstErrorField,
+  FUNNEL_NUMBER_KEYS, bottleneckLine, cashMissing, cashView, emptyNums, firstErrorField,
   formatCount, joinList, missingStages, moneyFacts, parseFunnelForm, parseFunnelNumber, previewLine,
   REFERRAL_GOAL, REFERRAL_KILL, VERIFIED_TEST_GOAL, VERIFIED_TEST_KILL, referralNotice,
   rowSubtitle, rowToForm, rowsNewestFirst, stageItems, trendGap, trendSeries, trendSummary, trendTone, trendUntracked,
@@ -106,32 +106,40 @@ test('stageItems / missingStages / bottleneckLine on seed-like rows', () => {
   assert.ok(!missingStages(shift2).includes('Paid'));
 });
 
+const RATES = { floor: 100, target: 250 };
+
 test('cashView: SHIFT[2] sits above the floor, under target', () => {
-  const c = cashView(shift2);
+  const c = cashView(shift2, RATES);
   assert.equal(c.band, 'above-floor');
   assert.equal(c.tone, 'data');
   assert.equal(c.value, '฿150/h');
-  assert.ok(Math.abs(c.fill - (12000 - 3000) / 60 / CASH_SCALE_MAX) < 1e-9);
-  assert.equal(c.floorAt, 130 / CASH_SCALE_MAX);
-  assert.equal(c.targetAt, 300 / CASH_SCALE_MAX);
-  assert.match(c.copy, /Above the ฿130 floor/);
+  assert.ok(Math.abs(c.fill - (12000 - 3000) / 60 / c.scaleMax) < 1e-9);
+  assert.equal(c.floorAt, 100 / c.scaleMax);
+  assert.equal(c.targetAt, 250 / c.scaleMax);
+  assert.match(c.copy, /Above the ฿100 floor/);
+  assert.match(c.copy, /฿250\/h/);
 });
 
 test('cashView: bands, clamping and unknowns', () => {
-  const below = cashView({ id: 'a', label: 'a', period: 'cohort', revenueThb: 1000, costThb: 2000, founderHours: 10 });
+  const below = cashView({ id: 'a', label: 'a', period: 'cohort', revenueThb: 1000, costThb: 2000, founderHours: 10 }, RATES);
   assert.equal(below.band, 'below-floor');
   assert.equal(below.tone, 'warn');
   assert.equal(below.fill, 0);
-  const high = cashView({ id: 'b', label: 'b', period: 'cohort', revenueThb: 50000, costThb: 0, founderHours: 10 });
+  const high = cashView({ id: 'b', label: 'b', period: 'cohort', revenueThb: 50000, costThb: 0, founderHours: 10 }, RATES);
   assert.equal(high.band, 'on-target');
-  assert.equal(high.fill, 1);
+  assert.equal(high.fill, 5000 / high.scaleMax);
   const unknown = cashView({ id: 'c', label: 'c', period: 'cohort', revenueThb: 1000 });
   assert.equal(unknown.perHour, null);
   assert.equal(unknown.copy, 'Add costs and founder hours to see this.');
+  assert.equal(unknown.floorAt, null);
   const zeroHours = cashView({ id: 'd', label: 'd', period: 'cohort', revenueThb: 1, costThb: 0, founderHours: 0 });
   assert.equal(zeroHours.perHour, null);
   assert.match(zeroHours.copy, /Founder hours is 0/);
   assert.deepEqual(cashMissing(shift1), ['revenue', 'costs', 'founder hours']);
+  const unset = cashView(shift2);
+  assert.equal(unset.band, null);
+  assert.equal(unset.value, '฿150/h');
+  assert.match(unset.copy, /Settings/);
 });
 
 test('trendSeries: oldest first, with a hint when a rate is unknown', () => {

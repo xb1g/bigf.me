@@ -39,8 +39,9 @@ export function emptyState(now: Date = new Date()): AnchorState {
 }
 
 // Generic on purpose: this seed ships in the public JS bundle, so it holds names only: no hypotheses,
-// metrics, continue/kill lines, prices or side projects. The real bets and numbers live in a private start
-// file kept outside the repo (Settings → Import a backup).
+// metrics, continue/kill lines, prices, hourly rates or side projects. The real bets and numbers live in a
+// private start file kept outside the repo (Settings → Import a backup). Hourly floor and target stay unset
+// until the user chooses them.
 
 function activeBet(createdAt: string, name: string, reviewOn: string): Bet {
   return {

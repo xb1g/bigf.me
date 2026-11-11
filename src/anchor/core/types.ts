@@ -58,8 +58,25 @@ export interface WeeklyReview {
   betDecisions: { betId: ID; verdict: Verdict; why: string }[]; nextAnchor: string;
   snapshot: Record<string, number | string | null>;
 }
-export interface Profile { name: string; weeklyTalkTarget: number; buildSellTarget: number; maxActiveBets: number }
-export interface LockSettings { pinHash?: string; pinSalt?: string; lockAfterMin: number }
+export interface Profile {
+  name: string;
+  weeklyTalkTarget: number;
+  buildSellTarget: number;
+  maxActiveBets: number;
+  /**
+   * Baht per founder hour, chosen by the user. Absent until they set one.
+   * Synced only as part of the encrypted vault (this whole state is what gets sealed).
+   */
+  hourlyFloorThb?: number;
+  hourlyTargetThb?: number;
+}
+export interface LockSettings {
+  pinHash?: string;
+  pinSalt?: string;
+  /** PBKDF2-SHA256 iterations for pinHash. Absent on hashes made before this was stored. */
+  pinIters?: number;
+  lockAfterMin: number;
+}
 export interface SyncMeta {
   rev: number; lastSyncedAt?: string;
   /** The state's updatedAt that the last push/pull matched. updatedAt ≠ this → unsynced changes. */

@@ -14,6 +14,10 @@ import { MAX_STATE_BYTES } from '../core/constants.ts';
 export const VAULT_URL = '/api/anchor/vault';
 /** Device-local keys (prefix 'anchor:' so eraseAll removes them). */
 export const TOKEN_KEY = 'anchor:sync:token';
+/**
+ * Old localStorage key for a plaintext sync passphrase. Startup deletes any leftover.
+ * A remembered passphrase now lives in sessionStorage under the same name, for this tab only.
+ */
 export const PASS_KEY = 'anchor:sync:pass';
 /**
  * Largest backup file we try to read: room for a state at MAX_STATE_BYTES even inside an encrypted backup,
@@ -230,7 +234,7 @@ export function tokenIssue(token: string): string | null {
 // ---------------------------------------------------------------------------
 
 export type SyncErrorCode =
-  | 'offline' | 'timeout' | 'unauthorized' | 'not_configured' | 'too_large' | 'bad_request'
+  | 'offline' | 'timeout' | 'unauthorized' | 'not_configured' | 'rate_limited' | 'too_large' | 'bad_request'
   | 'server' | 'wrong_passphrase' | 'bad_envelope' | 'not_anchor' | 'insecure'
   | 'missing_token' | 'missing_pass' | 'short_pass' | 'replaced' | 'replaced_after_push' | 'state_too_large' | 'unknown';
 
@@ -238,7 +242,8 @@ export const SYNC_ERROR_COPY: Record<SyncErrorCode, string> = {
   offline: 'Can’t reach the server. You may be offline — your data is safe here. Try again when you’re connected.',
   timeout: 'The server took too long. Try again in a minute.',
   unauthorized: 'The sync token doesn’t match. Check it and try again.',
-  not_configured: 'Sync isn’t set up on the server yet. Backups still work.',
+  not_configured: 'Sync not configured. Push and pull stay off until the server has a sync token. Backups still work.',
+  rate_limited: 'Too many tries. Wait a few minutes, then try again.',
   too_large: 'Your data is over the 2 MB sync limit. Download a backup instead.',
   bad_request: 'The server didn’t accept that. Try again.',
   server: 'The server had a problem. Try again in a minute.',
@@ -273,6 +278,7 @@ export function classifyHttp(status: number, body: unknown): HttpOutcome {
   if (status >= 200 && status < 300) return { kind: 'ok' };
   if (status === 409) return isObj(body) && isRev(body.rev) ? { kind: 'conflict', rev: body.rev } : { kind: 'error', code: 'server' };
   if (status === 401 || status === 403) return { kind: 'error', code: 'unauthorized' };
+  if (status === 429 || err === 'rate_limited') return { kind: 'error', code: 'rate_limited' };
   if (status === 503 && err === 'sync_not_configured') return { kind: 'error', code: 'not_configured' };
   if (status === 400 || status === 413) return { kind: 'error', code: err === 'too_large' || status === 413 ? 'too_large' : 'bad_request' };
   return { kind: 'error', code: 'server' };

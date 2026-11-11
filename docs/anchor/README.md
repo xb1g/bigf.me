@@ -40,6 +40,8 @@ If it's a hard night: Thailand Mental Health Hotline **1323** (24 hours).
 ## Privacy, in plain words
 
 - **Everything stays on this device.** No account, no tracking, no AI. Nothing leaves the phone unless you export or sync.
+- **Fonts stay with the app.** Anchor does not load type from Google or any other site. The service worker keeps the font files so they work offline.
+- **Hourly floor and target** are numbers you set (on Today the first time, or in Settings). They stay on this device and, if you sync, only inside the encrypted vault. The public code does not contain a floor or a target.
 - **Plain backup:** a readable JSON file. Keep it somewhere private.
 - **Encrypted backup:** opens only with your passphrase. Nobody can recover it for you.
 - **Sync is optional and end-to-end encrypted.** The phone locks the data with your passphrase (AES-256-GCM, key from PBKDF2) *before* sending it. The server keeps one locked copy it can't read.
@@ -48,7 +50,7 @@ If it's a hard night: Thailand Mental Health Hotline **1323** (24 hours).
 
 ## Your starting data
 
-This repo is public and the first-run seed ships in the app's code, so the seed is generic: a few bet names, empty funnel rows and one Heavy item. It has no hypotheses, thresholds, prices or real numbers.
+This repo is public and the first-run seed ships in the app's code, so the seed is generic: a few bet names, empty funnel rows and one Heavy item. It has no hypotheses, thresholds, prices or real numbers. The hourly floor and target are not in the seed either. Anchor asks you to set them; until you do, cash per hour is shown with no comparison.
 
 Your real starting numbers live in a **private start file** that never goes into the repo. It's an ordinary Anchor backup (the same JSON that *Download backup* makes), so you can build it once on any device and reuse it.
 
@@ -61,10 +63,10 @@ An encrypted backup imports the same way; Anchor asks for its passphrase first.
 ## Turn on sync (optional)
 
 1. In Vercel, open **Project → Settings → Environment Variables** and add `ANCHOR_SYNC_TOKEN`, set to a long random string (for example from `openssl rand -base64 32`). Redeploy. Sync uses the Turso database the site already has (`TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`) and creates its table on first use.
-2. On your phone: **Settings → Sync**. Enter the token and a passphrase you'll remember, then tap **Push**.
+2. On your phone: **Settings → Sync**. Enter the token and a passphrase you'll remember, then tap **Push**. The passphrase stays in memory for that visit. “Remember for this session” keeps it until you close Anchor; it is not saved in the device’s long-term storage.
 3. On another device: same token and passphrase, then **Pull**.
 
-If both devices changed, Anchor asks which copy to keep. Without `ANCHOR_SYNC_TOKEN`, `/api/anchor/vault` answers 503 and everything else keeps working on the device.
+If both devices changed, Anchor asks which copy to keep. Without `ANCHOR_SYNC_TOKEN`, `/api/anchor/vault` answers 503, Settings says **Sync not configured**, and everything else keeps working on the device. The vault also slows repeated guesses: too many wrong tokens, and it asks you to wait.
 
 ## Run it locally
 
@@ -81,5 +83,7 @@ npx playwright test -c playwright.anchor.config.ts  # end-to-end, iPhone-size sc
 ```
 
 The end-to-end tests set the page clock to a fixed weekday morning in Bangkok and move it when a test needs another time, so they give the same result at any hour.
+
+GitHub Actions runs the unit tests, the production build, and the Playwright tests on every push and pull request.
 
 The original spec and screenshots are kept private, outside git.

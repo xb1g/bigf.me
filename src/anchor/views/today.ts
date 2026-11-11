@@ -5,6 +5,7 @@ import { datasetGeneration, ensureDay, getDay, getState, newId, onErase, removeB
 import { formatPercent } from '../core/metrics.ts';
 import { addDays, daysBetween, formatDate } from '../core/dates.ts';
 import { MAX_ACTIONS, TIME_CATEGORIES, labelOf } from '../core/constants.ts';
+import { applyHourlyRate, hourlyRateIssue, hourlyRateText, hourlyRatesReady } from '../core/rates.ts';
 import {
   badge, button, card, checkboxRow, chips, confirmDialog, disclosure, form, icon, iconButton, linkButton, listRow,
   liveElapsed, selectField, splitBar, stat, textField, toast,
@@ -12,7 +13,7 @@ import {
 import {
   ANCHOR_LAST_STEP_COPY, ANCHOR_MOVED_COPY, ANCHOR_NUDGE_MIN, ANCHOR_OPEN_COPY, ANCHOR_PROMPT, ANCHOR_REQUIRED_COPY,
   ANCHOR_SET_COPY, ANCHOR_TEST_COPY, ANCHOR_UPDATED_COPY, CARRY_DISMISSED_KEY, CHECKIN_QUESTIONS, CHECKIN_SUBTITLE, INTRO_DISMISSED_KEY,
-  INTRO_LINES, LIMIT_COPY, LOW_ENERGY_COPY, LOW_ENERGY_EMPTY_HINT, SCALE_LEGEND, SHUTDOWN_CARRY_HINT, SLEEP_OPTIONS,
+  INTRO_LINES, LIMIT_COPY, LOW_ENERGY_COPY, LOW_ENERGY_EMPTY_HINT, RATES_PROMPT_KEY, SCALE_LEGEND, SHUTDOWN_CARRY_HINT, SLEEP_OPTIONS,
   actionsFull, actionsLeft, anchorBetOptions, anchorCoach, anchorInputFrom, anchorMeta, anchorMovedToTomorrow, anchorStatus,
   anchorStepsText, anchorStillOpen, anchorTimerNote, applyShutdown, buildAnchor, carriesAnchorStep, carryAction,
   carryOverCandidates,
@@ -116,6 +117,8 @@ export function render(ctx: ViewContext): HTMLElement {
   const sections = todaySections(phase, {
     intro: readLocal(INTRO_DISMISSED_KEY) === null,
     carry: showCarryOver(carry, phase, readLocal(CARRY_DISMISSED_KEY)),
+    rates: !hourlyRatesReady(state.profile.hourlyFloorThb, state.profile.hourlyTargetThb)
+      && readLocal(RATES_PROMPT_KEY) === null,
   });
   const primary = primaryAction({ anchorEditing, shutdownEditing: shutdownVisible && sd.editing, phase });
   const todayDay = getDay(state, today);
@@ -126,6 +129,7 @@ export function render(ctx: ViewContext): HTMLElement {
     sections.map((s) => {
       switch (s) {
         case 'intro': return introCard(ctx);
+        case 'rates': return ratesCard(ctx);
         case 'anchor': return anchorCard(ctx, ad, aDay, anchorEditing, primary === 'anchor');
         case 'checkin': return checkinCard(ctx, ck, phase);
         case 'carry': return carry ? carryCard(ctx, carry) : null;
@@ -143,6 +147,42 @@ export function render(ctx: ViewContext): HTMLElement {
 // ---------------------------------------------------------------------------
 // First-run card
 // ---------------------------------------------------------------------------
+
+function ratesCard(ctx: ViewContext): HTMLElement {
+  const p = ctx.state.profile;
+  const ui = ctx.draft<{ floorError: string; targetError: string }>('rates', () => ({ floorError: '', targetError: '' }));
+  const issue = hourlyRateIssue(p.hourlyFloorThb, p.hourlyTargetThb);
+  const commit = (key: 'hourlyFloorThb' | 'hourlyTargetThb', which: 'floorError' | 'targetError', raw: string) => {
+    const message = applyHourlyRate({ ...p }, key, raw);
+    if (message) { ui[which] = message; ctx.rerender(); return; }
+    ui[which] = '';
+    ctx.update((d) => { applyHourlyRate(d.profile, key, raw); });
+  };
+  return card({ title: 'Hourly floor and target', titleLevel: 2, variant: 'raised', class: 'today-rates', key: 'today-rates' },
+    h('p', { class: 'small' }, 'Funnel and the weekly review can compare cash per hour with a floor and a target you choose. Nothing is filled in.'),
+    h('p', { class: 'small muted' }, 'They’re saved on this device and, if you sync, inside the encrypted vault. You can change them in Settings.'),
+    textField({
+      id: 'today-hourly-floor', label: 'Floor, baht per hour', inputmode: 'decimal',
+      value: hourlyRateText(p.hourlyFloorThb), placeholder: 'Not set', autocomplete: 'off', maxLength: 12,
+      error: ui.floorError,
+      onChange: (v) => commit('hourlyFloorThb', 'floorError', v),
+    }),
+    textField({
+      id: 'today-hourly-target', label: 'Target, baht per hour', inputmode: 'decimal',
+      value: hourlyRateText(p.hourlyTargetThb), placeholder: 'Not set', autocomplete: 'off', maxLength: 12,
+      error: ui.targetError,
+      onChange: (v) => commit('hourlyTargetThb', 'targetError', v),
+    }),
+    issue ? h('p', { class: 'small text-warn' }, issue) : null,
+    h('div', { class: 'row-between' },
+      linkButton('Open Settings', href('settings'), { variant: 'ghost', size: 'sm', key: 'today-rates-settings' }),
+      button('Not now', {
+        variant: 'ghost', size: 'sm', key: 'today-rates-dismiss',
+        onClick: () => { writeLocal(RATES_PROMPT_KEY, '1'); ctx.rerender(); },
+      }),
+    ),
+  );
+}
 
 function introCard(ctx: ViewContext): HTMLElement {
   return card({ title: 'Start here', titleLevel: 2, variant: 'raised', class: 'today-intro', key: 'today-intro' },
